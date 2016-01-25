@@ -147,6 +147,7 @@ All top-level API resources with root type ```list``` have support of pagination
 API utilizes cursor-based pagination via the ```starting_after``` and ```ending_before``` parameters. Both take an existing object ID value (see below). The ```ending_before``` parameter returns objects created before the named object, in descending chronological order. The ```starting_after``` parameter returns objects created after the named object, in ascending chronological order. If both parameters are provided, only ending_before is used.
 
 Arguments:
+
 - ```limit``` (optional) - A limit on the number of objects to be returned, between 1 and 100. Default: 50;
 - ```starting_after``` (optional) - A cursor for use in pagination. ```starting_after``` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with ```obj_foo```, your subsequent call can include ```starting_after=obj_foo``` in order to fetch the next page of the list;
 - ``` ``` (optional) - A cursor for use in pagination. ```ending_before``` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with ```obj_bar```, your subsequent call can include ```ending_before=obj_bar``` in order to fetch the previous page of the list.
@@ -154,6 +155,7 @@ Arguments:
 ## HTTP Verbs
 
 As per RESTful design patterns, API implements following HTTP verbs:
+
 - ```HEAD``` - Can be issued against any resource to get just the HTTP header info;
 - ```GET``` - Read resources;
 - ```POST``` - Create new resources;
@@ -165,6 +167,7 @@ As per RESTful design patterns, API implements following HTTP verbs:
 API uses HTTP redirection where appropriate. Clients should assume that any request may result in a redirection. Receiving an HTTP redirection is not an error and clients should follow that redirect. Redirect responses will have a Location header field which contains the URI of the resource to which the client should repeat the requests.
 
 Status codes:
+
 - ```301``` - Permanent redirection. The URI you used to make the request has been superseded by the one specified in the Location header field. This and all future requests to this resource should be directed to the new URI.
 - ```302, 307``` - Temporary redirection. The request should be repeated verbatim to the URI specified in the Location header field but clients should continue to use the original URI for future requests.
 
@@ -173,6 +176,7 @@ Other redirection status codes may be used in accordance with the HTTP 1.1 spec.
 ## Content Types
 
 We support 3 content types:
+
 - ```application/json``` - to response in JSON format;
 - ```application/xml``` - to receive response in XML format;
 - ```text/csv``` - to receive response in CSV format.
