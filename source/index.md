@@ -11,11 +11,23 @@ search: true
 
 Welcome to the QBilling API. It will provide you access to universal billing system that is usage-agnostic, what makes it suitable for financial companies for storing accounts and transferring money, games with inner currency or anyone else who have balance and any actions with it.
 
-# Data Retention Policy
+# Key Features
 
-We believe that vendor-lock is a bad thing, thats why you are free to download all data from your account in JSON format and to remove all you data from our servers.
+### Data Retention Policy
 
-After your confirm data remove process we will keep everything for additional 30 days, so your account will be protected from accidental removals. After 30 days all data will be scrubbed for our servers and impossible to restore.
+We believe that vendor-lock is a bad thing, thats why you are free to download all data from your account in JSON format.
+
+Also you can remove all you data from our servers. After your confirm data remove process in Dashboard we will keep everything for additional 30 days, so your account will be protected from accidental removals. After 30 days all data will be scrubbed for our servers and impossible to restore.
+
+### API-oriented
+
+We are API centered, that means that we are trying to make it simple, easy to understand, and yet very powerful.
+
+### Crossintegrations
+
+We support hustle-free integration with oAuth providers. See more at [Authentication](#authentication) section.
+
+Also we support custom webhook integrations in a SOA-style.
 
 # Interacting with API
 
@@ -24,25 +36,30 @@ Our API is organized around [REST](http://en.wikipedia.org/wiki/Representational
 ## Response structure
 
 Response consist 4 main objects in root:
-- ```meta``` - URL of the requested resource; current status; error and error messages; root object type; idempotency key; request id; .
+
+- ```meta``` - URL of the requested resource; current status; error and error messages; root object type; idempotency key; request id.
 - ```paging``` - pagination data
 - ```urgent``` - notifications and counters;
 - ```data``` - root response data object;
 - ```sandbox``` - data provided by ```sandbox``` environment, for eg. otp token.
 
-, status, errors, test, type (collection), has_more, notifications, counters
-
 ```json
 {
   "meta": {
-    "code": "200",
+    "code": "XXX",
     "url": "https://qbill.ly/transactions/",
     "type": "list",
     "error": {
-      "type": "some_error_type",
-      "message": "No records at specified date in transactions collection",
-      "param": "2015-01-24"
-    }
+      "type": "form_validation_failed",
+      "params": {"submit_date": "2015-01-24"},
+      "fields": [
+        {"field_id": "username", "rule": "required"},
+        {"field_id": "email", "rule": "empty"}
+      ],
+      "message": "You specified incorrect content type. See https://docs.qbill.ly/#content-type."
+    },
+    "request_id": "qudk48fFlaP",
+    "idempotency_id": "iXXekd88DKqo"
   },
   "urgent": {
     "notifications": ["Read new emails!"],
@@ -58,7 +75,7 @@ Response consist 4 main objects in root:
       "after": "MTAxNTExOTQ1MjAwNzI5NDE=",
       "before": "NDMyNzQyODI3OTQw"
     },
-    "has_more": false,
+    "has_more": true,
     "limit": 50
   },
   "sandbox": {
@@ -68,9 +85,13 @@ Response consist 4 main objects in root:
 
 ```
 
-All responses have ```object``` field that contains object type. For eg. collections have ```object``` that equals to ```collection```.
+All responses have ```object``` field that contains object type. For eg. transactions have ```object``` that equals to ```transaction```.
 
 ## Authentication
+
+To use our service you need to authenticate your application. Additionally you can use our oAuth cross-integration for authenticating your clients.
+
+### Application
 
 Authenticate your account when using the API by including your secret API key in the request. You can manage your API keys in the dashboard.
 
@@ -81,6 +102,36 @@ Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia
 ```curl
 curl https://example.com/resource \
    -u WgLodNU5wCdbSw4f:
+```
+
+### Client
+
+(TODO: Move this to pre-flight webhooks.)
+
+This is an option. To make it work specify oAuth provider in your Dashboard. When "Client Authentication" is turned on, our API expects additional key provided as HTTP Basic Auth password.
+
+! Requests without oAuth token will return HTTP 401 error code.
+
+Currently support 3 oAuth providers: Facebook, Google and a custom endpoint, that can be entered by you.
+
+```curl
+curl https://example.com/resource \
+   -u WgLodNU5wCdbSw4f:<oAuthToken>
+```
+
+After receiving oAuth token we will send a GET request to selected oAuth endpoint to validate this token. Our response differs for every response made by oAuth endpoint:
+
+oAuth HTTP Code | Action
+--------- | -----------
+2XX | Continue processing your request.
+301, 307, 308 | Follow the redirect. And continue checking response code.
+403 | Return HTTP 403 Forbidden
+401, 402 and other 4XX | Return HTTP 401 Unauthorized
+5XX | Return HTTP 412 Precondition Failed
+
+
+```
+GET <oAuthProviderURI>?access_token=<oAuthToken>&action=<APIProjectID>.<APIUserID>.<APIEntity>.<HTTPVerb>
 ```
 
 ## Versioning
@@ -126,13 +177,13 @@ We support 3 content types:
 - ```application/xml``` - to receive response in XML format;
 - ```text/csv``` - to receive response in CSV format.
 
-Internally we stick with JSON, and convert it to XML or CSV when necessary, so response structure for JSON and XML content types will be pretty much the same. But for CSV we won't return any additional meta (for eg. pagination) to make it prettier in spreadsheets viewers.
+Internally we stick with JSON, and convert it to XML or CSV when necessary, so response structure for JSON and XML content types will be pretty much the same. But for CSV we will return only content in root ```data``` object, without any additional meta (for eg. pagination) to make it prettier in spreadsheets viewers.
 
 To simplify documentation all samples will be provided with JSON ```content-type``` responses.
 
 ## Errors
 
-All errors is returned in JSON format if another ```content-type``` is not specified. This means that your will receive JSON for requests with incorrect ```content-type``` header.
+All errors is returned in JSON format if another ```content-type``` is not specified. This means that your will receive JSON for requests with HTTP 415 code when incorrect ```content-type``` is provided.
 
 ### Application Error Types
 
@@ -142,14 +193,16 @@ ID | The ID to retrieve
 
 ### HTTP status codes
 
-- ```200``` - Everything worked as expected;
-- ```400``` - Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON;
-- ```401``` - Unauthorized. No valid API key provided or API key doesn't match project;
-- ```402``` - The parameters were valid but the request failed;
-- ```404``` - Not Found. The requested resource doesn't exist;
-- ```415``` - Incorrect Content-Type HTTP header;
-- ```429``` - Too Many Requests. Rate limit is exceeded;
-- ```500, 502, 503, 504``` - Server Errors. Something went wrong on our end. (These are rare.)
+HTTP Code | Description
+--------- | -----------
+```200``` | Everything worked as expected;
+```400``` | Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON;
+```401``` | Unauthorized. No valid API key provided or API key doesn't match project;
+```402``` | The parameters were valid but the request failed;
+```404``` | Not Found. The requested resource doesn't exist;
+```415``` | Incorrect Content-Type HTTP header;
+```429``` | Too Many Requests. Rate limit is exceeded;
+```500```, ```502```, ```503```, ```504``` | Server Errors. Something went wrong on our end. (These are rare.)
 
 ## Rate Limits (Throttling)
 
@@ -160,13 +213,14 @@ Rate limiting of the API is primarily considered on a per-user basis — or more
 Right now rate limit is 5000 calls every 15 minutes, but this value may be adjusted at our discretion.
 
 All responses have 3 additional headers:
+
 - ```X-RateLimit-Limit``` - current rate limit for your application;
 - ```X-RateLimit-Remaining``` - remaining rate limit for your application;
 - ```X-RateLimit-Reset``` - the time at which the current rate limit window resets in [UTC epoch seconds](http://en.wikipedia.org/wiki/Unix_time).
 
 When limit is exceeded all requests will return ```HTTP 402``` status code.
 
-```json
+```
 X-RateLimit-Limit: 5000
 X-RateLimit-Remaining: 4966
 X-RateLimit-Reset: 1372700873
@@ -182,11 +236,11 @@ Also note: making a conditional request and receiving a 304 response does not co
 
 The API supports Cross Origin Resource Sharing (CORS) for AJAX requests from any origin. You can read the [CORS W3C Recommendation](http://www.w3.org/TR/cors/), or [this intro](http://code.google.com/p/html5security/wiki/CrossOriginRequestSecurity) from the HTML 5 Security Guide.
 
-```json
+```
 Access-Control-Allow-Origin: *
-Access-Control-Allow-Headers: Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, X-QBill-OTP, X-Requested-With
+Access-Control-Allow-Headers: Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, X-Requested-With
 Access-Control-Allow-Methods: GET, POST, PUT, DELETE
-Access-Control-Expose-Headers: ETag, Link, X-QBill-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes
+Access-Control-Expose-Headers: ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes
 Access-Control-Allow-Credentials: true
 ```
 
@@ -198,32 +252,16 @@ Explicitly provide an ISO 8601 timestamp with timezone information to use this f
 
 It is possible to supply a Time-Zone header which defines a timezone according to the list of names from the [Olson database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
-```json
+```shell
 curl -H "Time-Zone: Europe/Amsterdam" ..
 curl -H "Time-Zone: Europe/Kiev" ..
 ```
 
-This means that we generate a timestamp for the moment your API call is made in the timezone this header defines. For example, the Contents API generates a git commit for each addition or change and uses the current time as the timestamp. This header will determine the timezone used for generating that current timestamp.
-
-_Using the last known timezone for the user_
-
-If no Time-Zone header is specified and you make an authenticated call to the API, we use the last known timezone for the authenticated user. The last known timezone is updated whenever you browse the GitHub website.
-
-_UTC_
-
-If the steps above don't result in any information, we use UTC as the timezone to create the git commit.
+This means that we will return all datetime fields in corresponding timezone. Default timezone is UTC.
 
 ## Request IDs
 
-Each API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.
-
-## Expanding Objects
-
-Many objects contain the ID of a related object in their response properties. For example, a Charge may have an associated Customer ID. Those objects can be expanded inline with the expand request parameter. Objects that can be expanded are noted in this documentation. This parameter is available on all API requests, and applies to the response of that request only.
-
-You can nest expand requests with the dot property. For example, requesting invoice.customer on a charge will expand the invoice property into a full Invoice object, and will then expand the customer property on that invoice into a full Customer object.
-
-You can expand multiple objects at once by identifying multiple items in the expand array.
+Each API request has an associated request identifier. You can find this value in the response headers, under ```X-Request-ID``` or inside ```meta``` object in response data. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.
 
 ## Limiting response fields
 
@@ -231,6 +269,22 @@ By default, all the fields in a node are returned when you make a query. You can
 
 ```curl
 /resource?fields=id,name,balance
+```
+
+## Expanding Objects
+
+Many objects contain the ID of a related object in their response properties. For example a ```Transfer``` can have an associated ```User``` object linked by a ```sender``` field. Those objects can be expanded inline with the ```expand``` request parameter. Objects that can be expanded are noted in this documentation. This parameter is available on all API requests, and applies to the response of that request only.
+
+You can nest expand requests with the dot property. For example, requesting ```sender.payments``` on a ```Transfer``` list will expand the ```sender``` property into a full ```User``` object, and will then expand the ```payments``` property of that ```User``` into a full ```Transactions``` collection.
+
+You can expand multiple objects at once by identifying multiple items divided by comma.
+
+You can expand object by querying list, expands will be applied on all matched elements.
+
+Expanded collections return up to 25 elements, limit can be specified in brackets.
+
+```curl
+/users?expand=payments(5)
 ```
 
 ## Ordering response data
@@ -247,11 +301,129 @@ All accounts have test project that is created for by default. Just use test API
 
 ## Webhooks
 
-We send notifications.
+### Events
+
+All actions will trigger creation of notification, that will be send to all your webhooks that is subscribed for this kind of events.
+
+If notification is failed to deliver we will retry it for the next 24 hours. Retry time is increased each time request is made: 5, 15, 30 and 60 minutes. (60 minutes is a maximum timeout.)
+
+### Pre-Flight Requests
+
+To make API easier to integrate with other systems we can synchronously pass all requested data and all available metadata to endpoint specified in a Dashboard.
+
+Service will act differently based on HTTP response of this endpoint:
+
+oAuth HTTP Code | Action
+--------- | -----------
+2XX | Continue processing your request.
+301, 307, 308 | Follow the redirect. And continue checking response code.
+401, 402, 4XX | Return same HTTP code
+5XX and all other codes | Return HTTP 412 Precondition Failed
+
+This webhooks is extremely useful for antifraud purposes, when another system needs to validate transaction before they are completed.
 
 ## Geographic Optimization
 
 To ensure that you will always have the lowest response time we can provide, we are automatically detecting closest datacenter to you, so all your projects have master servers in it. To migrate data to different region please contact our support team.
+
+# Accounts
+
+## Create an Account
+
+```
+POST /v1/accounts
+```
+
+## Get account data
+
+```
+GET /v1/accounts/:id
+```
+
+## Funding an Account
+
+(TODO: Create a default project-wide accounts that can be funded, and all user accounts should be funded by a transfer.)
+
+```
+POST /v1/accounts/:account_id/fund
+```
+
+## Freezing and Unfreezing an Account
+
+Accounts can't be deleted, but can be freezed to prevent its future usage.
+
+```
+POST /v1/accounts/:id/freeze
+```
+
+You can unfreeze account to continue using it later.
+
+```
+POST /v1/accounts/:id/unfreeze
+```
+
+# Transaction
+
+Transaction is a main operation with account balance that covers both payments and transfers.
+
+## Creating Transaction
+
+There are two flows for creating a transaction:
+- Instant - create hold and immediately convert it to charge;
+- delayed - create hold and manually convert it to charge.
+
+A single payment can have multiple charges that will look like a single transaction for an account, but it will create multiple technical transactions. This is useful to charge fees.
+
+### One-Step Transaction
+
+```
+POST /v1/accounts/:account_id/transactions
+{
+  total: 100,
+  charges: [
+    {subtotal: 90, destination: "<service_account_id>", meta: {service_id: 1, service_name: 'Cellular Topup'}}
+    {subtotal: 10, destination: "<fees_account_id>", meta: {for: "service_payment", service_id 1}}
+  ],
+  meta: {}
+}
+```
+
+### Multi-Step Transaction
+
+Hold money on target account.
+```
+POST /v1/accounts/:account_id/holds
+```
+
+While money is on-hold you can change any payment details, for eg. to refund some part of money
+
+```
+PUT /v1/holds/:transaction_id
+{
+  total: 20.00
+}
+```
+
+After hold payment can be completed to commit balance change and turn hold into charge or declined to remove hold and return funds to available balance.
+
+```
+POST /v1/transactions/:transaction_id/complete
+```
+
+```
+POST /v1/transactions/:transaction_id/decline
+```
+
+
+# Transactions
+
+# Holds
+
+# Settings
+
+# Webhooks
+
+# Backups
 
 # Best Practices
 
