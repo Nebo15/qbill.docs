@@ -46,10 +46,10 @@ As per RESTful design patterns, API implements following HTTP verbs:
 
 ## Response structure
 
-Response consist 4 main objects in root:
+Response consist of 4 main objects in root:
 
 - ```meta``` - URL of the requested resource; current status; error and error messages; root object type; idempotency key; request id.
-- ```paging``` - pagination data
+- ```paging``` - pagination data;
 - ```urgent``` - notifications and counters;
 - ```data``` - root response data object;
 - ```sandbox``` - data provided by ```sandbox``` environment, for eg. otp token.
@@ -106,11 +106,11 @@ To use our service you need to authenticate your application. Additionally you c
 
 Authenticate your account when using the API by including your secret API key in the request. You can manage your API keys in the dashboard.
 
-<aside class="warning">
-Your API keys carry many privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such GitHub, client-side code, and so forth.
-</aside>
-
 Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia.org/wiki/Basic_access_authentication). Provide your API key as the basic auth username value. You do not need to provide a password.
+
+<aside class="warning">
+Your API keys carry all the privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such GitHub, client-side code, and so forth.
+</aside>
 
 ```curl
 curl https://example.com/resource \
@@ -127,7 +127,7 @@ This is an option. To make it work specify oAuth provider in your Dashboard. Whe
 Requests without oAuth token will return HTTP 401 error code.
 </aside>
 
-Currently support 3 oAuth providers: Facebook, Google and a custom endpoint, that can be entered by you.
+Currently we support 3 oAuth providers: Facebook, Google and a custom endpoint, that can be entered by you.
 
 ```curl
 curl https://example.com/resource \
@@ -176,10 +176,10 @@ We support 3 content types that should be send in a ```Content-Type``` header:
 - ```text/csv``` - to receive response in CSV format.
 
 <aside class="notice">
-For CSV we will return only content in root ```data``` object, without any additional meta (for eg. pagination) to make it prettier in spreadsheets viewers.
+For CSV we will return only content in a root ```data``` object, without any additional meta (for eg. pagination) to make it prettier in spreadsheets viewers.
 </aside>
 
-To simplify documentation all samples will be provided with JSON ```Content-Type``` responses.
+To simplify documentation all samples will be provided with JSON content type responses.
 
 ## Errors
 
@@ -187,13 +187,13 @@ All errors is returned in JSON format if another ```Content-Type``` is not speci
 
 ### Application Error Types
 
-Parameter | Description
+> Parameter | Description
 --------- | -----------
 ID | The ID to retrieve
 
 ### HTTP status codes
 
-HTTP Code | Description
+> HTTP Code | Description
 --------- | -----------
 ```200``` | Everything worked as expected;
 ```400``` | Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON;
