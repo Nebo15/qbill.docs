@@ -15,13 +15,13 @@ Welcome to the QBilling API. It will provide you access to universal billing sys
 
 ### Data Retention Policy
 
-We believe that vendor-lock is a bad thing, thats why you are free to download all data from your account in JSON format.
+We believe that vendor-lock is a bad thing, thats why you are free to download all data from your account in a JSON format.
 
-Also you can remove all you data from our servers. After your confirm data remove process in Dashboard we will keep everything for additional 30 days, so your account will be protected from accidental removals. After 30 days all data will be scrubbed for our servers and impossible to restore.
+Also you can remove all you data from our servers. After your confirm data remove process in Dashboard we will keep everything for additional 30 days, so your account will be protected from accidental removals. After 30 days all data will be scrubbed from our servers and impossible to restore.
 
 ### API-oriented
 
-We are API centered, that means that we are trying to make it simple, easy to understand, and yet very powerful.
+We are API-centered, that means that we are trying to make it simple, easy to understand, and yet very powerful.
 
 ### Crossintegrations
 
@@ -95,7 +95,9 @@ To use our service you need to authenticate your application. Additionally you c
 
 Authenticate your account when using the API by including your secret API key in the request. You can manage your API keys in the dashboard.
 
-! Your API keys carry many privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such GitHub, client-side code, and so forth.
+<aside class="warning">
+Your API keys carry many privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such GitHub, client-side code, and so forth.
+</aside>
 
 Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia.org/wiki/Basic_access_authentication). Provide your API key as the basic auth username value. You do not need to provide a password.
 
@@ -110,7 +112,9 @@ curl https://example.com/resource \
 
 This is an option. To make it work specify oAuth provider in your Dashboard. When "Client Authentication" is turned on, our API expects additional key provided as HTTP Basic Auth password.
 
-! Requests without oAuth token will return HTTP 401 error code.
+<aside class="notice">
+Requests without oAuth token will return HTTP 401 error code.
+</aside>
 
 Currently support 3 oAuth providers: Facebook, Google and a custom endpoint, that can be entered by you.
 
@@ -124,7 +128,7 @@ After receiving oAuth token we will send a GET request to selected oAuth endpoin
 oAuth HTTP Code | Action
 --------- | -----------
 2XX | Continue processing your request.
-301, 307, 308 | Follow the redirect. And continue checking response code.
+301, 302, 307, 308 | Follow the redirect. And continue checking response code.
 403 | Return HTTP 403 Forbidden
 401, 402 and other 4XX | Return HTTP 401 Unauthorized
 5XX | Return HTTP 412 Precondition Failed
@@ -150,7 +154,7 @@ Arguments:
 
 - ```limit``` (optional) - A limit on the number of objects to be returned, between 1 and 100. Default: 50;
 - ```starting_after``` (optional) - A cursor for use in pagination. ```starting_after``` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with ```obj_foo```, your subsequent call can include ```starting_after=obj_foo``` in order to fetch the next page of the list;
-- ``` ``` (optional) - A cursor for use in pagination. ```ending_before``` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with ```obj_bar```, your subsequent call can include ```ending_before=obj_bar``` in order to fetch the previous page of the list.
+- ```ending_before``` (optional) - A cursor for use in pagination. ```ending_before``` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with ```obj_bar```, your subsequent call can include ```ending_before=obj_bar``` in order to fetch the previous page of the list.
 
 ## HTTP Verbs
 
@@ -175,19 +179,21 @@ Other redirection status codes may be used in accordance with the HTTP 1.1 spec.
 
 ## Content Types
 
-We support 3 content types:
+We support 3 content types that should be send in a ```Content-Type``` header:
 
 - ```application/json``` - to response in JSON format;
 - ```application/xml``` - to receive response in XML format;
 - ```text/csv``` - to receive response in CSV format.
 
-Internally we stick with JSON, and convert it to XML or CSV when necessary, so response structure for JSON and XML content types will be pretty much the same. But for CSV we will return only content in root ```data``` object, without any additional meta (for eg. pagination) to make it prettier in spreadsheets viewers.
+<aside class="notice">
+For CSV we will return only content in root ```data``` object, without any additional meta (for eg. pagination) to make it prettier in spreadsheets viewers.
+</aside>
 
-To simplify documentation all samples will be provided with JSON ```content-type``` responses.
+To simplify documentation all samples will be provided with JSON ```Content-Type``` responses.
 
 ## Errors
 
-All errors is returned in JSON format if another ```content-type``` is not specified. This means that your will receive JSON for requests with HTTP 415 code when incorrect ```content-type``` is provided.
+All errors is returned in JSON format if another ```Content-Type``` is not specified. This means that your will receive JSON for requests with HTTP 415 code when incorrect ```Content-Type``` is provided.
 
 ### Application Error Types
 
@@ -218,11 +224,15 @@ Right now rate limit is 5000 calls every 15 minutes, but this value may be adjus
 
 All responses have 3 additional headers:
 
-- ```X-RateLimit-Limit``` - current rate limit for your application;
-- ```X-RateLimit-Remaining``` - remaining rate limit for your application;
-- ```X-RateLimit-Reset``` - the time at which the current rate limit window resets in [UTC epoch seconds](http://en.wikipedia.org/wiki/Unix_time).
+HTTP Header | Description
+--------- | -----------
+X-RateLimit-Limit | Current rate limit for your application;
+X-RateLimit-Remaining | Remaining rate limit for your application;
+X-RateLimit-Reset | The time at which the current rate limit window resets in [UTC epoch seconds](http://en.wikipedia.org/wiki/Unix_time).
 
+<aside class="notice">
 When limit is exceeded all requests will return ```HTTP 402``` status code.
+</aside>
 
 ```
 X-RateLimit-Limit: 5000
@@ -263,7 +273,7 @@ curl -H "Time-Zone: Europe/Kiev" ..
 
 This means that we will return all datetime fields in corresponding timezone. Default timezone is UTC.
 
-## Request IDs
+## Request ID's
 
 Each API request has an associated request identifier. You can find this value in the response headers, under ```X-Request-ID``` or inside ```meta``` object in response data. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.
 
@@ -303,7 +313,180 @@ By default, all collections are ordered in ascending chronological order. You ca
 
 All accounts have test project that is created for by default. Just use test API secret for your test environment. We don't have any policy for data retention in test accounts and we can drop all data once a while. You can do it manually from your dashboard.
 
-## Webhooks
+## Geographic Redundancy and Optimization
+
+To ensure that you will always have the lowest response time we can provide, we are automatically detecting nearest datacenter to you, so all your projects have master servers in it. To migrate data to different region please contact our support team.
+
+# Accounts
+
+Account is a one a base entities that represents any object with a balance. This balance can be in any currency. If you have multiple currencies, they will be converted automatically.
+
+## List all Accounts
+
+List all accounts with a filter. Filter can represent any field that is available in the response, except entities that needs to be expanded.
+
+(TODO: Add less than, greater than, text search).
+
+```
+GET /v1/accounts?filters=[]
+```
+
+> For analytical purposes response can be grouped by a field
+
+```
+GET /v1/accounts?filters=[]&group_by=[]
+```
+
+> For analytical purposes response can return aggregation counts
+
+```
+GET /v1/accounts?filters=[]&get_count_by=[]
+```
+
+## Create an Account
+
+Account can have any custom metadata, for eg. ```account_type``` that can be ```user``` and ```system```. Also you can link your internal ID to a user to find them by an ```external_id``` field.
+
+(TODO: Specify a custom ID?)
+
+```
+POST /v1/accounts
+```
+
+## Get all Account data
+
+```
+GET /v1/accounts/:id
+```
+
+## Funding an Account
+
+(TODO: Create a default project-wide accounts that can be funded, and all user accounts should be funded by a transfer.)
+
+(TODO: Move this to a Fundings entity?)
+
+(TODO: Allow subpayments on funding to charge front fee?)
+
+We recommend to fund only system accounts and to avoid direct funding for user-related accounts. This simplifies accounting of your system's money flow.
+
+```
+POST /v1/accounts/:account_id/fund
+{
+  total: 1000
+}
+```
+
+## Freezing and Unfreezing an Account
+
+Accounts can't be deleted, but can be freezed to prevent its future usage.
+
+```
+POST /v1/accounts/:id/freeze
+```
+
+You can unfreeze account to continue using it later.
+
+```
+POST /v1/accounts/:id/unfreeze
+```
+
+# Transactions
+
+Transaction is a main operation with account balance that covers both payments and transfers.
+
+Transactions can be ```internal``` and ```external```. We recommend you to skip ```internal``` transactions for all lists that will be visible for your customers, since then carry only technical purposes.
+
+## Creating Transaction
+
+There are two flows for creating a transaction:
+- Instant - create hold and immediately convert it to charge;
+- Delayed - create hold and manually convert it to charge.
+
+A single payment can have multiple charges that will look like a single transaction for an account, but it will create multiple technical transactions. This is useful to charge fees.
+
+### One-Step Transaction
+
+```
+POST /v1/accounts/:account_id/transactions
+{
+  total: 100,
+  charges: [
+    {subtotal: 90, destination: "<service_account_id>", meta: {service_id: 1, service_name: 'Cellular Topup'}}
+    {subtotal: 10, destination: "<fees_account_id>", meta: {for: "service_payment", service_id 1}}
+  ],
+  meta: {}
+}
+```
+
+### Multi-Step Transaction
+
+(TODO: Transfer with a currency conversion.)
+
+Hold money on target account.
+```
+POST /v1/accounts/:account_id/holds
+```
+
+> While money is on-hold you can change any payment details, for eg. to refund some part of money
+
+```
+PUT /v1/holds/:transaction_id
+{
+  total: 20.00
+}
+```
+
+> After hold payment can be completed to commit balance change and turn hold into charge or declined to remove hold and return funds to available balance.
+
+```
+POST /v1/transactions/:transaction_id/complete
+```
+
+```
+POST /v1/transactions/:transaction_id/decline
+```
+
+## List all Transactions
+
+List all transactions with a filter. Filter can represent any field that is available in the response, except entities that needs to be expanded.
+
+(TODO: Add less than, greater than, text search).
+
+```
+GET /v1/transactions?filters=[]
+```
+
+> For analytical purposes response can be grouped by a field
+
+```
+GET /v1/transactions?filters=[]&group_by=[]
+```
+
+> For analytical purposes response can return aggregation counts
+
+```
+GET /v1/transactions?filters=[]&get_count_by=[]
+```
+
+## Rollback a Transaction
+
+To a rollback we will create a new Transaction with a ```type=internal``` and a ```refference_id=<originalTransactionID>``` fields.
+
+## Create Refund for a Transaction
+
+Refund is similar to a Rollback, but you need to specify refund total for every account that received funds. This allows you to refund funds by keeping the fees or to refund it with all the fees.
+
+# Holds
+
+# Currencies and Rates
+
+# Webhooks
+
+# Events
+
+# Requests
+
+## General Infromation
 
 ### Events
 
@@ -326,106 +509,6 @@ oAuth HTTP Code | Action
 
 This webhooks is extremely useful for antifraud purposes, when another system needs to validate transaction before they are completed.
 
-## Geographic Optimization
-
-To ensure that you will always have the lowest response time we can provide, we are automatically detecting closest datacenter to you, so all your projects have master servers in it. To migrate data to different region please contact our support team.
-
-# Accounts
-
-## Create an Account
-
-```
-POST /v1/accounts
-```
-
-## Get account data
-
-```
-GET /v1/accounts/:id
-```
-
-## Funding an Account
-
-(TODO: Create a default project-wide accounts that can be funded, and all user accounts should be funded by a transfer.)
-
-```
-POST /v1/accounts/:account_id/fund
-```
-
-## Freezing and Unfreezing an Account
-
-Accounts can't be deleted, but can be freezed to prevent its future usage.
-
-```
-POST /v1/accounts/:id/freeze
-```
-
-You can unfreeze account to continue using it later.
-
-```
-POST /v1/accounts/:id/unfreeze
-```
-
-# Transaction
-
-Transaction is a main operation with account balance that covers both payments and transfers.
-
-## Creating Transaction
-
-There are two flows for creating a transaction:
-- Instant - create hold and immediately convert it to charge;
-- delayed - create hold and manually convert it to charge.
-
-A single payment can have multiple charges that will look like a single transaction for an account, but it will create multiple technical transactions. This is useful to charge fees.
-
-### One-Step Transaction
-
-```
-POST /v1/accounts/:account_id/transactions
-{
-  total: 100,
-  charges: [
-    {subtotal: 90, destination: "<service_account_id>", meta: {service_id: 1, service_name: 'Cellular Topup'}}
-    {subtotal: 10, destination: "<fees_account_id>", meta: {for: "service_payment", service_id 1}}
-  ],
-  meta: {}
-}
-```
-
-### Multi-Step Transaction
-
-Hold money on target account.
-```
-POST /v1/accounts/:account_id/holds
-```
-
-While money is on-hold you can change any payment details, for eg. to refund some part of money
-
-```
-PUT /v1/holds/:transaction_id
-{
-  total: 20.00
-}
-```
-
-After hold payment can be completed to commit balance change and turn hold into charge or declined to remove hold and return funds to available balance.
-
-```
-POST /v1/transactions/:transaction_id/complete
-```
-
-```
-POST /v1/transactions/:transaction_id/decline
-```
-
-
-# Transactions
-
-# Holds
-
-# Settings
-
-# Webhooks
 
 # Backups
 
