@@ -423,6 +423,7 @@ POST /v1/accounts/:account_id/transactions
 (TODO: Transfer with a currency conversion.)
 
 Hold money on target account.
+
 ```
 POST /v1/accounts/:account_id/holds
 ```
@@ -480,11 +481,9 @@ Refund is similar to a Rollback, but you need to specify refund total for every 
 
 # Currencies and Rates
 
-# Webhooks
-
 # Events
 
-# Requests
+# Webhooks
 
 ## General Infromation
 
@@ -509,6 +508,7 @@ oAuth HTTP Code | Action
 
 This webhooks is extremely useful for antifraud purposes, when another system needs to validate transaction before they are completed.
 
+# Requests
 
 # Backups
 
