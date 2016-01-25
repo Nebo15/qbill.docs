@@ -229,13 +229,17 @@ You can expand multiple objects at once by identifying multiple items in the exp
 
 By default, all the fields in a node are returned when you make a query. You can choose the fields you want returned with the "fields" query parameter. This is really useful for making your API calls more efficient and fast.
 
-```/resource?fields=id,name,balance```
+```curl
+/resource?fields=id,name,balance
+```
 
 ## Ordering response data
 
 By default, all collections are ordered in ascending chronological order. You can specify different order by providing the "order" query parameter.
 
-```/resource?order=payment.created_at(reverse_chronological)```
+```curl
+/resource?order=payment.created_at(reverse_chronological)
+```
 
 ## Testing
 
