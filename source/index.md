@@ -428,20 +428,20 @@ POST /v1/accounts/:account_id/fund
 ```
 
 ## Disabling an Account
-Accounts can't be deleted, but can be freezed to prevent its future usage. Freezed account will always return HTTP 403 error.
+Accounts can't be deleted, but can be disabled to prevent its future usage. Disabled account will always return HTTP 403 error.
 
-## Freezing
+### Disabled
 
 ```
 POST /v1/accounts/:id/freeze
 ```
 
-## Unfreezing
+### Enabling
 
-You can unfreeze account to continue using it later.
+You can enable account to continue using it later.
 
 ```
-POST /v1/accounts/:id/unfreeze
+POST /v1/accounts/:id/enable
 ```
 
 # Transactions
