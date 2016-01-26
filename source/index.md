@@ -215,13 +215,13 @@ message | Human readable message for API developer.
 
 ### Application Error Types
 
-> Parameter | Description
+Parameter | Description
 --------- | -----------
 ID | The ID to retrieve
 
 ### HTTP status codes
 
-> HTTP Code | Description
+HTTP Code | Description
 --------- | -----------
 ```200``` | Everything worked as expected.
 ```400``` | Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON.
