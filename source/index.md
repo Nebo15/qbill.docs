@@ -17,7 +17,7 @@ Welcome to the QBilling API. It will provide you access to universal billing sys
 
 We believe that vendor-lock is a bad thing, thats why you are free to download all data from your account in a JSON format.
 
-Also you can remove all you data from our servers. After your confirm data remove process in Dashboard we will keep everything for additional 30 days, so your account will be protected from accidental removals. After 30 days all data will be scrubbed from our servers and impossible to restore.
+Also you can remove all you data from our servers. After your confirm data remove process in Dashboard we will keep everything for additional 30 days, so your account will be protected from accidental removals. After 30 days all data will be scrubbed and impossible to restore.
 
 ### API-oriented
 
@@ -27,7 +27,7 @@ We are API-centered, that means that we are trying to make it simple, easy to un
 
 We support hustle-free integration with oAuth providers. See more at [Authentication](#authentication) section.
 
-Also we support custom webhook integrations in a SOA-style.
+Also we support custom webhook integrations in a SOA-style. This will help you to add any puzzle-pieces that you may need: users storage, antifraud systems, data storages, scoring systems, etc.
 
 # Interacting with API
 
@@ -37,18 +37,18 @@ Our API is organized around [REST](http://en.wikipedia.org/wiki/Representational
 
 As per RESTful design patterns, API implements following HTTP verbs:
 
-- ```HEAD``` - Can be issued against any resource to get just the HTTP header info;
-- ```GET``` - Read resources;
-- ```POST``` - Create new resources;
-- ```PUT``` - Replace resources or collections. For PUT requests with no body attribute, be sure to set the Content-Length header to zero;
+- ```HEAD``` - Can be issued against any resource to get just the HTTP header info.
+- ```GET``` - Read resources.
+- ```POST``` - Create new resources.
+- ```PUT``` - Replace resources or collections. For PUT requests with no body attribute, be sure to set the Content-Length header to zero.
 - ```DELETE``` - Remove resources.
 
 
 ## Response structure
 
-Response consist of 4 main objects in root:
+Response consist of 5 main root objects:
 
-- ```meta``` - URL of the requested resource; current status; error and error messages; root object type; idempotency key; request id.
+- ```meta``` - URL of the requested resource (```url``` ); current status (```code```); error and error messages (```error```); root object type (```type```); idempotency key (```idempotency_id```); request id (```request_id```).
 - ```paging``` - pagination data;
 - ```urgent``` - notifications and counters;
 - ```data``` - root response data object;
@@ -109,7 +109,7 @@ Authenticate your account when using the API by including your secret API key in
 Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia.org/wiki/Basic_access_authentication). Provide your API key as the basic auth username value. You do not need to provide a password.
 
 <aside class="warning">
-Your API keys carry all the privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such GitHub, client-side code, and so forth.
+Your API keys carry all the privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such GitHub, client-side code, and so forth. Paranoid people even don't store it in the configuration files, by keeping them in [memcache](https://en.wikipedia.org/wiki/Memcached).
 </aside>
 
 ```curl
@@ -184,6 +184,36 @@ To simplify documentation all samples will be provided with JSON content type re
 ## Errors
 
 All errors is returned in JSON format if another ```Content-Type``` is not specified. This means that your will receive JSON for requests with HTTP 415 code when incorrect ```Content-Type``` is provided.
+
+### Error Object
+
+Error description is returned as part of ```meta``` root object. It have following fields:
+
+Parameter | Description
+--------- | -----------
+type | Error type. You should return human-readable error message based on this field as a key. Type descriptions is listed in next section.
+invalid | Collection of validation errors for your request.
+invalid[].field_id | ID of invalid field.
+invalid[].rule | Failed rule for invalid field. Supported rules: ```required```, ```not_empty```, ```type:integer```, ```type:float```, ```type:string```, ```type:boolean```.
+invalid[].params | Optional parameters that can be used in a human-readable error message, to make it easier to understand. Usually it contains limit values for failed validator.
+message | Human readable message for API developer.
+
+```json
+{
+  "meta": {
+    "error": {
+      "type": "form_validation_failed",
+      "invalid": [
+        {"field_id": "username", "rule": "required"},
+        {"field_id": "email", "rule": "empty"}
+        {"field_id": "surname", "rule": "max_length", params:{max_lenght: 5}}
+      ],
+      "message": "You specified incorrect content type. See https://docs.qbill.ly/#content-type."
+    }
+  }
+}
+
+```
 
 ### Application Error Types
 
@@ -296,6 +326,20 @@ By default, all collections are ordered in ascending chronological order. You ca
 ## Testing
 
 All accounts have test project that is created for by default. Just use test API secret for your test environment. We don't have any policy for data retention in test accounts and we can drop all data once a while. You can do it manually from your dashboard.
+
+## Metadata
+
+We support ```metadata``` field for every objects in our API. It allows the API developer to store custom information related to accounts and transactions. This information can be for example:
+
+- Internal order ID.
+- Customers name and email address.
+
+Metadata field supports key-value pairs with the following limitations:
+
+- Up to 24 keys.
+- Up to 100 characters for the key (alphanumeric characters, hyphens and underscores).
+- Up to 500 characters for the value.
+- String, integer, decimals and boolean values only. All other types will be converted into strings.
 
 # Accounts
 
