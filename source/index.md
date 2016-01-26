@@ -74,9 +74,7 @@ Response consist of 5 main root objects:
   },
   "urgent": {
     "notifications": ["Read new emails!"],
-    "counters": {
-      "unseen_payments": 10
-    }
+    "unseen_payments": 10
   }
   "data": {
 
@@ -140,20 +138,14 @@ oAuth HTTP Code | Action
 --------- | -----------
 2XX | Continue processing your request.
 301, 302, 307, 308 | Follow the redirect. And continue checking response code.
-403 | Return HTTP 403 Forbidden
-401, 402 and other 4XX | Return HTTP 401 Unauthorized
-5XX | Return HTTP 412 Precondition Failed
+403 | Return HTTP 403 Forbidden.
+401, 402 and other 4XX | Return HTTP 401 Unauthorized.
+5XX | Return HTTP 412 Precondition Failed.
 
 
 ```
 GET <oAuthProviderURI>?access_token=<oAuthToken>&action=<APIProjectID>.<APIUserID>.<APIEntity>.<HTTPVerb>
 ```
-
-## Versioning
-
-All API calls should be made with a X-API-Version header which guarantees that your call is using the correct API version. Version is passed in as a date (UTC) of the implementation in YYYY-MM-DD format.
-
-If no version is passed, the newest will be used and a warning will be shown. Under no circumstances should you always pass in the current date as that will return the current version which might break your implementation.
 
 ## Pagination
 
@@ -169,14 +161,20 @@ Arguments:
 
 ## Content Type
 
+(TODO: Remove XML?)
+
 We support 3 content types that should be send in a ```Content-Type``` header:
 
-- ```application/json``` - to response in JSON format;
-- ```application/xml``` - to receive response in XML format;
-- ```text/csv``` - to receive response in CSV format.
+- ```application/json``` - Response is sent in a JSON format.
+- ```application/xml``` - Response is sent in a  XML format.
+- ```text/csv``` - Response is sent in a CSV format.
 
 <aside class="notice">
 For CSV we will return only content in a root ```data``` object, without any additional meta (for eg. pagination) to make it prettier in spreadsheets viewers.
+</aside>
+
+<aside class="notice">
+```Content-Type``` doesn't affect on webhooks format, they are always sent in JSON.
 </aside>
 
 To simplify documentation all samples will be provided with JSON content type responses.
@@ -225,13 +223,14 @@ ID | The ID to retrieve
 
 > HTTP Code | Description
 --------- | -----------
-```200``` | Everything worked as expected;
-```400``` | Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON;
-```401``` | Unauthorized. No valid API key provided or API key doesn't match project;
-```402``` | The parameters were valid but the request failed;
-```404``` | Not Found. The requested resource doesn't exist;
-```415``` | Incorrect Content-Type HTTP header;
-```429``` | Too Many Requests. Rate limit is exceeded;
+```200``` | Everything worked as expected.
+```400``` | Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON.
+```401``` | Unauthorized. No valid API key provided or API key doesn't match project.
+```402``` | The parameters were valid but the request failed.
+```403``` | Source or destination account is freezed.
+```404``` | Not Found. The requested resource doesn't exist.
+```415``` | Incorrect Content-Type HTTP header.
+```429``` | Too Many Requests. Rate limit is exceeded.
 ```500```, ```502```, ```503```, ```504``` | Server Errors. Something went wrong on our end. (These are rare.)
 
 ## Rate Limits (Throttling)
@@ -246,8 +245,8 @@ All responses have 3 additional headers:
 
 HTTP Header | Description
 --------- | -----------
-X-RateLimit-Limit | Current rate limit for your application;
-X-RateLimit-Remaining | Remaining rate limit for your application;
+X-RateLimit-Limit | Current rate limit for your application.
+X-RateLimit-Remaining | Remaining rate limit for your application.
 X-RateLimit-Reset | The time at which the current rate limit window resets in [UTC epoch seconds](http://en.wikipedia.org/wiki/Unix_time).
 
 <aside class="notice">
@@ -369,12 +368,42 @@ GET /v1/accounts?filters=[]&get_count_by=[]
 
 ## Create an Account
 
-Account can have any custom metadata, for eg. ```account_type``` that can be ```user``` and ```system```. Also you can link your internal ID to a user to find them by an ```external_id``` field.
-
-(TODO: Specify a custom ID?)
+Accounts support ```metadata``` object. See more info at [Metadata](#metadata) section.
 
 ```
 POST /v1/accounts
+{
+  metadata: {
+    external_id: 192838
+  }
+}
+```
+
+> Response
+
+```
+{
+  "meta": {
+    "code": "201",
+    "url": "https://api.qbill.ly/accounts/acc_388djejje88du",
+    "type": "account",
+    "request_id": "qudk48fFdaP",
+    "idempotency_id": "iXXedd88DKqo"
+  },
+  "urgent": {
+    "notifications": [],
+    "unseen_payments": 0,
+    "holds": 0,
+    "balance": 0
+  }
+  "data": {
+    id: "acc_388djejje88du"
+    balance: 0,
+    metadata: {
+      external_id: 192838
+    }
+  },
+}
 ```
 
 ## Get all Account data
@@ -385,13 +414,11 @@ GET /v1/accounts/:id
 
 ## Funding an Account
 
-(TODO: Create a default project-wide accounts that can be funded, and all user accounts should be funded by a transfer.)
-
 (TODO: Move this to a Fundings entity?)
 
 (TODO: Allow subpayments on funding to charge front fee?)
 
-We recommend to fund only system accounts and to avoid direct funding for user-related accounts. This simplifies accounting of your system's money flow.
+We recommend to fund only system accounts and to avoid direct funding for user-related accounts. This simplifies accounting of your system's money flow. You can find more info about best accounting practices at [Currency Flows](#currency-flows) section.
 
 ```
 POST /v1/accounts/:account_id/fund
@@ -400,13 +427,16 @@ POST /v1/accounts/:account_id/fund
 }
 ```
 
-## Freezing and Unfreezing an Account
+## Disabling an Account
+Accounts can't be deleted, but can be freezed to prevent its future usage. Freezed account will always return HTTP 403 error.
 
-Accounts can't be deleted, but can be freezed to prevent its future usage.
+## Freezing
 
 ```
 POST /v1/accounts/:id/freeze
 ```
+
+## Unfreezing
 
 You can unfreeze account to continue using it later.
 
@@ -415,6 +445,8 @@ POST /v1/accounts/:id/unfreeze
 ```
 
 # Transactions
+
+(TODO: Rename to Charge?)
 
 Transaction is a main operation with account balance that covers both payments and transfers.
 
@@ -428,7 +460,7 @@ There are two flows for creating a transaction:
 
 A single payment can have multiple charges that will look like a single transaction for an account, but it will create multiple technical transactions. This is useful to charge fees.
 
-### One-Step Transaction
+### Instant (One-Step) Transaction
 
 ```
 POST /v1/accounts/:account_id/transactions
@@ -442,7 +474,7 @@ POST /v1/accounts/:account_id/transactions
 }
 ```
 
-### Multi-Step Transaction
+### Delayed (Multi-Step) Transaction
 
 (TODO: Transfer with a currency conversion.)
 
@@ -503,9 +535,45 @@ Refund is similar to a Rollback, but you need to specify refund total for every 
 
 # Holds
 
-# Currencies and Rates
+## Create a Hold
+
+## List all Holds
+
+## Get all Account Holds
+
+## Cancel a Hold
+
+## Convert Hold into Transaction
+
+# Fundings
+
+Funding allows to top-up any balance in a system. Basically this is an equivalent for an money emission, where all generated funds will be sent to specific system account.
+
+## Create a Funding operation
+
+## List all Funding operations
+
+## Canceling a Funding operation
+
+All Fundings can't be canceled, to do so just create a Transaction and move money to system account.
+
+# Currencies and Conversion Rates
+
+Our system supports any currency with a custom conversion rates. To simplify conversion we have a base
+
+## Creating a Currency
+
+## List all Currencies
+
+## Updating a Currency
+
+### Setting a base Currency
+
+### Changing Conversion Rates
 
 # Events
+
+## List all Events
 
 # Webhooks
 
@@ -534,9 +602,13 @@ This webhooks is extremely useful for antifraud purposes, when another system ne
 
 # Requests
 
+## List all Requests
+
 # SQL Queries
 
 # Backups
+
+## Download all data
 
 # Best Practices
 
@@ -548,7 +620,7 @@ This will help you to calculate losses and revenue in a right, predictable way.
 
 ## Token and ID lengths and formats
 
-In order to avoid interruptions in processing, it's best to make minimal assumptions about what our gateway-generated tokens and identifiers will look like in the future. The length and format of these identifiers – including payment method tokens and transaction IDs – can change at any time, with or without advance notice. However, it is safe to assume that they will remain 1 to 64 alphanumeric characters.
+In order to avoid interruptions in processing, it's best to make minimal assumptions about what our gateway-generated tokens and identifiers will look like in the future. The length and format of these identifiers – including payment method tokens and transaction IDs – can change at any time, with or without advance notice. However, it is safe to assume that they will remain 1 to 64 upper- and lowercase alphanumeric characters with minuses (```-```) and underscores (```_```).
 
 ## Geographic Redundancy and Optimization
 
@@ -567,6 +639,12 @@ How you create unique keys is completely up to you. We suggest using random stri
 Most responses return an ETag header. Many responses also return a Last-Modified header. You can use the values of these headers to make subsequent requests to those resources using the ```If-None-Match``` and ```If-Modified-Since``` headers, respectively. If the resource has not changed, the server will return a 304 Not Modified.
 
 Also note: making a conditional request and receiving a 304 response does not count against your Rate Limit, so we encourage you to use it whenever possible.
+
+## Versioning
+
+All API calls should be made with a X-API-Version header which guarantees that your call is using the correct API version. Version is passed in as a date (UTC) of the implementation in YYYY-MM-DD format.
+
+If no version is passed, the newest will be used and a warning will be shown. Under no circumstances should you always pass in the current date as that will return the current version which might break your implementation.
 
 ## SSL certificates
 
