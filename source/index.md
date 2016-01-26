@@ -533,6 +533,10 @@ To a rollback we will create a new Transaction with a ```type=internal``` and a 
 
 Refund is similar to a Rollback, but you need to specify refund total for every account that received funds. This allows you to refund funds by keeping the fees or to refund it with all the fees.
 
+## Transferring money between projects
+
+(TODO: Should we handle it or leave it for developers?)
+
 # Holds
 
 ## Create a Hold
