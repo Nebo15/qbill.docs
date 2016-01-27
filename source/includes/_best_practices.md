@@ -8,11 +8,25 @@ This will help you to calculate losses and revenue in a right, predictable way.
 
 ### Funding account
 
-Every time you need to add a money to your system you should create a ```Funding```. Even trough they have a separate endpoint we strongly recommend to fund a technical accounts, rather that directly funding consumer accounts.
+Every time you need to add a money to your system you should create a ```Funding```. Even trough they have a separate endpoint to load all fundings, we strongly recommend to fund a transit accounts first, rather that directly consumer accounts.
 
-For example, you can create a system account for money inflow for each of your Payment Service Providers, and you would be able to list all
+For example, you can create a system account for money inflow for each of your Payment Service Providers, and you would be able to list all transfers trough it, compare money flow of our PSP and QBill, and to charge front-fee by leaving some money on transit account or by batch-transferring it both to customer and "revenue" accounts.
 
-Also this allows you to charge front-fees on your money income.
+Also we strongly recommend you to use ```Funding``` metadata power, by adding to it original ID of your PSP, original amount and other helpful information, to efficiently track money flow trough all the systems.
+
+### Revenue tracking
+
+For revenue we recommend you to create special account for each of revenue-takers (you, your partners, etc.)
+
+This will allow to find all transactions that is gained your revenue, and to easily understand how many you need to pay to your partners.
+
+Finally if you want to clear revenue account once a while (for example, each time you sending money to a partner), you can simply send them to "/dev/null" account, that will accommodate all funds that should be terminated.
+
+Direct reduction of account is not possible to keep you from common accounting mistakes.
+
+### Charges
+
+Any time you charge customer for any type your services, you should simply create a transfer to a revenue account with corresponding metadata (to show correct transaction information for your customers).
 
 ## Token and ID lengths and formats
 
