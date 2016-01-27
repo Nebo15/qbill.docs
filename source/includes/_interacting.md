@@ -330,3 +330,17 @@ We have list of key objects that is accessible trough our API:
 - ```Settings``` - List of settings for API ```Project```.
 - ```Projects``` - List of available projects (they have different access scope and API keys).
 - ```Backup``` - Data retention endpoint that allows to download all data of your projects.
+
+## Request Flow
+
+1. Save request data.
+2. Check authentication. And if authorized..
+3. Check rate limits for your application. And if they not exceeded..
+3. Run any pre-flight webhooks, for example for customer authentication. And if webhooks returned 2XX codes..
+4. Validate request data and complete request.
+4.1. Generate event for this request.
+4.2. Queue money flow (all operations with money is asynchronous).
+5. Return API response
+6. Save API response to ```Requests```
+7. Schedule all webhooks configured for a ```Project```. If webhook failed, re-try it.
+8. Record all webhooks statuses
