@@ -8,4 +8,4 @@ before_script:
   - git config --global user.name "The Marvin"
 script:
   - git status
-  - bundle exec rake publish ALLOW_DIRTY=true --verbose
+  - bundle exec rake publish ALLOW_DIRTY=true --trace
