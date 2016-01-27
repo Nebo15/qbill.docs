@@ -10,8 +10,8 @@ includes:
   - best_practices
   - projects
   - settings
-  - accounts
   - backup
+  - accounts
   - fundings
   - holds
   - transfers
