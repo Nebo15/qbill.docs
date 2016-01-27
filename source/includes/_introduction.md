@@ -23,3 +23,15 @@ Also we support custom webhook integrations in a SOA-style. This will help you t
 ### Project scopes
 
 We allow you to create separated projects in case you need them for different test or production environments.
+
+# Account types
+
+We have 3 plans for different clients:
+
+1. Starter. This is a free account that you can use for testing purposes. It's rate limited to 1000 requests per 15 minutes. Support trough GitHub issues.
+
+2. Basic. Includes all features starter plan and rate limit of 5000 requests per 15 minutes.
+
+3. Enterpise. Basic package plus access to custom SQL queries. Backups for this plan can be downloaded 4 times per day. Plus email support.
+
+Need custom installation or 99.9% SLA? Contact us!

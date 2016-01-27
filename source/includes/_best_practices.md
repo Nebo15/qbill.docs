@@ -6,6 +6,14 @@ We encourage you to use right accounting models inside your system. Separate all
 
 This will help you to calculate losses and revenue in a right, predictable way.
 
+### Funding account
+
+Every time you need to add a money to your system you should create a ```Funding```. Even trough they have a separate endpoint we strongly recommend to fund a technical accounts, rather that directly funding consumer accounts.
+
+For example, you can create a system account for money inflow for each of your Payment Service Providers, and you would be able to list all
+
+Also this allows you to charge front-fees on your money income.
+
 ## Token and ID lengths and formats
 
 In order to avoid interruptions in processing, it's best to make minimal assumptions about what our gateway-generated tokens and identifiers will look like in the future. The length and format of these identifiers – including payment method tokens and transaction IDs – can change at any time, with or without advance notice. However, it is safe to assume that they will remain 1 to 64 upper- and lowercase alphanumeric characters with minuses (```-```) and underscores (```_```).

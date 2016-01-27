@@ -13,8 +13,8 @@ includes:
   - accounts
   - backup
   - fundings
-  - transfers
   - holds
+  - transfers
   - currencies
   - events
   - webhooks

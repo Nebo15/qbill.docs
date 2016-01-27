@@ -208,6 +208,8 @@ HTTP Code | Description
 
 ## Rate Limits (Throttling)
 
+(TODO: Rate limit depends on account type.)
+
 We throttle our APIs by default to ensure maximum performance for all developers. All projects share a same rate limit, to avoid API-consuming fraud.
 
 Rate limiting of the API is primarily considered on a per-user basis — or more accurately, per access token in your control. Rate limits are determined globally for the entire application.
