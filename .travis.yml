@@ -9,3 +9,4 @@ before_script:
 script:
   - git status
   - bundle exec rake publish ALLOW_DIRTY=true --trace
+  - bundle exec middleman build --clean --verbose

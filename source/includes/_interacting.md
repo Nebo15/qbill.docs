@@ -9,7 +9,7 @@ As per RESTful design patterns, API implements following HTTP verbs:
 - ```HEAD``` - Can be issued against any resource to get just the HTTP header info.
 - ```GET``` - Read resources.
 - ```POST``` - Create new resources.
-- ```PUT``` - Replace resources or collections. For PUT requests with no body attribute, be sure to set the Content-Length header to zero.
+- ```PUT``` - Replace resources (basically fields) or collections.
 - ```DELETE``` - Remove resources.
 
 ## Response structure
@@ -67,6 +67,11 @@ All responses have ```object``` field that contains object type. For eg. transac
 ## Authentication
 
 To use our service you need to authenticate your application. Additionally you can use our oAuth cross-integration for authenticating your clients.
+
+### Root token
+
+(TODO: Describe root authentication with OTP token.)
+(TODO: Allow creating root user accounts only from our domain.)
 
 ### Application
 
