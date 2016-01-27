@@ -313,7 +313,7 @@ Metadata field supports key-value pairs with the following limitations:
 - Up to 24 keys.
 - Up to 100 characters for the key (alphanumeric characters, hyphens and underscores).
 - Up to 500 characters for the value.
-- String, integer, decimals and boolean values only. All other types will be converted into strings.
+- String, integer, decimals and boolean values only. All other types will be converted into string.
 
 ## Key objects
 

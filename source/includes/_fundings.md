@@ -1,5 +1,7 @@
 # Fundings
 
+(TODO: We can replace this with special "Funding" account with unlimited balance.)
+
 Funding allows to top-up any balance in a system. Basically this is an equivalent for an money emission, where all generated funds will be sent to specific system account.
 
 ## Create a Funding operation
