@@ -1,5 +1,7 @@
 # Webhooks
 
+Each webhook call is added to your rate limit, so be careful and void creating too many of them.
+
 ## General Infromation
 
 ### Events
