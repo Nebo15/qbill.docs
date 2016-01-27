@@ -12,7 +12,6 @@ As per RESTful design patterns, API implements following HTTP verbs:
 - ```PUT``` - Replace resources or collections. For PUT requests with no body attribute, be sure to set the Content-Length header to zero.
 - ```DELETE``` - Remove resources.
 
-
 ## Response structure
 
 Response consist of 5 main root objects:
@@ -204,7 +203,7 @@ HTTP Code | Description
 
 ## Rate Limits (Throttling)
 
-We throttle our APIs by default to ensure maximum performance for all developers.
+We throttle our APIs by default to ensure maximum performance for all developers. All projects share a same rate limit, to avoid API-consuming fraud.
 
 Rate limiting of the API is primarily considered on a per-user basis — or more accurately, per access token in your control. Rate limits are determined globally for the entire application.
 
@@ -308,3 +307,19 @@ Metadata field supports key-value pairs with the following limitations:
 - Up to 100 characters for the key (alphanumeric characters, hyphens and underscores).
 - Up to 500 characters for the value.
 - String, integer, decimals and boolean values only. All other types will be converted into strings.
+
+## Key objects
+
+We have list of key objects that is accessible trough our API:
+
+- ```Accounts``` - Represents a customer object with a balance.
+- ```Fundings``` - Represents fundings into system. All top-ups is grouped in this list, to have all money income in a single place.
+- ```Transfers``` - Represents all charges and transfer operations in system. (Move of money from one account into another.)
+- ```Holds``` - Represents all holds on account balances. Hold is a similar of ```Transfers```, with key difference: hold decreases available balance for an ```Account```, but doesn't really decrease balance itself. ```Hold``` can be declined or turned into ```Transfer```.
+- ```Webhooks``` - List of all webhooks and their historical data.
+- ```Events``` - List of all events that was created in our API.
+- ```Requests``` - List of all incoming requests to the API.
+- ```Currencies``` - List of custom currencies.
+- ```Settings``` - List of settings for API ```Project```.
+- ```Projects``` - List of available projects (they have different access scope and API keys).
+- ```Backup``` - Data retention endpoint that allows to download all data of your projects.

@@ -19,3 +19,7 @@ We are API-centered, that means that we are trying to make it simple, easy to un
 We support hustle-free integration with oAuth providers. See more at [Authentication](#authentication) section.
 
 Also we support custom webhook integrations in a SOA-style. This will help you to add any puzzle-pieces that you may need: users storage, antifraud systems, data storages, scoring systems, etc.
+
+### Project scopes
+
+We allow you to create separated projects in case you need them for different test or production environments.

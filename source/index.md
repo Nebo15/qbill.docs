@@ -8,7 +8,10 @@ includes:
   - introduction
   - interacting
   - best_practices
+  - projects
+  - settings
   - accounts
+  - backup
   - fundings
   - transfers
   - holds
@@ -16,9 +19,7 @@ includes:
   - events
   - webhooks
   - requests
-  - settings
   - queries
-  - backup
 
 search: true
 ---
