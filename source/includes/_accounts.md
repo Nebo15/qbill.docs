@@ -4,24 +4,8 @@ Account is a one a base entities that represents any object with a balance. This
 
 ## List all Accounts
 
-List all accounts with a filter. Filter can represent any field that is available in the response, except entities that needs to be expanded.
-
-(TODO: Add less than, greater than, text search).
-
 ```
-GET /v1/accounts?filters=[]
-```
-
-> For analytical purposes response can be grouped by a field
-
-```
-GET /v1/accounts?filters=[]&group_by=[]
-```
-
-> For analytical purposes response can return aggregation counts
-
-```
-GET /v1/accounts?filters=[]&get_count_by=[]
+GET /v1/accounts
 ```
 
 ## Create an Account
