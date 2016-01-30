@@ -167,7 +167,7 @@ Validator | Description
 ```url``` | The field under validation must be a valid URL according to PHP's ```filter_var``` function.
 ```otp_code``` | A valid OTP code.
 ```password_strong``` | Password field that should include at least one latin letter in lowercase, one letter in uppercase and one number. Min lenght is set by another rule.
--------------------------- |
+----------------------------- |
 
 ## Pagination
 
@@ -450,8 +450,6 @@ We have list of key objects that is accessible trough our API:
 - ```Requests``` - List of all incoming requests to the API.
 - ```Currencies``` - List of custom currencies.
 - ```Settings``` - List of settings for API ```Project```.
-- ```Projects``` - List of available projects (they have different access scope and API keys).
-- ```Backup``` - Data retention endpoint that allows to download all data of your projects.
 
 ## Batching Request
 
