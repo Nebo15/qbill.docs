@@ -233,9 +233,9 @@ HTTP Code | Description
 ```400``` | Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON.
 ```401``` | Unauthorized. No valid API key provided or API key doesn't match project.
 ```402``` | The parameters were valid but the request failed.
-```403``` | Source or destination account is freezed.
+```403``` | Source or destination account is disabled.
 ```404``` | Not Found. The requested resource doesn't exist.
-```415``` | Incorrect Content-Type HTTP header.
+```415``` | Incorrect ```Content-Type``` HTTP header.
 ```429``` | Too Many Requests. Rate limit is exceeded.
 ```500```, ```502```, ```503```, ```504``` | Server Errors. Something went wrong on our end. (These are rare.)
 
@@ -384,9 +384,13 @@ curl \
     https://graph.facebook.com
 ```
 
+(TODO: Add alias for lists: /list/:id1,:id2. It's easier. Clarify rate limits. Clarify response structure.)
+
 ### Timeouts
 
 Large or complex batches may timeout if it takes too long to complete all the requests within the batch. In such a circumstance, the result is a partially-completed batch. In partially-completed batches, responses from operations that complete successfully will look normal (see prior examples) whereas responses for operations that are not completed will be null.
+
+(TODO: Return correct json with error instead of null.)
 
 ### Limits
 
