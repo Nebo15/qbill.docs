@@ -80,7 +80,8 @@ Response can consist of 5 root properties:
     "has_more": true
   },
   "sandbox": {
-    "debug_varibale": "39384"
+    "debug_varibale": "39384",
+    "live": "false"
   }
 }
 
@@ -422,7 +423,21 @@ year | Return aggregation for each year in a filtered period.
 
 ## Testing
 
-All accounts have test project that is created for by default. Just use test API secret for your test environment. We don't have any policy for data retention in test accounts and we can drop all data once a while. You can do it manually from your dashboard.
+All accounts have test project that is created for you on account creation. Just use test project API secret for your test environment. We don't have any policy for data retention in test accounts and we can drop all data once a while. You can do it manually from your dashboard.
+
+Responses in ```sandbox``` environment will always return a ```sandbox``` property.
+
+```
+{
+  "meta":{},
+  "data":{},
+  "sandbox":{
+    ...
+  }
+}
+```
+
+Right now test accounts is not rate limited, but we will manually limit test project that will consume too many resources.
 
 ## Metadata
 
