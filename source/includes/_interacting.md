@@ -9,155 +9,98 @@ As per RESTful design patterns, API implements following HTTP verbs:
 - ```HEAD``` - Can be issued against any resource to get just the HTTP header info.
 - ```GET``` - Read resources.
 - ```POST``` - Create new resources.
-- ```PUT``` - Replace resources (basically fields) or collections.
+- ```PUT``` - Replace resources (basically field values) or collections.
 - ```DELETE``` - Remove resources.
 
-## Response structure
+### HTTP status codes
 
-Response consist of 5 main root objects:
-
-- ```meta``` - URL of the requested resource (```url``` ); current status (```code```); error and error messages (```error```); root object type (```type```); idempotency key (```idempotency_id```); request id (```request_id```).
-- ```paging``` - pagination data;
-- ```urgent``` - notifications and counters;
-- ```data``` - root response data object;
-- ```sandbox``` - data provided by ```sandbox``` environment, for eg. otp token.
-
-```json
-{
-  "meta": {
-    "code": "XXX",
-    "url": "https://qbill.ly/transactions/",
-    "type": "list",
-    "error": {
-      "type": "form_validation_failed",
-      "params": {"submit_date": "2015-01-24"},
-      "fields": [
-        {"field_id": "username", "rule": "required"},
-        {"field_id": "email", "rule": "empty"}
-      ],
-      "message": "You specified incorrect content type. See https://docs.qbill.ly/#content-type."
-    },
-    "request_id": "qudk48fFlaP",
-    "idempotency_id": "iXXekd88DKqo"
-  },
-  "urgent": {
-    "notifications": ["Read new emails!"],
-    "unseen_payments": 10
-  },
-  "data": {
-
-  },
-  "paging": {
-    "cursors": {
-      "after": "MTAxNTExOTQ1MjAwNzI5NDE=",
-      "before": "NDMyNzQyODI3OTQw"
-    },
-    "has_more": true,
-    "limit": 50
-  },
-  "sandbox": {
-    "otp_code": "39384"
-  }
-}
-
-```
-
-All responses have ```object``` field that contains object type. For eg. transactions have ```object``` that equals to ```transaction```.
+HTTP Code | Description
+--------- | -----------
+```200``` | Everything worked as expected.
+```400``` | Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON.
+```401``` | Unauthorized. No valid API key provided or API key doesn't match project.
+```402``` | The parameters were valid but the request failed.
+```403``` | Source or destination account is disabled.
+```404``` | Not Found. The requested resource doesn't exist.
+```415``` | Incorrect ```Content-Type``` HTTP header.
+```429``` | Too Many Requests. Rate limit is exceeded.
+```500```, ```502```, ```503```, ```504``` | Server Errors. Something went wrong on our end. (These are rare.)
 
 ## Authentication
 
-(TODO: Move all application creation to a separate docs or section, since its a different internal API.)
-
-To use our service you need to authenticate your application. Additionally you can use our oAuth cross-integration for authenticating your clients.
-
-Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia.org/wiki/Basic_access_authentication). Provide your API key as the basic auth username value. You do not need to provide a password.
-
-API takes two types of tokens (```application``` and ```project``` tokens), each of them have different access scope. This scope is managed by a object-related Access Control Layer. It means that if you have token that have access to a ```Accounts`` list, than you can manage all records in this list, and all fields in them.
-
-List of objects and token access to them:
-
-Object | ```application``` Token | ```project``` Token
---------- | ----------- | -----------
-```Projects``` | Yes | No
-```Settings``` | Yes | No
-```Backup``` | Yes | No
-```Accounts``` | No | Yes
-```Fundings``` | No | Yes
-```Transfers``` | No | Yes
-```Holds``` | No | Yes
-```Webhooks``` | No | Yes
-```Events``` | No | Yes
-```Requests``` | No | Yes
-```Currencies``` | No | Yes
-
-You can additionally add oAuth authentication for your clients, by using a pre-flight webhook and a "exchanged-token" technique. You can find more info at [Connecting oAuth Provider]() section.
-
-<aside class="warning">
-Your API keys carry all the privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such GitHub, client-side code, and so forth. Paranoid people even don't store it in the configuration files, by keeping them in [memcache](https://en.wikipedia.org/wiki/Memcached).
-</aside>
-
-### Application token
-
-(TODO: Describe root authentication with OTP token. Lets call them ```Managers``` + API for manager login.)
-
-(TODO: Allow creating root user accounts only from our domain.)
-
-### Project token
-
-Authenticate your account when using the API by including your secret API key in the request. You can manage your API keys in the dashboard.
+To use our service you need to authenticate your application. Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia.org/wiki/Basic_access_authentication). Provide your API key as the basic auth username value. You do not need to provide a password. You can manage your API keys in the Dashboard.
 
 ```curl
 curl https://example.com/resource \
    -u WgLodNU5wCdbSw4f:
 ```
 
-## Pagination
-
-All top-level API resources with root type ```list``` have support of pagination over a "list" API methods. These methods share a common structure, taking at least these three parameters: ```limit```, ```starting_after```, and ```ending_before```.
-
-API utilizes cursor-based pagination via the ```starting_after``` and ```ending_before``` parameters. Both take an existing object ID value (see below). The ```ending_before``` parameter returns objects created before the named object, in descending chronological order. The ```starting_after``` parameter returns objects created after the named object, in ascending chronological order. If both parameters are provided, only ending_before is used.
-
-Arguments:
-
-- ```limit``` (optional) - A limit on the number of objects to be returned, between 1 and 100. Default: 50;
-- ```starting_after``` (optional) - A cursor for use in pagination. ```starting_after``` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with ```obj_foo```, your subsequent call can include ```starting_after=obj_foo``` in order to fetch the next page of the list;
-- ```ending_before``` (optional) - A cursor for use in pagination. ```ending_before``` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with ```obj_bar```, your subsequent call can include ```ending_before=obj_bar``` in order to fetch the previous page of the list.
-
-## Content Type
-
-(TODO: Remove XML?)
-
-We support 3 content types that should be send in a ```Content-Type``` header:
-
-- ```application/json``` - Response is sent in a JSON format.
-- ```application/xml``` - Response is sent in a  XML format.
-- ```text/csv``` - Response is sent in a CSV format.
-
 <aside class="notice">
-For CSV we will return only content in a root ```data``` object, without any additional meta (for eg. pagination) to make it prettier in spreadsheets viewers.
+Even trough we support different scopes for tokens, you should simply use token from a Project settings in your Dashboard. (This token have a ```poject``` access scope.) All following mentions of token should read as "project scope token".
 </aside>
 
-<aside class="notice">
-```Content-Type``` affects on webhooks format, they are always sent in a originally requested content type. For ```CSV`` content type webhook will be sent in JSON format.
+<aside class="warning">
+Your API keys carry all the privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such GitHub, client-side code, and so forth. Paranoid people even don't store it in the configuration files, by keeping them in [memcache](https://en.wikipedia.org/wiki/Memcached).
 </aside>
 
-To simplify documentation all samples will be provided with JSON content type responses.
+Additionally you can create oAuth cross-integration for authenticating your clients and making requests directly to our API. You can find more info at [Integrating oAuth provider](#integrating-oauth-provider) section.
+
+## Response structure
+
+Response can consist of 5 root properties:
+
+- ```meta``` - URL of the requested resource (```url``` ); requested resource type (```type```); current status (```code```); optional error description (```error```); idempotency key (```idempotency_id```); request id (```request_id```).
+- ```urgent``` - Notifications and counters.
+- ```data``` - Requested resource.
+- ```paging``` - Pagination data.
+- ```sandbox``` - Optional data provided by ```sandbox``` environment, for development purposes.
+
+```json
+{
+  "meta": {
+    "url": "https://qbill.ly/transactions/",
+    "type": "list",
+    "code": "200",
+    "idempotency_id": "iXXekd88DKqo",
+    "request_id": "qudk48fFlaP"
+  },
+  "urgent": {
+    "notifications": ["Read new emails!"],
+    "unseen_payments": 10
+  },
+  "data": {
+    <...>
+  },
+  "paging": {
+    "limit": 50,
+    "cursors": {
+      "after": "MTAxNTExOTQ1MjAwNzI5NDE=",
+      "before": "NDMyNzQyODI3OTQw"
+    },
+    "has_more": true
+  },
+  "sandbox": {
+    "debug_varibale": "39384"
+  }
+}
+
+```
 
 ## Errors
 
 All errors is returned in JSON format if another ```Content-Type``` is not specified. This means that your will receive JSON for requests with HTTP 415 code when incorrect ```Content-Type``` is provided.
 
-### Error Object
+### Error Object Properties
 
-Error description is returned as part of ```meta``` root object. It have following fields:
+You can find all necessary information about occurred error in a response ```meta.error``` property. It can have following fields:
 
-Parameter | Description
+Fields | Description
 --------- | -----------
-type | Error type. You should return human-readable error message based on this field as a key. Type descriptions is listed in next section.
+type | General error type. You should return human-readable error message based on this field as a key. Type descriptions is listed in next section.
 invalid | Collection of validation errors for your request.
 invalid[].entry_type | Type of invalid field.
 invalid[].entry_id | ID of invalid field.
-invalid[].rule | Failed rule for invalid field. Supported rules: ```required```, ```not_empty```, ```type:integer```, ```type:float```, ```type:string```, ```type:boolean```.
+invalid[].rule | Failed rule for invalid field. You can find supported validation rules at [Request Validators](#request-validators) table.
 invalid[].params | Optional parameters that can be used in a human-readable error message, to make it easier to understand. Usually it contains limit values for failed validator.
 message | Human readable message for API developer.
 
@@ -179,15 +122,15 @@ message | Human readable message for API developer.
 
 ```
 
-### Application Error Types
+### Error Types
 
 Parameter | Description
 --------- | -----------
 ID | The ID to retrieve
 
-### Request Validators
+### Request Data Validators
 
-All invalid request fields are listed in ```meta.error.invalid``` object. There are different types of entries:
+All invalid request data is listed in ```meta.error.invalid``` object. There are different types of entries:
 
 - ```header``` - Response HTTP header.
 - ```request``` - Response JSON object.
@@ -225,29 +168,40 @@ Validator | Description
 ```otp_code``` | A valid OTP code.
 ```password_strong``` | Password field that should include at least one latin letter in lowercase, one letter in uppercase and one number. Min lenght is set by another rule.
 
-### HTTP status codes
+## Pagination
 
-HTTP Code | Description
---------- | -----------
-```200``` | Everything worked as expected.
-```400``` | Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON.
-```401``` | Unauthorized. No valid API key provided or API key doesn't match project.
-```402``` | The parameters were valid but the request failed.
-```403``` | Source or destination account is disabled.
-```404``` | Not Found. The requested resource doesn't exist.
-```415``` | Incorrect ```Content-Type``` HTTP header.
-```429``` | Too Many Requests. Rate limit is exceeded.
-```500```, ```502```, ```503```, ```504``` | Server Errors. Something went wrong on our end. (These are rare.)
+All top-level API resources with root type ```list``` have support of pagination over a "list" API methods. These methods share a common structure, taking at least these three parameters: ```limit```, ```starting_after```, and ```ending_before```.
+
+API utilizes cursor-based pagination via the ```starting_after``` and ```ending_before``` parameters. Both take an existing object ID value (see below). The ```ending_before``` parameter returns objects created before the named object, in descending chronological order. The ```starting_after``` parameter returns objects created after the named object, in ascending chronological order. If both parameters are provided, only ending_before is used.
+
+Arguments:
+
+- ```limit``` (optional) - A limit on the number of objects to be returned, between 1 and 100. Default: 50;
+- ```starting_after``` (optional) - A cursor for use in pagination. ```starting_after``` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with ```obj_foo```, your subsequent call can include ```starting_after=obj_foo``` in order to fetch the next page of the list;
+- ```ending_before``` (optional) - A cursor for use in pagination. ```ending_before``` is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with ```obj_bar```, your subsequent call can include ```ending_before=obj_bar``` in order to fetch the previous page of the list.
+
+## Content Type
+
+You should send ```Content-Type``` header in all your requests, otherwise API will return HTTP 415 status. Right now we support two content types:
+
+- ```application/json``` - Response is sent in a JSON format.
+- ```text/csv``` - Response is trimmed to a requested resource and sent in a CSV format.
+
+This header doesn't affect any outgoing requests, they are always sent in JSON format.
+
+<aside class="notice">
+To make CSV look better in spreadsheets viewers we are stripping all response metadata (everything except data that is returned in ```data``` field).
+</aside>
 
 ## Rate Limits (Throttling)
 
-We throttle our APIs by default to ensure maximum performance for all developers. All projects share a same rate limit, to avoid API-consuming fraud.
+We throttle our APIs by default to ensure maximum performance for all developers.
 
-Rate limiting of the API is primarily considered on a per-user basis — or more accurately, per access token in your control. Rate limits are determined globally for the entire application. Rate limits depend on your account type.
+Rate limiting of the API is primarily considered on a per-consumer basis. All your projects share a same rate limit, to avoid API-consuming fraud. Rate limits depend on your account type.
 
-For free accounts rate limit is 1000 calls every 15 minutes, but this value may be adjusted at our discretion.
+Currently free accounts is rate limited to 1000 API calls every 15 minutes, but this value may be adjusted at our discretion.
 
-All responses have 3 additional headers:
+For your convenience, all requests is sent with 3 additional headers:
 
 HTTP Header | Description
 ------------- | -----------
@@ -283,45 +237,45 @@ Access-Control-Allow-Credentials: true
 
 ## Timezones
 
-All requests allow for specifying timestamps or generate timestamps with time zone information. We apply the following rules, in order of priority, to determine timezone information for API calls.
+All requests allow to provide a ```Time-Zone``` header to receive all date and time fields in a local timezone.
 
-Explicitly provide an ISO 8601 timestamp with timezone information to use this feature.
-
-It is possible to supply a Time-Zone header which defines a timezone according to the list of names from the [Olson database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+Explicitly provide an ISO 8601 timestamp with timezone information to use this feature. Also it is possible to supply a Time-Zone header which defines a timezone according to the list of names from the [Olson database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
 ```shell
 curl -H "Time-Zone: Europe/Amsterdam" ..
 curl -H "Time-Zone: Europe/Kiev" ..
 ```
 
-This means that we will return all datetime fields in corresponding timezone. Default timezone is UTC.
-
 ## Request ID's
 
-Each API request has an associated request identifier. You can find this value in the response headers, under ```X-Request-ID``` or inside ```meta``` object in response data. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.
+Each API request has an associated request identifier. You can find it in ```X-Request-ID``` response header or inside ```meta.request_id``` property of returned JSON.
+
+You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.
 
 ## Limiting Response Fields
 
-By default, all the fields in a node are returned when you make a query. You can choose the fields you want returned with the "fields" query parameter. This is really useful for making your API calls more efficient and fast.
+By default, all the fields in a node are returned when you make a query. You can choose the fields you want returned with the ```fields``` query parameter. This is really useful for making your API calls more efficient and fast.
 
 ```curl
 /resource?fields=id,name,balance
 ```
 
-## Expanding Response Fields
+## Expanding Response Fields into Objects
 
-Many objects contain the ID of a related object in their response properties. For example a ```Transfer``` can have an associated ```User``` object linked by a ```sender``` field. Those objects can be expanded inline with the ```expand``` request parameter. Objects that can be expanded are noted in this documentation. This parameter is available on all API requests, and applies to the response of that request only.
+Many response fields contain the ID of a related object in their values. For example a ```Transfer``` can have an associated ```User``` object linked by a ```sender``` field. Those objects can be expanded inline with the ```expand``` request parameter. Objects that can be expanded are noted in this documentation. This parameter is available on all API requests, and applies to the response of that request only.
 
-You can nest expand requests with the dot property. For example, requesting ```sender.payments``` on a ```Transfer``` list will expand the ```sender``` property into a full ```User``` object, and will then expand the ```payments``` property of that ```User``` into a full ```Transactions``` collection.
+You can expand object by querying list, expands will be applied on all matched elements. Expanded lists return up to 25 elements, limit can be specified in brackets.
 
 You can expand multiple objects at once by identifying multiple items divided by comma.
 
-You can expand object by querying list, expands will be applied on all matched elements.
-
-Expanded collections return up to 25 elements, limit can be specified in brackets.
-
 ```curl
 /accounts?expand=transactions(5)
+```
+
+You can nest expand requests with the dot property. For example, requesting ```sender.payments``` on a ```Transfer``` list will expand the ```sender``` property into a full ```User``` object, and will then expand the ```payments``` property of that ```User``` into a full ```Transactions``` collection.
+
+```curl
+/accounts?expand=transactions(5).recipients
 ```
 
 ## Ordering Lists and Collections
@@ -332,9 +286,112 @@ By default, all collections are ordered in ascending chronological order. You ca
 /accounts?order=account.created_at(reverse_chronological)
 ```
 
+Available orders:
+
+- ```ascending_chronological``` - Ascending chronological order.
+- ```reverse_chronological``` - Descending chronological order.
+
 ## Filtering Lists
 
-(TODO: Describe all possible filtering rules in one section, including metadata.)
+You can filter all lists by a data. Filter can refer to any fields inside a ```data``` response property, except entities that was expanded. Also you can filter by a metadata value.
+
+You should set filter as a [base64 encoded](https://en.wikipedia.org/wiki/Base64) JSON object string in a ```filter``` query parameter.
+
+> Create a JSON object and convert it to string:
+
+```bash
+echo "{predicates:[<predicate_1>,<predicate_1>,...]}" | base64
+```
+
+> Result:
+
+```
+e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K
+```
+
+> Send encoded string as filter query parameter:
+
+```
+GET /v1/accounts?filter=e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K
+```
+
+Predicate is an object with 4 fields:
+
+- ```field``` - Resource filed that should be used for current filter predicate.
+- ```comparison``` - Comparison type that is applied to a field value and ```value``` predicate property.
+- ```value``` - Value that should be compared with resource field value.
+
+Available comparison methods:
+
+Name | Description
+------------- | -----------
+eq | Matches values that are equal to a specified value.
+ne | Matches all values that are not equal to a specified value.
+gt | Matches values that are greater than a specified value.
+gte |  Matches values that are greater than or equal to a specified value.
+lt | Matches values that are less than a specified value.
+lte |  Matches values that are less than or equal to a specified value.
+in | Matches any of the values specified in an array. Array is set to a ```value``` predicate property.
+nin |  Matches none of the values specified in an array.
+ewi | Matches all values that ends with a specified value.
+swi | Matches all values that starts with a specified value.
+
+```json
+{
+  predicates:[
+    {
+      "attribute":"balance",
+      "comparison":"eq",
+      "value":"27"
+    },
+    {
+      "attribute":"metadata.user_id",
+      "comparison":"in",
+      "value":[1, 2, 3]
+    }
+  ]
+}
+```
+
+To apply filters with logical rules you can add with logical type. Available types:
+
+Name | Description
+------------- | -----------
+or | Joins query clauses with a logical OR returns all objects that match the conditions of either clause.
+and | Joins query clauses with a logical AND returns all objects that match the conditions of both clauses.
+not | Inverts the effect of a query expression and returns objects that do not match the query expression.
+nor | Joins query clauses with a logical NOR returns all objects that fail to match both clauses.
+
+```json
+{
+  "predicates":[
+    {
+      "attribute":"metadata.user_id",
+      "comparison":"eq",
+      "value":"3994kdkd8"
+    },
+    {
+      "type":"or",
+      "predicates":[
+        {
+          "attribute":"balance",
+          "comparison":"gt",
+          "value":"100"
+        },
+        {
+          "attribute":"transactions.count",
+          "comparison":"gt",
+          "value":"10"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Aggregating Lists
+
+..
 
 ## Testing
 

@@ -16,7 +16,7 @@ We are API-centered, that means that we are trying to make it simple, easy to un
 
 ### Crossintegrations
 
-We support hustle-free integration with oAuth providers. See more at [Authentication](#authentication) section.
+We support hustle-free integration with oAuth providers. See more at [Integrating oAuth provider](#integrating-oauth-provider) section.
 
 Also we support custom webhook integrations in a SOA-style. This will help you to add any puzzle-pieces that you may need: users storage, antifraud systems, data storages, scoring systems, etc.
 
