@@ -1,9 +1,5 @@
 # Holds
 
-## Funding an Account
-
-(TODO: Move this to a Fundings entity?)
-
 (TODO: Allow subpayments on funding to charge front fee?)
 
 (TODO: Holds should be part of Transfers API response, so consumers can return correct payment history to clients.)
@@ -21,7 +17,7 @@ POST /v1/accounts/:account_id/fund
 
 ## List all Holds
 
-## Get all Account Holds
+### List all Account Holds
 
 ## Cancel a Hold
 

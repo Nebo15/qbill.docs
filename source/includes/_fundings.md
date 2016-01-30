@@ -1,13 +1,25 @@
 # Fundings
 
-(TODO: We can replace this with special "Funding" account with unlimited balance.)
+Funding allows to top-up any account balance in a system. (Basically this is an equivalent for an money emission.)
 
-Funding allows to top-up any balance in a system. Basically this is an equivalent for an money emission, where all generated funds will be sent to specific system account.
+You can find best practices for [Funding an Account](http://nebo15.github.io/qbill.docs/#funding-account).
 
-## Create a Funding operation
+## Create a Funding Operation, Fund an Account
 
-## List all Funding operations
+```
+POST /projects/:project_id/fundings
+{
+  account_id: <account_id>,
+  total: 1000
+}
+```
 
-## Canceling a Funding operation
+## List all Funding Operations
 
-All Fundings can't be canceled, to do so just create a Charge and move money to system account.
+```
+GET /projects/:project_id/fundings
+```
+
+## Canceling a Funding Operation
+
+All Fundings can't be canceled, to do so just create a Transaction and move money to a system account. You can create some sort of ```/dev/null``` account for this purpose.

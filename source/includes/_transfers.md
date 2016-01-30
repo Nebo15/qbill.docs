@@ -57,24 +57,8 @@ POST /v1/transfers/:transfer_id/decline
 
 ## List all Transfer
 
-List all Transfer with a filter. Filter can represent any field that is available in the response, except entities that needs to be expanded.
-
-(TODO: Add less than, greater than, text search).
-
 ```
-GET /v1/transfers?filters=[]
-```
-
-> For analytical purposes response can be grouped by a field
-
-```
-GET /v1/transfers?filters=[]&group_by=[]
-```
-
-> For analytical purposes response can return aggregation counts
-
-```
-GET /v1/transfers?filters=[]&get_count_by=[]
+GET /v1/transfers
 ```
 
 ## Rollback a Transfer

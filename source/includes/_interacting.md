@@ -17,7 +17,7 @@ As per RESTful design patterns, API implements following HTTP verbs:
 HTTP Code | Description
 --------- | -----------
 ```200``` | Everything worked as expected.
-```400``` | Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON.
+```400``` | Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON. Duplicate idempotency key.
 ```401``` | Unauthorized. No valid API key provided or API key doesn't match project.
 ```402``` | The parameters were valid but the request failed.
 ```403``` | Source or destination account is disabled.
@@ -127,6 +127,7 @@ message | Human readable message for API developer.
 Parameter | Description
 --------- | -----------
 ID | The ID to retrieve
+duplicated_idempotency_key |
 
 ### Request Data Validators
 
@@ -211,7 +212,7 @@ X-RateLimit-Remaining | Remaining rate limit for your application.
 X-RateLimit-Reset | The time at which the current rate limit window resets in [UTC epoch seconds](http://en.wikipedia.org/wiki/Unix_time).
 
 <aside class="notice">
-When limit is exceeded all requests will return ```HTTP 402``` status code with corresponding error in ```meta`` response object.
+When limit is exceeded all requests will return ```HTTP 429``` status code with corresponding error in ```meta`` response object.
 </aside>
 
 ```
@@ -465,13 +466,27 @@ curl \
     https://graph.facebook.com
 ```
 
-(TODO: Add alias for lists: /list/:id1,:id2. It's easier. Clarify rate limits. Clarify response structure.)
+As an alternative you can use simpler alias for a batching requests to the objects. Whenever you can provide an ID inside URL to retrieve resource, you can also provide multiple ID's separated by comma. For example, you can get two user accounts in one request.
+
+```
+GET /projects/:project_id/accounts/:id1,id2,...
+```
+
+> Response would be a list of requested items.
+
+```
+{
+  data: {
+    "<user1_id>": {"<user1>"},
+    "<user2_id>": {"<user2>"}
+  }
+}
+
+```
 
 ### Timeouts
 
-Large or complex batches may timeout if it takes too long to complete all the requests within the batch. In such a circumstance, the result is a partially-completed batch. In partially-completed batches, responses from operations that complete successfully will look normal (see prior examples) whereas responses for operations that are not completed will be null.
-
-(TODO: Return correct json with error instead of null.)
+Large or complex batches may timeout if it takes too long to complete all the requests within the batch. In such a circumstance, the result is a partially-completed batch. In partially-completed batches, responses from operations that complete successfully will look normal whereas responses for operations that are not completed will have corresponding error code in ```meta``` property.
 
 ### Limits
 

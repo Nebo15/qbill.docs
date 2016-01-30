@@ -1,22 +1,25 @@
 # Accounts
 
-Account is a one a base entities that represents any object with a balance. This balance can be in any currency. If you have multiple currencies, they will be converted automatically.
+Account is a one a base entities that represents any object with a balance. This balance can be in any currency, you can add a currency code in ```metadata``` object. (You find info at [Metadata](#metadata) section.)
+
+(TODO: Add information about in-built currencies.)
+
+(TODO: Add overdraft limit to an Account. ```overdraft``` field that hold maximum negative balance for this user.)
 
 ## List all Accounts
 
 ```
-GET /v1/accounts
+GET /projects/:project_id/accounts
 ```
 
 ## Create an Account
 
-Accounts support ```metadata``` object. See more info at [Metadata](#metadata) section.
-
 ```
-POST /v1/accounts
+POST /projects/:project_id/accounts
 {
   metadata: {
-    external_id: 192838
+    external_id: 192838,
+    currency_code: 'USD'
   }
 }
 ```
@@ -42,7 +45,8 @@ POST /v1/accounts
     id: "acc_388djejje88du"
     balance: 0,
     metadata: {
-      external_id: 192838
+      external_id: 192838,
+      currency_code: 'USD'
     }
   },
 }
@@ -51,16 +55,19 @@ POST /v1/accounts
 ## Get all Account data
 
 ```
-GET /v1/accounts/:id
+GET /projects/:project_id/accounts/:id
 ```
 
 ## Disabling and Enabling an Account
-Accounts can't be deleted, but can be disabled to prevent its future usage. Disabled account will always return HTTP 403 error.
+Accounts can't be deleted, but can be disabled to prevent its future usage. Requesting or linking a disabled account will always result a ```HTTP 403``` error.
 
 ### Disabling
 
 ```
-POST /v1/accounts/:id/disable
+PUT /projects/:project_id/accounts/:id
+{
+  is_disabled: true
+}
 ```
 
 ### Enabling
@@ -68,5 +75,8 @@ POST /v1/accounts/:id/disable
 You can enable account to continue using it later.
 
 ```
-POST /v1/accounts/:id/enable
+PUT /projects/:project_id/accounts/:id
+{
+  is_disabled: false
+}
 ```
