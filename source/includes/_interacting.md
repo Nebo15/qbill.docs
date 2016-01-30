@@ -389,9 +389,38 @@ nor | Joins query clauses with a logical NOR returns all objects that fail to ma
 }
 ```
 
-## Aggregating Lists
+## Aggregating lists
 
-..
+All lists can be queried to get aggregations on given set of rules. When you are using aggregation default filtered period is one month. For example you can get aggregated count of ```Accounts``` to know how many accounts was created at each day for last month.
+
+```
+GET /accounts?aggregate_stategy=count&aggregate_field=count&tick=day
+```
+
+To use aggregation you need to specify at least 3 fields:
+
+- ```aggregate_stategy``` - Aggregation strategy.
+- ```aggregate_field``` - Field that will be used for aggregation.
+- ```tick``` - Aggregation period particle. Default value: ```day```.
+
+Available aggregation strategies:
+
+Name | Description
+------------- | -----------
+count | Returns count of returned aggregated fields.
+add | For integers and floats returns total for all field values. For strings returns concatenated string of all field values.
+max | Returns maximum value of a field.
+min | Returns minimum value of a field.
+avg | Returns average value of a field.
+
+Available ```tick``` values:
+
+Name | Description
+------------- | -----------
+hour | Return aggregation for each hour in a filtered period.
+day | Return aggregation for each day in a filtered period. Default value.
+month | Return aggregation for each month in a filtered period.
+year | Return aggregation for each year in a filtered period.
 
 ## Testing
 
