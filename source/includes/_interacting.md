@@ -303,11 +303,7 @@ You should set filter as a [base64 encoded](https://en.wikipedia.org/wiki/Base64
 echo "{predicates:[<predicate_1>,<predicate_1>,...]}" | base64
 ```
 
-> Result:
-
-```
-e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K
-```
+> Result: e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K
 
 > Send encoded string as filter query parameter:
 
