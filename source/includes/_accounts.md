@@ -76,7 +76,7 @@ Accounts can't be deleted, but can be disabled to prevent its future usage. Disa
 ### Disabling
 
 ```
-POST /v1/accounts/:id/freeze
+POST /v1/accounts/:id/disable
 ```
 
 ### Enabling

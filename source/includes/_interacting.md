@@ -66,6 +66,8 @@ All responses have ```object``` field that contains object type. For eg. transac
 
 ## Authentication
 
+(TODO: Move all application creation to a separate docs or section, since its a different internal API.)
+
 To use our service you need to authenticate your application. Additionally you can use our oAuth cross-integration for authenticating your clients.
 
 Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia.org/wiki/Basic_access_authentication). Provide your API key as the basic auth username value. You do not need to provide a password.
@@ -97,6 +99,7 @@ Your API keys carry all the privileges, so be sure to keep them secret! Do not s
 ### Application token
 
 (TODO: Describe root authentication with OTP token. Lets call them ```Managers``` + API for manager login.)
+
 (TODO: Allow creating root user accounts only from our domain.)
 
 ### Project token
@@ -135,7 +138,7 @@ For CSV we will return only content in a root ```data``` object, without any add
 </aside>
 
 <aside class="notice">
-```Content-Type``` doesn't affect on webhooks format, they are always sent in JSON.
+```Content-Type``` affects on webhooks format, they are always sent in a originally requested content type. For ```CSV`` content type webhook will be sent in JSON format.
 </aside>
 
 To simplify documentation all samples will be provided with JSON content type responses.
@@ -152,7 +155,8 @@ Parameter | Description
 --------- | -----------
 type | Error type. You should return human-readable error message based on this field as a key. Type descriptions is listed in next section.
 invalid | Collection of validation errors for your request.
-invalid[].field_id | ID of invalid field.
+invalid[].entry_type | Type of invalid field.
+invalid[].entry_id | ID of invalid field.
 invalid[].rule | Failed rule for invalid field. Supported rules: ```required```, ```not_empty```, ```type:integer```, ```type:float```, ```type:string```, ```type:boolean```.
 invalid[].params | Optional parameters that can be used in a human-readable error message, to make it easier to understand. Usually it contains limit values for failed validator.
 message | Human readable message for API developer.
@@ -163,12 +167,12 @@ message | Human readable message for API developer.
     "error": {
       "type": "form_validation_failed",
       "invalid": [
-        {"entry_type": "field", "id": "username", "rule": "min:6", "params":{"lenght": 4}},
-        {"entry_type": "field", "id": "email", "rule": "empty"},
-        {"entry_type": "header", "id":"Timezone", "rule": "timezone"},
-        {"entry_type": "request", "id":null, "rule": "json"}
+        {"entry_type": "field", "entry_id": "username", "rule": "min:6", "params":{"lenght": 4}},
+        {"entry_type": "field", "entry_id": "email", "rule": "empty"},
+        {"entry_type": "header", "entry_id":"Timezone", "rule": "timezone"},
+        {"entry_type": "request", "entry_id":null, "rule": "json"}
       ],
-      "message": "You specified incorrect content type. See https://docs.qbill.ly/#content-type."
+      "message": "Validation failed. Return human-readable error message. You find all possible validation rules at https://docs.qbill.ly/#request-validators."
     }
   }
 }
@@ -192,7 +196,7 @@ All invalid request fields are listed in ```meta.error.invalid``` object. There 
 List of possible validation rules:
 
 Validator | Description
---------- | -----------
+------------------------- | -----------
 ```active_url``` | The field under validation must be a valid URL according to the checkdnsrr PHP function.
 ```after:<date>``` | The field under validation must be a value after a given date. The dates will be passed into the strtotime PHP function. Sample rule: ```date|after:tomorrow```.
 ```before:<date>``` | The field under validation must be a value preceding the given date. The dates will be passed into the PHP strtotime function. Sample rule: ```date|before:today```.
@@ -250,13 +254,13 @@ For free accounts rate limit is 1000 calls every 15 minutes, but this value may 
 All responses have 3 additional headers:
 
 HTTP Header | Description
---------- | -----------
+------------- | -----------
 X-RateLimit-Limit | Current rate limit for your application.
 X-RateLimit-Remaining | Remaining rate limit for your application.
 X-RateLimit-Reset | The time at which the current rate limit window resets in [UTC epoch seconds](http://en.wikipedia.org/wiki/Unix_time).
 
 <aside class="notice">
-When limit is exceeded all requests will return ```HTTP 402``` status code with corresponding error in ```mete`` response object.
+When limit is exceeded all requests will return ```HTTP 402``` status code with corresponding error in ```meta`` response object.
 </aside>
 
 ```
@@ -270,20 +274,20 @@ X-RateLimit-Reset: 1372700873
 The API supports Cross Origin Resource Sharing (CORS) for AJAX requests from any origin. You can read the [CORS W3C Recommendation](http://www.w3.org/TR/cors/), or [this intro](http://code.google.com/p/html5security/wiki/CrossOriginRequestSecurity) from the HTML 5 Security Guide.
 
 <aside type="notice">
-Never publish your application or project tokens in any kind of Front-End applications. They carry all the project privileges, and would be easy to get by third-parties. You can find more info about client authentication in [best practices]() section.
+Never publish your application or project tokens in any kind of Front-End applications. They carry all the project privileges, and would be exposed to a third-parties. You can find more info about client authentication in [Adding oAuth provider](#adding-oauth-provider) section.
 </aside>
 
 ```
 Access-Control-Allow-Origin: *
 Access-Control-Allow-Headers: Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, X-Requested-With
 Access-Control-Allow-Methods: GET, POST, PUT, DELETE
-Access-Control-Expose-Headers: ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes
+Access-Control-Expose-Headers: ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-Request-ID, X-Idempotency-Key
 Access-Control-Allow-Credentials: true
 ```
 
 ## Timezones
 
-Some requests allow for specifying timestamps or generate timestamps with time zone information. We apply the following rules, in order of priority, to determine timezone information for API calls.
+All requests allow for specifying timestamps or generate timestamps with time zone information. We apply the following rules, in order of priority, to determine timezone information for API calls.
 
 Explicitly provide an ISO 8601 timestamp with timezone information to use this feature.
 
@@ -321,7 +325,7 @@ You can expand object by querying list, expands will be applied on all matched e
 Expanded collections return up to 25 elements, limit can be specified in brackets.
 
 ```curl
-/users?expand=payments(5)
+/accounts?expand=transactions(5)
 ```
 
 ## Ordering Lists and Collections
@@ -329,8 +333,12 @@ Expanded collections return up to 25 elements, limit can be specified in bracket
 By default, all collections are ordered in ascending chronological order. You can specify different order by providing the "order" query parameter.
 
 ```curl
-/resource?order=payment.created_at(reverse_chronological)
+/accounts?order=account.created_at(reverse_chronological)
 ```
+
+## Filtering Lists
+
+(TODO: Describe all possible filtering rules in one section, including metadata.)
 
 ## Testing
 

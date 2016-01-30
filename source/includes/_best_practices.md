@@ -14,6 +14,8 @@ For example, you can create a system account for money inflow for each of your P
 
 Also we strongly recommend you to use ```Funding``` metadata power, by adding to it original ID of your PSP, original amount and other helpful information, to efficiently track money flow trough all the systems.
 
+Additionally it would be easier for you to show your customer all transactions log, because all operations will be available trough ```Transfers``` list. Otherwise, your will need to merge two lists: ```Transfers``` and ```Fundings```.
+
 ### Revenue tracking
 
 For revenue we recommend you to create special account for each of revenue-takers (you, your partners, etc.)
@@ -63,7 +65,9 @@ The API supports idempotency for safely retrying write requests without accident
 
 To perform an idempotent request, attach a unique key to any ```POST```, ```DELETE``` or ```PUT``` request made to the API via the ```Idempotency-Key: <key>``` header.
 
-How you create unique keys is completely up to you. We suggest using random strings or UUIDs. We'll always send back the same response for requests made with the same key. However, you cannot use the same key with different request parameters. The keys expire after 24 hours.
+How you create unique keys is completely up to you. We suggest using random strings or UUIDs. We'll always send back the same response for requests made with the same key. However, you cannot use the same key with different request parameters (We will return error in this case). The keys expire after 24 hours.
+
+(TODO: Clarify duplicate idempotency key error.)
 
 ## Conditional requests
 
