@@ -20,6 +20,8 @@ POST /projects/:project_id/fundings
 GET /projects/:project_id/fundings
 ```
 
+### List all Account Funding Operations
+
 ## Canceling a Funding Operation
 
 All Fundings can't be canceled, to do so just create a Transaction and move money to a system account. You can create some sort of ```/dev/null``` account for this purpose.

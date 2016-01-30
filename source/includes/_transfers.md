@@ -55,11 +55,13 @@ POST /v1/transfers/:transfer_id/complete
 POST /v1/transfers/:transfer_id/decline
 ```
 
-## List all Transfer
+## List all Transfers
 
 ```
 GET /v1/transfers
 ```
+
+### List all Account Transfers
 
 ## Rollback a Transfer
 
