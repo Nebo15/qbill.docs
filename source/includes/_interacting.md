@@ -217,11 +217,7 @@ Validator | Description
 ```not_in:<foo>,<bar>,<...>``` | The field under validation must not be included in the given list of values.
 ```numeric``` | The field under validation must be numeric.
 ```regex:<pattern>``` | The field under validation must match the given regular expression.
-```required``` | The field under validation must be present in the input data and not empty. A field is considered "empty" is one of the following conditions are true:
-The value is null.
-The value is an empty string.
-The value is an empty array or empty Countable object.
-The value is an uploaded file with no path.
+```required``` | The field under validation must be present in the input data and not empty. A field is considered "empty" is one of the following conditions are true: the value is null; the value is an empty string; the value is an empty array or empty Countable object; the value is an uploaded file with no path.
 ```size:<value>``` | The field under validation must have a size matching the given value. For string data, value corresponds to the number of characters. For numeric data, value corresponds to a given integer value. For files, size corresponds to the file size in kilobytes.
 ```string``` | The field under validation must be a string.
 ```timezone``` | The field under validation must be a valid timezone identifier according to the timezone_identifiers_list PHP function.
