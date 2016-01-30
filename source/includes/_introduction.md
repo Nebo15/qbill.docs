@@ -10,7 +10,7 @@ We believe that vendor-lock is a bad thing, thats why you are free to download a
 
 Also you can remove all you data from our servers. After your confirm data remove process in Dashboard we will keep everything for additional 30 days, so your account will be protected from accidental removals. After 30 days all data will be scrubbed and impossible to restore.
 
-### API-oriented
+### API-centered
 
 We are API-centered, that means that we are trying to make it simple, easy to understand, and yet very powerful.
 
