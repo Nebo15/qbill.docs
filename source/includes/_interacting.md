@@ -68,13 +68,13 @@ All responses have ```object``` field that contains object type. For eg. transac
 
 To use our service you need to authenticate your application. Additionally you can use our oAuth cross-integration for authenticating your clients.
 
-### Root token
+Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia.org/wiki/Basic_access_authentication). Provide your API key as the basic auth username value. You do not need to provide a password.
 
-Application can have two authentication tokens, each of them have different access scope. This scope is managed by a object-related Access Control Layer. It means that if you have token that have access to a ```Accounts`` list, than you can manage all records in this list, and all fields in them.
+API takes two types of tokens (```application``` and ```project``` tokens), each of them have different access scope. This scope is managed by a object-related Access Control Layer. It means that if you have token that have access to a ```Accounts`` list, than you can manage all records in this list, and all fields in them.
 
 List of objects and token access to them:
 
-Object | Consumer Token | Project Token
+Object | ```application``` Token | ```project``` Token
 --------- | ----------- | -----------
 ```Projects``` | Yes | No
 ```Settings``` | Yes | No
@@ -90,54 +90,22 @@ Object | Consumer Token | Project Token
 
 You can additionally add oAuth authentication for your clients, by using a pre-flight webhook and a "exchanged-token" technique. You can find more info at [Connecting oAuth Provider]() section.
 
-(TODO: Describe root authentication with OTP token. Lets call them ```Managers``` + API for manager login.)
-(TODO: Allow creating root user accounts only from our domain.)
-
-### Application
-
-Authenticate your account when using the API by including your secret API key in the request. You can manage your API keys in the dashboard.
-
-Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia.org/wiki/Basic_access_authentication). Provide your API key as the basic auth username value. You do not need to provide a password.
-
 <aside class="warning">
 Your API keys carry all the privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such GitHub, client-side code, and so forth. Paranoid people even don't store it in the configuration files, by keeping them in [memcache](https://en.wikipedia.org/wiki/Memcached).
 </aside>
 
+### Application token
+
+(TODO: Describe root authentication with OTP token. Lets call them ```Managers``` + API for manager login.)
+(TODO: Allow creating root user accounts only from our domain.)
+
+### Project token
+
+Authenticate your account when using the API by including your secret API key in the request. You can manage your API keys in the dashboard.
+
 ```curl
 curl https://example.com/resource \
    -u WgLodNU5wCdbSw4f:
-```
-
-### Client
-
-(TODO: Move this to pre-flight webhooks.)
-
-This is an option. To make it work specify oAuth provider in your Dashboard. When "Client Authentication" is turned on, our API expects additional key provided as HTTP Basic Auth password.
-
-<aside class="notice">
-Requests without oAuth token will return HTTP 401 error code.
-</aside>
-
-Currently we support 3 oAuth providers: Facebook, Google and a custom endpoint, that can be entered by you.
-
-```curl
-curl https://example.com/resource \
-   -u WgLodNU5wCdbSw4f:<oAuthToken>
-```
-
-After receiving oAuth token we will send a GET request to selected oAuth endpoint to validate this token. Our response differs for every response made by oAuth endpoint:
-
-oAuth HTTP Code | Action
---------- | -----------
-2XX | Continue processing your request.
-301, 302, 307, 308 | Follow the redirect. And continue checking response code.
-403 | Return HTTP 403 Forbidden.
-401, 402 and other 4XX | Return HTTP 401 Unauthorized.
-5XX | Return HTTP 412 Precondition Failed.
-
-
-```
-GET <oAuthProviderURI>?access_token=<oAuthToken>&action=<APIProjectID>.<APIUserID>.<APIEntity>.<HTTPVerb>
 ```
 
 ## Pagination
@@ -302,7 +270,7 @@ X-RateLimit-Reset: 1372700873
 The API supports Cross Origin Resource Sharing (CORS) for AJAX requests from any origin. You can read the [CORS W3C Recommendation](http://www.w3.org/TR/cors/), or [this intro](http://code.google.com/p/html5security/wiki/CrossOriginRequestSecurity) from the HTML 5 Security Guide.
 
 <aside type="notice">
-Never publish your consumer or project tokens in any kind of Front-End applications. They carry all the project privileges, and would be easy to get by third-parties. You can find more info about client authentication in [best practices]() section.
+Never publish your application or project tokens in any kind of Front-End applications. They carry all the project privileges, and would be easy to get by third-parties. You can find more info about client authentication in [best practices]() section.
 </aside>
 
 ```
