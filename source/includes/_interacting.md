@@ -43,7 +43,7 @@ Response consist of 5 main root objects:
   "urgent": {
     "notifications": ["Read new emails!"],
     "unseen_payments": 10
-  }
+  },
   "data": {
 
   },
@@ -70,7 +70,27 @@ To use our service you need to authenticate your application. Additionally you c
 
 ### Root token
 
-(TODO: Describe root authentication with OTP token.)
+Application can have two authentication tokens, each of them have different access scope. This scope is managed by a object-related Access Control Layer. It means that if you have token that have access to a ```Accounts`` list, than you can manage all records in this list, and all fields in them.
+
+List of objects and token access to them:
+
+Object | Consumer Token | Project Token
+--------- | ----------- | -----------
+```Projects``` | Yes | No
+```Settings``` | Yes | No
+```Backup``` | Yes | No
+```Accounts``` | No | Yes
+```Fundings``` | No | Yes
+```Transfers``` | No | Yes
+```Holds``` | No | Yes
+```Webhooks``` | No | Yes
+```Events``` | No | Yes
+```Requests``` | No | Yes
+```Currencies``` | No | Yes
+
+You can additionally add oAuth authentication for your clients, by using a pre-flight webhook and a "exchanged-token" technique. You can find more info at [Connecting oAuth Provider]() section.
+
+(TODO: Describe root authentication with OTP token. Lets call them ```Managers``` + API for manager login.)
 (TODO: Allow creating root user accounts only from our domain.)
 
 ### Application
@@ -175,9 +195,10 @@ message | Human readable message for API developer.
     "error": {
       "type": "form_validation_failed",
       "invalid": [
-        {"field_id": "username", "rule": "required"},
-        {"field_id": "email", "rule": "empty"}
-        {"field_id": "surname", "rule": "max_length", params:{max_lenght: 5}}
+        {"entry_type": "field", "id": "username", "rule": "min:6", "params":{"lenght": 4}},
+        {"entry_type": "field", "id": "email", "rule": "empty"},
+        {"entry_type": "header", "id":"Timezone", "rule": "timezone"},
+        {"entry_type": "request", "id":null, "rule": "json"}
       ],
       "message": "You specified incorrect content type. See https://docs.qbill.ly/#content-type."
     }
@@ -191,6 +212,50 @@ message | Human readable message for API developer.
 Parameter | Description
 --------- | -----------
 ID | The ID to retrieve
+
+### Request Validators
+
+All invalid request fields are listed in ```meta.error.invalid``` object. There are different types of entries:
+
+- ```header``` - Response HTTP header.
+- ```request``` - Response JSON object.
+- ```field``` - Response field.
+
+List of possible validation rules:
+
+Validator | Description
+--------- | -----------
+```active_url``` | The field under validation must be a valid URL according to the checkdnsrr PHP function.
+```after:<date>``` | The field under validation must be a value after a given date. The dates will be passed into the strtotime PHP function. Sample rule: ```date|after:tomorrow```.
+```before:<date>``` | The field under validation must be a value preceding the given date. The dates will be passed into the PHP strtotime function. Sample rule: ```date|before:today```.
+```alpha``` | The field under validation must be entirely alphabetic characters.
+```alpha_dash``` | The field under validation may have alpha-numeric characters, as well as dashes and underscores.
+```alpha_num``` | The field under validation must be entirely alpha-numeric characters.
+```between:<min>,<max>``` | The field under validation must have a size between the given <min> and <max>. Strings, numerics, and files are evaluated in the same fashion as the size rule.
+```boolean``` | The field under validation must be able to be cast as a boolean. Accepted input are ```true```, ```false```, ```1```, ```0```, ```"1"```, and ```"0"```.
+```confirmed``` | The field under validation must have a matching field of ```foo_confirmation```. For example, if the field under validation is ```password```, a matching ```password_confirmation``` field must be present in the input.
+```date``` | A valid data in ISO 8601 format.
+```digits:<value>``` | The field under validation must be numeric and must have an exact length of value.
+```digits_between:<min>,<max>``` | The field under validation must have a length between the given min and max.
+```email``` | The field under validation must be formatted as an e-mail address.
+```in:<foo>,<bar>,<...>``` | The field under validation must be included in the given list of values.
+```json``` | The field under validation must be a valid JSON string.
+```max:<value>``` | The field under validation must be less than or equal to a maximum value. Strings, numerics, and files are evaluated in the same fashion as the size rule.
+```min:<value>``` | The field under validation must have a minimum value. Strings, numerics, and files are evaluated in the same fashion as the size rule.
+```not_in:<foo>,<bar>,<...>``` | The field under validation must not be included in the given list of values.
+```numeric``` | The field under validation must be numeric.
+```regex:<pattern>``` | The field under validation must match the given regular expression.
+```required``` | The field under validation must be present in the input data and not empty. A field is considered "empty" is one of the following conditions are true:
+The value is null.
+The value is an empty string.
+The value is an empty array or empty Countable object.
+The value is an uploaded file with no path.
+```size:<value>``` | The field under validation must have a size matching the given value. For string data, value corresponds to the number of characters. For numeric data, value corresponds to a given integer value. For files, size corresponds to the file size in kilobytes.
+```string``` | The field under validation must be a string.
+```timezone``` | The field under validation must be a valid timezone identifier according to the timezone_identifiers_list PHP function.
+```url``` | The field under validation must be a valid URL according to PHP's ```filter_var``` function.
+```otp_code``` | A valid OTP code.
+```password_strong``` | Password field that should include at least one latin letter in lowercase, one letter in uppercase and one number. Min lenght is set by another rule.
 
 ### HTTP status codes
 
@@ -208,13 +273,11 @@ HTTP Code | Description
 
 ## Rate Limits (Throttling)
 
-(TODO: Rate limit depends on account type.)
-
 We throttle our APIs by default to ensure maximum performance for all developers. All projects share a same rate limit, to avoid API-consuming fraud.
 
-Rate limiting of the API is primarily considered on a per-user basis — or more accurately, per access token in your control. Rate limits are determined globally for the entire application.
+Rate limiting of the API is primarily considered on a per-user basis — or more accurately, per access token in your control. Rate limits are determined globally for the entire application. Rate limits depend on your account type.
 
-Right now rate limit is 5000 calls every 15 minutes, but this value may be adjusted at our discretion.
+For free accounts rate limit is 1000 calls every 15 minutes, but this value may be adjusted at our discretion.
 
 All responses have 3 additional headers:
 
@@ -237,6 +300,10 @@ X-RateLimit-Reset: 1372700873
 ## Cross Origin Resource Sharing
 
 The API supports Cross Origin Resource Sharing (CORS) for AJAX requests from any origin. You can read the [CORS W3C Recommendation](http://www.w3.org/TR/cors/), or [this intro](http://code.google.com/p/html5security/wiki/CrossOriginRequestSecurity) from the HTML 5 Security Guide.
+
+<aside type="notice">
+Never publish your consumer or project tokens in any kind of Front-End applications. They carry all the project privileges, and would be easy to get by third-parties. You can find more info about client authentication in [best practices]() section.
+</aside>
 
 ```
 Access-Control-Allow-Origin: *
@@ -331,12 +398,34 @@ We have list of key objects that is accessible trough our API:
 - ```Projects``` - List of available projects (they have different access scope and API keys).
 - ```Backup``` - Data retention endpoint that allows to download all data of your projects.
 
+## Batching Request
+
+There are number of situations when you need to download few entities at once, for example when your customers have multiple accounts and you need to return balance for all of them in a single request. For this cases we have request multiplexing.
+
+The batch API takes in an array of logical HTTP requests represented as JSON arrays - each request has a method (corresponding to HTTP method GET/PUT/POST/DELETE etc.), a uri (the portion of the URL after domain), optional headers array (corresponding to HTTP headers) and an optional body (for POST and PUT requests). The Batch API returns an array of logical HTTP responses represented as JSON arrays - each response has a status code, an optional headers array and an optional body (which is a JSON encoded string).
+
+To make batched requests, you build a JSON object which describes each individual operation you'd like to perform and POST this to the batch API endpoint at https://batcher.qbill.co.
+
+```
+curl \
+    -F ‘batch=[{“method”:”GET",“relative_url”:/accounts/:id1”},{“method”:”GET",“relative_url”:/accounts/:id1”}]’ \
+    https://graph.facebook.com
+```
+
+### Timeouts
+
+Large or complex batches may timeout if it takes too long to complete all the requests within the batch. In such a circumstance, the result is a partially-completed batch. In partially-completed batches, responses from operations that complete successfully will look normal (see prior examples) whereas responses for operations that are not completed will be null.
+
+### Limits
+
+You can batch up to 10 request. Every request in batch will be counted as separate requests in Rate Limits.
+
 ## Request Flow
 
 1. Save request data.
-2. Check authentication. And if authorized..
+2. Run any pre-flight webhooks, for example for customer authentication. And if webhooks returned 2XX codes..
+3. Check authentication. And if authorized..
 3. Check rate limits for your application. And if they not exceeded..
-3. Run any pre-flight webhooks, for example for customer authentication. And if webhooks returned 2XX codes..
 4. Validate request data and complete request.
 4.1. Generate event for this request.
 4.2. Queue money flow (all operations with money is asynchronous).
