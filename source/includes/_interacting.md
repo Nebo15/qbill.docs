@@ -167,6 +167,7 @@ Validator | Description
 ```url``` | The field under validation must be a valid URL according to PHP's ```filter_var``` function.
 ```otp_code``` | A valid OTP code.
 ```password_strong``` | Password field that should include at least one latin letter in lowercase, one letter in uppercase and one number. Min lenght is set by another rule.
+-------------------------- |
 
 ## Pagination
 
