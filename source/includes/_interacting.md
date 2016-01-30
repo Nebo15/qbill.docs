@@ -392,14 +392,38 @@ nor | Joins query clauses with a logical NOR returns all objects that fail to ma
 
 All lists can be queried to get aggregations on given set of rules. When you are using aggregation default filtered period is one month. For example you can get aggregated count of ```Accounts``` to know how many accounts was created at each day for last month.
 
+(TODO: Support multiple aggregations in one request, for eg. to collect payments patency. Maybe another base64 object?)
+
 ```
-GET /accounts?aggregate_stategy=count&aggregate_field=count&tick=day
+GET /accounts?aggregate_stategy=count&aggregate_fields=count&tick=day
+```
+
+```
+{
+  meta: {
+    "type": "list"
+  }
+  data: [
+    {
+     "tick":"2014-07-11",
+     "aggregates": {
+       "count":123
+     }
+    },
+    {
+     "tick":"2014-07-12",
+     "aggregates": {
+       "count":98
+     }
+    }
+  ]
+}
 ```
 
 To use aggregation you need to specify at least 3 fields:
 
 - ```aggregate_stategy``` - Aggregation strategy.
-- ```aggregate_field``` - Field that will be used for aggregation.
+- ```aggregate_fields``` - Field that will be used for aggregation.
 - ```tick``` - Aggregation period particle. Default value: ```day```.
 
 Available aggregation strategies:
