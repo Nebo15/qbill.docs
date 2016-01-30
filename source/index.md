@@ -1,5 +1,5 @@
 ---
-title: QBill API Reference
+title: QBill API Reference - Consumers
 
 language_tabs:
   - shell
@@ -8,9 +8,6 @@ includes:
   - introduction
   - interacting
   - best_practices
-  - projects
-  - settings
-  - backup
   - accounts
   - fundings
   - holds
@@ -20,6 +17,10 @@ includes:
   - webhooks
   - requests
   - queries
+
+toc_footers:
+ - <a href='app.html'>Applications API</a>
+ - <a href='#'>Sign Up for a Developer Key</a>
 
 search: true
 ---
