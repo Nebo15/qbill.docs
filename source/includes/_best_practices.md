@@ -28,9 +28,26 @@ Direct reduction of account is not possible to keep you from common accounting m
 
 Any time you charge customer for any type your services, you should simply create a transfer to a revenue account with corresponding metadata (to show correct transaction information for your customers).
 
-## Token and ID lengths and formats
+## Adding oAuth provider
+
+Sometimes is more rational to make request to an API without any additional services that will proxy this requests. But by adding project token to your application you would make it very vulnerable to a third-party's.
+
+For this cases we recommend you to request our API with a oAuth token and to add a pre-flght webhook to connect API to your oAuth provider. Flow should look something like this:
+
+1. Your application requests API with ```Authorization: Bearer <token>``` header.
+2. Pre-flight webhook is send to your oAuth endpoint.
+3. oAuth endpoint validates Bearer token and if its valid returns ```HTTP 200``` status code with a ```X-Override-Authorization: Token <project_token>``` header, where ```<project_token>``` is a API project token issued in Dashboard.
+4. Our API validates new authorization token and fulfills the request.
+
+Sample oAuth provider can be found in our [GitHub]() account.
+
+## Token, ID lengths and formats
 
 In order to avoid interruptions in processing, it's best to make minimal assumptions about what our gateway-generated tokens and identifiers will look like in the future. The length and format of these identifiers – including payment method tokens and transaction IDs – can change at any time, with or without advance notice. However, it is safe to assume that they will remain 1 to 64 upper- and lowercase alphanumeric characters with minuses (```-```) and underscores (```_```).
+
+We use ISO 8601 formats for all dates in our API.
+
+We use E.123 telephone number in international notation for all phone numbers in our API.
 
 ## Geographic Redundancy and Optimization
 
