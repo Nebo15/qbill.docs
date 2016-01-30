@@ -53,6 +53,10 @@ We use E.123 telephone number in international notation for all phone numbers in
 
 To ensure that you will always have the lowest response time we can provide, we are automatically detecting nearest datacenter to you, so all your projects have master servers in it. To migrate data to different region please contact our support team.
 
+## Data Storage and Backup Policy
+
+To ensure that you won't loose your data we use geographical redundant MongoDB replica sets. It means that at least one of your secondary DB's is hosted in another region, and will save all data in case main datacenter would be unavailable.
+
 ## Idempotent Requests
 
 The API supports idempotency for safely retrying write requests without accidentally performing the same operation twice. For example, if a request to create a charge fails due to a network connection error, you can retry the request with the same idempotency key to guarantee that only a single charge is created.
