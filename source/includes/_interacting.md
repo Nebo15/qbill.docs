@@ -549,10 +549,10 @@ GET /projects/:project_id/accounts/:id1,id2,...
 
 ```
 {
-  data: {
+  data: [
     "<user1_id>": {"<user1>"},
     "<user2_id>": {"<user2>"}
-  }
+  ]
 }
 
 ```

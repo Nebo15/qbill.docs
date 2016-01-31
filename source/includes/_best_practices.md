@@ -57,11 +57,35 @@ We use E.123 telephone number in international notation for all phone numbers in
 
 ## Geographic Redundancy and Optimization
 
-To ensure that you will always have the lowest response time we can provide, we are automatically detecting nearest datacenter to you, so all your projects have master servers in it. To migrate data to different region please contact our support team.
+To ensure that you will always have the lowest response time we can provide, we are automatically detecting nearest datacenter to you, so all your projects have master servers in it. To migrate data to a different region please contact our support team.
 
 ## Data Storage and Backup Policy
 
 To ensure that you won't loose your data we use geographical redundant MongoDB replica sets. It means that at least one of your secondary DB's is hosted in another region, and will save all data in case main datacenter would be unavailable.
+
+## Providing urgent data for your users
+
+Sometimes you want to update account balance and notifications list on each request you made. You can provide additional HTTP header ```X-Urgent-Account-ID``` with an Account ID that should be queried. All result data will be in ```urgent``` response field.
+
+```
+X-Urgent-Data-ID: acc_3idjdjkd9
+```
+
+```
+{
+  "meta": {
+  },
+  "urgent": {
+    "account": "acc_3idjdjkd9",
+    "notifications": [],
+    "unseen_payments": 0,
+    "holds": 0,
+    "balance": 0
+  },
+  "data": {
+  }
+}
+```
 
 ## Idempotent Requests
 
@@ -79,15 +103,17 @@ Also note: making a conditional request and receiving a 304 response does not co
 
 ## Versioning
 
-All API calls should be made with a X-API-Version header which guarantees that your call is using the correct API version. Version is passed in as a date (UTC) of the implementation in YYYY-MM-DD format.
+All API calls should be made with a ```X-API-Version``` header which guarantees that your call is using the correct API version. Version is passed in as a date (UTC) of the implementation in YYYY-MM-DD format.
 
 If no version is passed, the newest will be used and a warning will be shown. Under no circumstances should you always pass in the current date as that will return the current version which might break your implementation.
 
 ## SSL certificates
 
-We recommend that all users obtain an SSL certificate and serve any data that is stored in our service over HTTPS.
+We recommend that all users obtain an SSL certificate and serve any data that is stored in our service over HTTPS. Also we don't allow to add a webhook that doesn't support SSL encryption.
 
 We don't have a specific preferred vendor for SSL certificates, but we recommend that you stick with a well-known provider (e.g. Network Solutions, GoDaddy, Namecheap). Generally speaking, most certificates will be similar, so it's up to you to determine what fits your needs best.
+
+You can test your server with a [SSL Server Test](https://www.ssllabs.com/ssltest/).
 
 ## HTTP Redirects
 

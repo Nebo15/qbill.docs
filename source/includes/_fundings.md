@@ -4,7 +4,7 @@ Funding allows to top-up any account balance in a system. (Basically this is an 
 
 You can find best practices for [Funding an Account](http://nebo15.github.io/qbill.docs/#funding-account).
 
-## Create a Funding Operation, Fund an Account
+## Create a Funding to Account
 
 ```
 POST /projects/:project_id/fundings
@@ -14,13 +14,11 @@ POST /projects/:project_id/fundings
 }
 ```
 
-## List all Funding Operations
+## List all Fundings
 
 ```
 GET /projects/:project_id/fundings
 ```
-
-### List all Account Funding Operations
 
 ## Canceling a Funding Operation
 

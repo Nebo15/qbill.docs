@@ -75,21 +75,12 @@ Also you can add and save your internal request ID to a webhooks log by using sa
 X-Override-External-Request-ID: 8383729938
 ```
 
-You can not modify following HTTP headers:
+You can modify following HTTP headers:
 
-- X-Application-ID
-- X-Project-ID
-- X-Request-ID
-- X-HTTP-Verb
-- X-Requested-Object
-- X-Requested-URI
-- X-Idempotency-Key
-- Connection
-- Host
-- Pragma
-- User-Agent
-- Content-Type
-- Accept-Encoding
-- Accept
+- Authorization
+- Timezone
+- X-Urgent-Account-ID
 
-(TODO: Add more headers to this list or, better, turn it into white-list.)
+## List all Webhooks
+
+## Add a Webhook

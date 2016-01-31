@@ -1,24 +1,27 @@
 # Transfer
 
-Transfer is a main operation with account balance that covers both payments and transfers.
+You should use Transfers whenever you accept a payment or transfer money from one account to another. Creating Transfer will decrease Account balance by transfer total.
 
-Transfer can be ```internal``` and ```external```. We recommend you to skip ```internal``` Transfer for all lists that will be visible for your customers, since then carry only technical purposes.
-
-## Creating Transfer
-
-There are two flows for creating a transfer:
-- Instant - create hold and immediately convert it to charge;
-- Delayed - create hold and manually convert it to charge.
-
-A single payment can have multiple Transfer that will look like a single transfer for an account, but it will create multiple technical Transfer. This is useful to charge fees.
-
-### Instant (One-Step) Transfer
+## List all Transfers
 
 ```
-POST /v1/accounts/:account_id/Transfer
+GET /projects/:project_id/transfers
+```
+
+### Create a Transfer
+
+To create a Transfer you need to specify at least two request fields:
+
+- ```transfer``` - List of Transfers that should be created in a single Transfer. This allows you to take fees from your customers.
+- ```total``` - Total amount of created transfers. Total should be exactly same as sum of all created transfers. (Otherwise we will return an appropriate error.)
+
+You can attach any ```metadata``` to a Transfer.
+
+```
+POST /projects/:project_id/transfers
 {
   total: 100,
-  Transfer: [
+  transfer: [
     {subtotal: 90, destination: "<service_account_id>", meta: {service_id: 1, service_name: 'Cellular Topup'}}
     {subtotal: 10, destination: "<fees_account_id>", meta: {for: "service_payment", service_id 1}}
   ],
@@ -26,46 +29,11 @@ POST /v1/accounts/:account_id/Transfer
 }
 ```
 
-### Delayed (Multi-Step) Transfer
-
-(TODO: Transfer with a currency conversion.)
-
-Hold money on target account.
-
-```
-POST /v1/accounts/:account_id/holds
-```
-
-> While money is on-hold you can change any payment details, for eg. to refund some part of money
-
-```
-PUT /v1/holds/:transfer_id
-{
-  total: 20.00
-}
-```
-
-> After hold payment can be completed to commit balance change and turn hold into charge or declined to remove hold and return funds to available balance.
-
-```
-POST /v1/transfers/:transfer_id/complete
-```
-
-```
-POST /v1/transfers/:transfer_id/decline
-```
-
-## List all Transfers
-
-```
-GET /v1/transfers
-```
-
-### List all Account Transfers
-
 ## Rollback a Transfer
 
-To a rollback we will create a new transfer with a ```type=internal``` and a ```refference_id=<originalTransferID>``` fields.
+On a Transfer rollback we will create new Transfer from a destination to a source accounts with same totals. This means that we will also return all the fees you charged from a Account. Created Transfer will have ```is_rollback``` field set to true and ```rollback_refference``` set to a original Transfer ID.
+
+Also rollbacked transfer will have a ```rollback_transfer``` property that will hold rollback Transfer ID and a ```is_rollbacke``` field set to ```true```.
 
 ## Create Refund for a Transfer
 

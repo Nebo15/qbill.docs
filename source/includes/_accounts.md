@@ -40,7 +40,7 @@ POST /projects/:project_id/accounts
     "unseen_payments": 0,
     "holds": 0,
     "balance": 0
-  }
+  },
   "data": {
     id: "acc_388djejje88du"
     balance: 0,
@@ -48,7 +48,7 @@ POST /projects/:project_id/accounts
       external_id: 192838,
       currency_code: 'USD'
     }
-  },
+  }
 }
 ```
 
@@ -56,6 +56,30 @@ POST /projects/:project_id/accounts
 
 ```
 GET /projects/:project_id/accounts/:id
+```
+
+## List all Account Funding Operations
+
+This is a shortcut to [List all Fundings](#List all Fundings) with an filter based on account id.
+
+```
+GET /projects/:project_id/accounts/:id/fundings
+```
+
+## List all Account Holds
+
+This is a shortcut to [List all Holds](#list-all-holds) with an filter based on account id.
+
+```
+GET /projects/:project_id/accounts/:id/holds
+```
+
+## List all Account Transfers
+
+This is a shortcut to [List all Transfers](#list-all-transfers) with an filter based on account id.
+
+```
+GET /projects/:project_id/accounts/:id/transfers
 ```
 
 ## Disabling and Enabling an Account
