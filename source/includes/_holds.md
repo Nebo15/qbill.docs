@@ -19,7 +19,7 @@ GET /projects/:project_id/holds
 To create a hold you should provide at least two fields:
 
 - ```transfer``` - List of Transfers that should be created when Hold is completed into a Transfer. This allows you to take fees from your customers.
-- ```total``` - Total amount should be holded from an Account. Total should be exactly same as sum of all created transfers. Otherwise we will return appropriate error.
+- ```total``` - Total amount should be holded from an Account. Total should be exactly same as sum of all created transfers. (Otherwise we will return an appropriate error.)
 
 You can attach any ```metadata``` to a Hold.
 

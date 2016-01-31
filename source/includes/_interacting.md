@@ -466,6 +466,7 @@ Name | Description
 ------------- | -----------
 count | Returns count of returned aggregated fields.
 sum | For integers and floats returns total for all field values.
+arr | Returns array of all possible values. (Very useful for anti-frauds.)
 max | Returns maximum value of a field.
 min | Returns minimum value of a field.
 avg | Returns average value of a field.

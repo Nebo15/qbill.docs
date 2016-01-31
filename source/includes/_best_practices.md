@@ -77,6 +77,8 @@ To ensure that you won't loose your data we use geographical redundant MongoDB r
 
 Sometimes you want to update account balance and notifications list on each request you made. You can provide additional HTTP header ```X-Urgent-Account-ID``` with an Account ID that should be queried. All result data will be in ```urgent``` response field.
 
+Requesting urgent data counts as a separate request and affects your rate limits.
+
 ```
 X-Urgent-Data-ID: acc_3idjdjkd9
 ```
