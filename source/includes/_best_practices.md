@@ -30,6 +30,10 @@ Direct reduction of account is not possible to keep you from common accounting m
 
 Any time you charge customer for any type your services, you should simply create a transfer to a revenue account with corresponding metadata (to show correct transaction information for your customers).
 
+### Account Overdrafts
+
+(TODO.)
+
 ## Integrating oAuth provider
 
 Sometimes is more rational to make request to an API without any additional services that will proxy this requests. But by adding project token to your application you would make it very vulnerable to a third-party's.
