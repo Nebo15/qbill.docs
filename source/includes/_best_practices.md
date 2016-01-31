@@ -55,6 +55,10 @@ We use ISO 8601 formats for all dates in our API.
 
 We use E.123 telephone number in international notation for all phone numbers in our API.
 
+All tokens have a human-readable prefix, so you can always see what scope it carries. Example: ```project-lksdlkfjf8ds8dfsl````.
+
+All ID's have a human-readable prefix that carries first 3 characters from a entity name. Example: ```acc_ssj8988udj```.
+
 ## Geographic Redundancy and Optimization
 
 To ensure that you will always have the lowest response time we can provide, we are automatically detecting nearest datacenter to you, so all your projects have master servers in it. To migrate data to a different region please contact our support team.
