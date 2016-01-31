@@ -19,14 +19,14 @@ Object | ```application``` Token | ```project``` Token
 ```Projects``` | Yes | No
 ```Settings``` | Yes | No
 ```Backup``` | Yes | No
-```Accounts``` | No | Yes
-```Fundings``` | No | Yes
-```Transfers``` | No | Yes
-```Holds``` | No | Yes
-```Webhooks``` | No | Yes
-```Events``` | No | Yes
-```Requests``` | No | Yes
-```Currencies``` | No | Yes -->
+```Accounts``` | Yes | Yes
+```Fundings``` | Yes | Yes
+```Transfers``` | Yes | Yes
+```Holds``` | Yes | Yes
+```Webhooks``` | Yes | Yes
+```Events``` | Yes | Yes
+```Requests``` | Yes | Yes
+```Currencies``` | Yes | Yes -->
 
 ### Application token
 
