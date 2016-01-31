@@ -32,7 +32,13 @@ Any time you charge customer for any type your services, you should simply creat
 
 ### Account Overdrafts
 
-(TODO.)
+(IDEA) Create a system overdrafts account and fund users from it each time they need an to get a overdraft. You can calculate overdraft later by using aggregation with account filter.
+
+(IDEA2) Create another account for your customer and fund it, then transfer money from one account to another. Funding should be done each time you are adding overdraft funs to a user.
+
+### Transferring money between projects
+
+(IDEA) Simply move money to an project account and create a funding operation in another project.
 
 ## Integrating oAuth provider
 
