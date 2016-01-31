@@ -298,15 +298,14 @@ Available orders:
 
 You can filter all lists by a data. Filter can refer to any fields inside a ```data``` response property, except entities that was expanded. Also you can filter by a metadata value.
 
-You should set filter as a [base64 encoded](https://en.wikipedia.org/wiki/Base64) JSON object string in a ```filter``` query parameter.
+To apply filter you should provide [Base64 encoded](https://en.wikipedia.org/wiki/Base64) encoded JSON string with a filtering rules in a ```filter``` query parameter.
 
 > Create a JSON object and convert it to string:
 
 ```bash
-echo "{predicates:[<predicate_1>,<predicate_1>,...]}" | base64
+$ echo "{predicates:[<predicate_1>,<predicate_1>,...]}" | base64
+e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K
 ```
-
-> Result: e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K
 
 > Send encoded string as filter query parameter:
 
@@ -314,7 +313,7 @@ echo "{predicates:[<predicate_1>,<predicate_1>,...]}" | base64
 GET /v1/accounts?filter=e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K
 ```
 
-Predicate is an object with 4 fields:
+Predicate is an object with at least 3 fields:
 
 - ```field``` - Resource filed that should be used for current filter predicate.
 - ```comparison``` - Comparison type that is applied to a field value and ```value``` predicate property.
@@ -392,46 +391,81 @@ nor | Joins query clauses with a logical NOR returns all objects that fail to ma
 
 All lists can be queried to get aggregations on given set of rules. When you are using aggregation default filtered period is one month. For example you can get aggregated count of ```Accounts``` to know how many accounts was created at each day for last month.
 
-(TODO: Support multiple aggregations in one request, for eg. to collect payments patency. Maybe another base64 object?)
+To use aggregation you need to specify only one query parameter:
+
+- ```aggregate``` - [Base64 encoded](https://en.wikipedia.org/wiki/Base64) JSON string with a aggregation rules.
+
+Also you can change aggregation dispensation by providing ```tick``` query parameter:
+
+- ```tick``` - Aggregation period particle. Default value: ```day```. Optional.
+
+> Create a JSON object and convert it to string:
+
+```bash
+$ echo "{aggregate:[<aggregate_1>,<aggregate_1>,...]}" | base64
+e2FnZ3JlZ2F0ZXM6WzxhZ2dyZWdhdGVfMT4sPGFnZ3JlZ2F0ZV8xPiwuLi5dfQo=
+```
+
+> Send encoded string as filter query parameter:
 
 ```
-GET /accounts?aggregate_stategy=count&aggregate_fields=count&tick=day
+GET /v1/accounts?aggregate=e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K&tick=day
 ```
 
+Aggregate is an object with at least 2 fields:
+
+- ```name``` - Property name in a response aggregate object.
+- ```strategy``` - Aggregation strategy.
+- ```field``` - Field that will be used for aggregation.
+
+```json
+{
+  predicates:[
+    {
+      "name": "accounts_count",
+      "strategy": "count",
+      "field": "id"
+    },
+    {
+      "name": "accounts_liquidity",
+      "strategy": "sum",
+      "field": "balance"
+    }
+  ]
+}
 ```
+
+```json
 {
   meta: {
     "type": "list"
   }
   data: [
     {
-     "tick":"2014-07-11",
+     "tick":"2015-07-11",
      "aggregates": {
-       "count":123
+       "accounts_count": 123,
+       "accounts_equity": 1000000
      }
     },
     {
-     "tick":"2014-07-12",
+     "tick":"2015-07-12",
      "aggregates": {
-       "count":98
-     }
+       "accounts_count": 98,
+       "accounts_equity": 900000
+     },
+     ...
     }
   ]
 }
 ```
-
-To use aggregation you need to specify at least 3 fields:
-
-- ```aggregate_stategy``` - Aggregation strategy.
-- ```aggregate_fields``` - Field that will be used for aggregation.
-- ```tick``` - Aggregation period particle. Default value: ```day```.
 
 Available aggregation strategies:
 
 Name | Description
 ------------- | -----------
 count | Returns count of returned aggregated fields.
-add | For integers and floats returns total for all field values. For strings returns concatenated string of all field values.
+sum | For integers and floats returns total for all field values.
 max | Returns maximum value of a field.
 min | Returns minimum value of a field.
 avg | Returns average value of a field.
