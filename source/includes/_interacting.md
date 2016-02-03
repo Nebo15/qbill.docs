@@ -36,7 +36,7 @@ curl https://example.com/resource \
 ```
 
 <aside class="notice">
-Even trough we support different scopes for tokens, you should simply use token from a Project settings in your Dashboard. (This token have a ```poject``` access scope.) All following mentions of token should read as "project scope token".
+Even trough we support different scopes for tokens, you should simply use token from a Project settings in your Dashboard. (This token have a ```project``` access scope.) All following mentions of token should read as "project scope token".
 </aside>
 
 <aside class="warning">
