@@ -255,6 +255,8 @@ Each API request has an associated request identifier. You can find it in ```X-R
 
 You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.
 
+All Request ID's are prefixed with a human-readable name of server that served your request. (Yes, we give names to all our servers.)
+
 ## Limiting Response Fields
 
 By default, all the fields in a node are returned when you make a query. You can choose the fields you want returned with the ```fields``` query parameter. This is really useful for making your API calls more efficient and fast.
