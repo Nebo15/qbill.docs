@@ -257,6 +257,10 @@ You can also find request identifiers in the URLs of individual request logs in 
 
 All Request ID's are prefixed with a human-readable name of server that served your request. (Yes, we give names to all our servers.)
 
+```
+X-Request-ID: flash-99spDSoim3i
+```
+
 ## Limiting Response Fields
 
 By default, all the fields in a node are returned when you make a query. You can choose the fields you want returned with the ```fields``` query parameter. This is really useful for making your API calls more efficient and fast.
@@ -581,3 +585,39 @@ You can batch up to 10 request. Every request in batch will be counted as separa
 6. Save API response to ```Requests```
 7. Schedule all webhooks configured for a ```Project```. If webhook failed, re-try it.
 8. Record all webhooks statuses
+
+## Other Security Improvements
+
+### Nosniff
+
+We are setting ```X-Content-Type-Options=nosniff``` to make sure that older IE browsers won't MIME-sniff a response away from the declared ```Content-Type```.
+
+###
+
+strict-transport-security: max-age=2592000;includeSubdomains
+
+### iFrames
+
+All Front-End Servers will disallow including any resources within an iFrame with a ```X-Frame-Options``` header.
+
+```
+X-Frame-Options DENY;
+```
+
+### Content Security Policy
+
+For API server we are setting Content-Security-Policy that disallows to load any resources.
+
+```
+Content-Security-Policy "default-src 'none'; script-src 'none'; img-src 'none'; style-src 'none'; font-src 'none'; child-src 'none'; frame-src 'none'; connect-src 'none'; object-src 'none'";
+```
+
+For Dashboard servers we will configure minimize all possible paths to resources, to make sure anything won't be loaded from unauthorized services.
+
+### SSH Access
+
+We are running a separate server as a single SSH authorization point, that allows to mange access right in one place, and to act fast on security incidents. Connecting to SSH ports on all other instances is only allows from Access Server IP address with a Access Server RSA keys.
+
+### Restricted On-Production Hotfixes
+
+Nobody should ever have an SUDO password for API servers. To make any changes you need to kill existing instance and to replace it with a new one.

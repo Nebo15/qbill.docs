@@ -18,6 +18,19 @@ search: true
 
 This is an API of a card tokenization service that was inspired by a [Visa Token Service](https://developer.visa.com/products/vts/reference#vts__vts____provision_token) API. It allows to exchange card data with a token, that can be later used to create transactions.
 
+## Security
+
+### Defining Card Token expiration date
+
+### Data Storage Policy
+
+Card Data | Policy
+--------- | ------
+PAN | Stored in DB for a token lifespan. It's stored in an encrypted format.
+Expiration Date | Stored inside server's RAM memory and can be lost on reboots.
+Holder | Stored inside server's RAM memory and can be lost on reboots.
+CVV | Never stored. (**TODO: How to make payments without CVV?! Store it in RAM?**)
+
 ## Enroll PAN
 
 ### Enroll via API (internal)
