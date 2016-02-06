@@ -1,0 +1,71 @@
+---
+title: QBill API Reference - Applications
+
+language_tabs:
+  - shell
+
+toc_footers:
+ - <a href='index.html'>Billing API</a>
+ - <a href='index.html'>Applications API</a>
+
+search: true
+---
+
+
+# Tokenization
+
+## Introduction
+
+This is an API of a card tokenization service that was inspired by a [Visa Token Service](https://developer.visa.com/products/vts/reference#vts__vts____provision_token) API. It allows to exchange card data with a token, that can be later used to create transactions.
+
+## Enroll PAN
+
+### Enroll via API (internal)
+
+### Enroll via iFrame
+
+### Enroll via Tokenize.js
+
+## Get Token Status
+
+## Suspend Token
+
+## Resume Token
+
+## Delete Token
+
+## Get Card Meta
+
+## Exchange token to Card Data (internal)
+
+# Funding
+
+## Introduction
+
+This is an API to card2card service that was inspired by a [Visa Direct](https://developer.visa.com/products/visa_direct/reference#visa_direct__funds_transfer__v1__pullfunds) and [MasterCard Money Send](https://developer.mastercard.com/portal/display/api/MoneySend) API's. It allows to transfer money between cards via card PAN's or Card Tokens.
+
+## List of available aquiers
+
+- TAS
+- UPC
+- ALFA
+
+## Funding
+
+### Funding with a Card Number
+
+### Funding with a Card Token
+
+### MultiFunding
+
+## Payment
+
+### Payment with a Card Number
+
+### Payment with a Card Token
+
+### MultiPayment
+
+## Reverse
+
+### MultiReverse
