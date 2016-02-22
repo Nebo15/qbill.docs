@@ -6,4 +6,6 @@ Request include, but not limited to: HTTP headers, last 4 digits of access token
 
 Outgoing requests is listed in [Webhooks]() section.
 
+All requests are stored and returned in popular [HTTP Archive (HAR)](http://www.softwareishard.com/blog/har-12-spec/) format with one difference, we use snake_case instead of CamelCase as field keys.
+
 ## List all Requests

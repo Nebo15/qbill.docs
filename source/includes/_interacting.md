@@ -111,10 +111,41 @@ message | Human readable message for API developer.
     "error": {
       "type": "form_validation_failed",
       "invalid": [
-        {"entry_type": "field", "entry_id": "username", "rule": "min:6", "params":{"lenght": 4}},
-        {"entry_type": "field", "entry_id": "email", "rule": "empty"},
-        {"entry_type": "header", "entry_id":"Timezone", "rule": "timezone"},
-        {"entry_type": "request", "entry_id":null, "rule": "json"}
+        {
+          "entry_type": "field",
+          "entry_id": "username",
+          "rules": [
+            {
+              "rule": "min:6",
+              "params":{"min": 6}
+            },
+            {
+              "rule": "length:2",
+              "params":{"lenght": 2}
+            }
+          ]
+        },
+        {
+          "entry_type": "field",
+          "entry_id": "email",
+          "rules": [
+            {"rule": "empty"}
+          ]
+        },
+        {
+          "entry_type": "header",
+          "entry_id":"Timezone",
+          "rules": [
+            {"rule": "date"}
+          ]
+        },
+        {
+          "entry_type": "request",
+          "entry_id":null,
+          "rules": [
+            {"rule": "json"}
+          ]
+        }
       ],
       "message": "Validation failed. Return human-readable error message. You find all possible validation rules at https://docs.qbill.ly/#request-validators."
     }
@@ -140,7 +171,7 @@ All invalid request data is listed in ```meta.error.invalid``` object. There are
 
 List of possible validation rules:
 
-Validator | Description
+Validator Rule | Description
 ------------------------- | -----------
 ```active_url``` | The field under validation must be a valid URL according to the checkdnsrr PHP function.
 ```after:<date>``` | The field under validation must be a value after a given date. The dates will be passed into the strtotime PHP function. Sample rule: ```date|after:tomorrow```.
