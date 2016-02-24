@@ -165,6 +165,8 @@ API для создания пользователей и добавления �
 
 4. Интеграция со Slack (уведомления и деплой через команду) и https://developer.github.com/v3/repos/deployments/
 
+5. Интеграция в GitHub Deployments API: https://developer.github.com/v3/repos/deployments/
+
 # Users
 
 All Arkenstone users and their changes are automatically provisioned to a main SSH authorization server and to all application servers that user have access to.
