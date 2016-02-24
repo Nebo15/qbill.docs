@@ -136,6 +136,7 @@ Never commit passwords, private keys, API keys or anything like to a git repos. 
 # Deploy Strategy
 
 1. Создать сервер на DO и задеплоить туда Rome с базовыми Puppet правилами:
+
 - Puppet Apply базовых настроек rome
 - HTTP сервис для управления инстансом по API
 - SSH (порт и мастер-ключ, IP с которого можно авторизоваться)
@@ -145,6 +146,7 @@ Never commit passwords, private keys, API keys or anything like to a git repos. 
 
 
 2. Деплой проекта (или изменений проекта) на сервер:
+
 - Стянуть git
 - Стянуть puppet модули
 - Puppet apply настроек с git репозитория
@@ -159,7 +161,6 @@ Never commit passwords, private keys, API keys or anything like to a git repos. 
 
 3. CRUD SSH ключей с доступом на сервер
 API для создания пользователей и добавления туда публичных ключей
-
 
 4. Интеграция со Slack (уведомления и деплой через команду) и https://developer.github.com/v3/repos/deployments/
 
