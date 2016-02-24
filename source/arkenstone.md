@@ -16,6 +16,7 @@ search: true
 This is project that Nebo15 uses to manage it's infrastructure.
 
 We use:
+
 - [DigitalOcean](https://digitalocean.com) (DO) as our main hosting provider, DNS hosting and Floating IP provider.
 - DO [CloudConfig](https://www.digitalocean.com/community/tutorials/an-introduction-to-cloud-config-scripting) for initial VM (Droplet) configuration.
 - [Puppet](https://puppetlabs.com/puppet/puppet-open-source) for configuration management.
