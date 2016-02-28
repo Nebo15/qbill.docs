@@ -87,6 +87,10 @@ There are cases when you need to send multiple webhooks when you receive some da
 
 You can setup trigger on each request. (Webhooks from QBill.)
 
+## Sync to Async
+
+If you want to wait, its your decision :). You can create a sync APi endpoint that will make one or few webhook calls and return response when they will be accomplished.
+
 # DB Structure
 
 ```
