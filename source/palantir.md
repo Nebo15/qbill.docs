@@ -37,7 +37,8 @@ For example, you have a lending site and you need to score your users before sen
 ```
 5. Describe how to map response
 ```
-applicant.score = response.scoring.result;
+applicant.score = request.scoring.result;
+applicant.decision = request.scoring.result > 50;
 ```
 6. Setup next webhook. ```ON_MODEL_FILLED```. And API endpoint where Palantir need to post data.
 
@@ -124,3 +125,9 @@ triggers: [
   }
 ]
 ```
+
+TODO:
+
+- Better way to describe triggers is a conditions table: ```WHEN name is set, surname is set THEN {api_call}``` and ```WHEN score is set THEN {api_call}```.
+- Split view editor for node.js code, like in October CMS. (Condition, Trigger, Result Mapping).
+- Drop downs in editor. For condition: ```ON: change, filled, code```. For trigger: ```Conenctor: JSON API, XML API, code```. Mapping: ```Editor: model, code```.
