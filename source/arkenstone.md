@@ -13,6 +13,11 @@ search: true
 
 # Introduction
 
+Refs:
+
+- https://strongloop.com/node-js/build-deploy-and-scale/
+
+
 This is project that Nebo15 uses to manage it's infrastructure.
 
 We use:
@@ -91,6 +96,10 @@ Servers are also consist of following parts:
 - ```{repo_name}``` - repository name for a deployed project.
 - ```{environment}``` - branch/environment name for a deployed project.
 - ```{server_id}``` - any human-readable unique id for a server. (Can be picked from a [star common name](https://en.wikipedia.org/wiki/List_of_proper_names_of_stars).)
+
+(TODO: Reverse IP. Auto-update DNS. Name server on a HOST string.)
+
+realhost CNAME internalhost
 
 ## DNS Records Naming
 
