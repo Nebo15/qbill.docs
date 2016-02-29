@@ -13,11 +13,6 @@ search: true
 
 # Introduction
 
-Refs:
-
-- https://strongloop.com/node-js/build-deploy-and-scale/
-
-
 This is project that Nebo15 uses to manage it's infrastructure.
 
 We use:
@@ -79,10 +74,6 @@ For all projects we have 3 environments:
 All our environments are mapped into git branches. It helps us to keep in mind where code will be provisioned whenever we add a new commit. And helps to get rid of messy branch->environment mapping.
 
 <aside class="notice">
-Our projects are also named in a standardized way.
-</aside>
-
-<aside class="notice">
 Our ```production```, ```beta``` and ```sandbox``` git branches are protected by a GitHub's "Protected branches" feature. It means that nobody can force-push to this branch; commit directly to it; can merge pull request that didn't passed all CI status checks.
 
 To commit change we are creating pull request and asking a colleague to review it and merge. Nobody is allowed to merge own pull request.
@@ -90,33 +81,31 @@ To commit change we are creating pull request and asking a colleague to review i
 
 ## Server Naming
 
-Servers are also consist of following parts:
-```{repo_name}.{environment}.{server_id}```, where:
+Servers are named based on their hostname and thus a DNS host name. This helps us to avoid PTR records issues.
 
-- ```{repo_name}``` - repository name for a deployed project.
-- ```{environment}``` - branch/environment name for a deployed project.
+Initially we name them in the following way:
+```{server_id}.nebo15.com```, where:
 - ```{server_id}``` - any human-readable unique id for a server. (Can be picked from a [star common name](https://en.wikipedia.org/wiki/List_of_proper_names_of_stars).)
-
-(TODO: Reverse IP. Auto-update DNS. Name server on a HOST string.)
-
-realhost CNAME internalhost
+- ```{environment}``` - branch/environment name for a deployed project.
 
 ## DNS Records Naming
 
-(TODO.)
+When we are adding a new server to our pool, we automatically adding a new DNS record to our ```nebo15.com``` domain. If you need to map another subdomain or domain to the server, you can simply setup a ```CNAME``` DNS record and make corresponding changes in nginx settings.
 
-For ```api``` projects: ```{environment}``` subdomain for a ```beta``` and ```sandbox``` environment. ```api``` subdomain for ```production`` environment.
+```
+gandalf.forza.md CNAME gandalf.nebo15.com
+```
 
-For ```web``` projects: ```{environment}-web``` subdomain for a ```beta``` and ```sandbox``` environment. Root domain for ```production``` environment. (And a CHNAME ```www``` to ```@```.)
+Generally we have a convention on naming end-domain endpoints:
+
+- For ```api``` projects: ```{environment}``` subdomain for a ```beta``` and ```sandbox``` environment. ```api``` subdomain for ```production`` environment.
+ - For ```web``` projects: root domain for ```production``` environment. (And a redirect from ```www``` to ```@```.) Other environments are tested on ```nebo15.com``` domain.
 
 <aside class="notice">
 We don't use 3-d level subdomains because it's would be too expensive to generate valid SSL wildcard certificates for all of them.
 </aside>
 
-
 ## Single Responsibility
-
-(TODO: Single VM for all envs? If else, droplet naming doesn't have sense).
 
 For production environment we are sticking to "single VM responsibility" strategy. It means that we do not deploy more than one project to a single DO droplet. It helps to scale better and simplifies maintenance of our projects.
 
@@ -124,57 +113,83 @@ For development environment we can have multiple projects on one VM, but still w
 
 # SSH Authorization
 
-1. Central server
-2. Generate user on it and generate public/private key on a central server.
-3. Provision public key from central server to application servers.
-4. Allow SSH access to application servers only from central server.
-5. Provision Areknstone password changes to all application servers. Provision SSH public key changes to a central server.
+All SSH access should be done trough middleware Arkenstone Auth server. It means that to connect, for example, to ```example.nebo15.com```, you need to run:
 
-# GitFlow
+- ```$ ssh auth.nebo15.com -p2020```.
+- ```# ssh example.nebo15.com -p2020```.
+
+Arkenstone will automatically:
+
+- Generate a SSH keypair for you and provision it to all servers you have access to.
+- Provision your Arkenstone password as to all your accounts on all servers you have access to.
+- Update ```~/.ssh/authorized_keys``` when you change ```public-key``` in Arkenstone GUI.
 
 # Security
 
 Never commit passwords, private keys, API keys or anything like to a git repos. If you did something like this, than you must change all credentials that was affected.
 
-
 # Continuous Integration
 
 ## Testing
 
+All our applications have minimum code coverage requirement (75%). On each commit we will trigger a build and test on Travis-CI server, that will run following checks:
+
+- Code style.
+- Code coverage.
+- All project tests.
+
+If one of checks is failed, than you should not merge your feature branch into repo. (And, actually, you won't be able to.)
+
 ## Delivery
 
-# Deploy Strategy
+# Initialization
 
-1. Создать сервер на DO и задеплоить туда Rome с базовыми Puppet правилами:
+Arkenstone will create a DigitalOcean droplet with specified parameters, using last DO Ubuntu LTS image. Only key that is added to server is a Arkenstone master key.
 
-- Puppet Apply базовых настроек rome
-- HTTP сервис для управления инстансом по API
-- SSH (порт и мастер-ключ, IP с которого можно авторизоваться)
-- Автоапдейт
-- Диффи-Хелман (прод)
-..
+After that it will set a CloudConfig to this VM, that will init Puppet base configuration on this server:
 
+- Change ssh port and ssh authorization settings (port: 2020; deny root login; authorization with key-only; allow login only from Arkenstone master-server IP address).
+- Setup nginx.
+- Setup Arkenstone client app and make it available only from Arkenstone Master-Server IP address.
+- Deploy Elliptic-Curve Diffie-Hellman (ECDHE) group.
+- Some other basic configurations.
 
-2. Деплой проекта (или изменений проекта) на сервер:
+# Deploying a Project
 
-- Стянуть git
-- Стянуть puppet модули
-- Puppet apply настроек с git репозитория
-- Собрать проект в releases/:commit_id
-- Запустить releases/:commit_id/bin/build.sh
-- Сделать симлинк current -> releases/:commit_id-:commit_time
+1. Notify Slack that deployment is started.
+1. Asks you to authorize our Arkenstone GitHub app.
+2. Generate a SSH key pair for GitHub repo on a application-server.
+3. Add this key to a GitHub Deploy Keys.
+4. Setup a virtual host to access GitHub that uses this keys from this server (in ```~/.ssh/config```).
+3. Fetch project git repository to a ```/www/{project_name}/releases/latest``` folder.
+4. Change branch to a deployment environment.
+5. Make a project copy (without ```.git``` folder) to a ```/www/{project_name}/releases/{commit_id}-{deploy_timestamp}/``` and ```cd``` to it.
+6. Provision users ssh keys and passwords from a Arkenstone master-servers.
+7. Fetch all Puppet dependencies and apply project config.
+8. Apply a Puppet config for this project.
+9. Fetch all Puppet dependencies.
+10. Run ```/www/{project_name}/releases/{commit_id}-{deploy_timestamp}/bin/build.sh```.
+11. Notify NewRelic, [GitHub](https://developer.github.com/v3/repos/deployments/) and Slack that deployment is finished.
+12. Add a project server to it's load balancer.
 
-(Все конфиги и публичные SSH ключи лежат прямо в репозитории проекта. Разделены по папкам. Роль берется с суффикса названия сервера, например mbank.api.production.s838 -> mbank.api::production::s838)
+All deploy logs are stored in ```/var/logs/www/{project_name}/releases/{commit_id}-{deploy_timestamp}/deploy.log```.
 
-2.1. Взять все папки в puppet/environments/:env/users и создать для них юзеров с указанным публичным ключем, но без пароля (для запуска SUDO человек должен сначала должен создать себе пароль через ssh). Заставить человека менять пароль при первом входе.
+<aside class="notice">
+We store all project configurations inside a repo along with a source code. So you can change add components in one place. And, eventually, all people that have access to the source code, can add themselves to a project users.
 
+Puppet config is in "/arkenstone/{environment}/puppet/init.pp".
+Users that have access is listed in "/arkenstone/{environment}/users.json".
+Environment variables listed in "/arkenstone/{environment}/environment.json".
+Load balancer discovery settings listed in "/arkenstone/{environment}/lb.json".
+</aside>
 
-3. CRUD SSH ключей с доступом на сервер
-API для создания пользователей и добавления туда публичных ключей
+# Deploying an update
 
-4. Интеграция со Slack (уведомления и деплой через команду) и https://developer.github.com/v3/repos/deployments/
+Deployment for a changes are very familiar. Just re-run steps 1-10 from previous section.
 
-5. Интеграция в GitHub Deployments API: https://developer.github.com/v3/repos/deployments/
+# Service Discovery and Load Balancing
+
+Each time you deploy a application we will try to find a appropriate load balancer for it and add a new node to it's config. It helps to scale projects really fast.
 
 # Users
 
@@ -397,3 +412,11 @@ GET /servers/:id/deployments/:repo_name/:commit_id/log
 
 POST /webhooks/github/
 POST /webhooks/slack/
+POST /webhooks/newrelic/
+
+# TODOs
+
+Refs:
+
+- [StrongLoop Similar Service](https://strongloop.com/node-js/build-deploy-and-scale/).
+- Arkenstone client API.
