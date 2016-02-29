@@ -99,7 +99,7 @@ gandalf.forza.md CNAME gandalf.nebo15.com
 Generally we have a convention on naming end-domain endpoints:
 
 - For ```api``` projects: ```{environment}``` subdomain for a ```beta``` and ```sandbox``` environment. ```api``` subdomain for ```production`` environment.
- - For ```web``` projects: root domain for ```production``` environment. (And a redirect from ```www``` to ```@```.) Other environments are tested on ```nebo15.com``` domain.
+- For ```web``` projects: root domain for ```production``` environment. (And a redirect from ```www``` to ```@```.) Other environments are tested on ```nebo15.com``` domain.
 
 <aside class="notice">
 We don't use 3-d level subdomains because it's would be too expensive to generate valid SSL wildcard certificates for all of them.
