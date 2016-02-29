@@ -85,6 +85,7 @@ Servers are named based on their hostname and thus a DNS host name. This helps u
 
 Initially we name them in the following way:
 ```{server_id}.nebo15.com```, where:
+
 - ```{server_id}``` - any human-readable unique id for a server. (Can be picked from a [star common name](https://en.wikipedia.org/wiki/List_of_proper_names_of_stars).)
 - ```{environment}``` - branch/environment name for a deployed project.
 
@@ -169,6 +170,7 @@ After that it will set a CloudConfig to this VM, that will init Puppet base conf
 8. Apply a Puppet config for this project.
 9. Fetch all Puppet dependencies.
 10. Run ```/www/{project_name}/releases/{commit_id}-{deploy_timestamp}/bin/build.sh```.
+11. Create symlink from ```/www/{project_name}/releases/{commit_id}-{deploy_timestamp}/``` to a ```/www/{project_name}/releases/current```.
 11. Notify NewRelic, [GitHub](https://developer.github.com/v3/repos/deployments/) and Slack that deployment is finished.
 12. Add a project server to it's load balancer.
 
@@ -185,7 +187,7 @@ Load balancer discovery settings listed in "/arkenstone/{environment}/lb.json".
 
 # Deploying an update
 
-Deployment for a changes are very familiar. Just re-run steps 1-10 from previous section.
+Deployment for a changes are very familiar. Just re-run steps 3-10 from previous section.
 
 # Service Discovery and Load Balancing
 
