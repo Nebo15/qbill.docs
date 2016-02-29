@@ -248,7 +248,6 @@ PUT /users/:name
 }
 ```
 
-
 ## Delete a User
 
 ```
@@ -418,9 +417,90 @@ POST /webhooks/github/
 POST /webhooks/slack/
 POST /webhooks/newrelic/
 
+# Arkenstone Client API
+
+## Deploy a project
+
+### List all Deployments
+
+```
+GET /deployments
+{
+  deployments: [
+    {
+      repo: ":repo_name",
+      environment: ":environment",
+      deployments: [
+        {commit_id: "", time: "", user: ":user_id", is_current: true}
+      ]
+    }
+  ]
+}
+```
+
+### Get Project deployment data for an Application Server
+
+```
+GET /deployments/:repo_name/:commit_id
+{
+  commit_id: "",
+  time: "",
+  user: ":user_id",
+  log: "",
+  is_current: true
+}
+```
+
+### Deploy new version of Application
+
+```
+POST GET /deployments/:repo_name
+{
+  commit_id: ":commit_id",
+  is_current: true
+}
+```
+
+### Rollback to a previous version of Application
+
+Also this allows to deploy specific version of application to a server.
+
+```
+PUT /deployments/:repo_name/:commit_id
+{
+  is_current: true
+}
+```
+
+### Get interactive Deployment log
+
+```
+GET /deployments/:repo_name/:commit_id/log
+```
+
+### Provision user changes and deploy a new project
+
+```
+PUT /settings
+{
+  deployments: [
+    {
+      repo: ":repo_name",
+      environment: ":environment"
+    }
+  ],
+  ssh: {
+    users: [
+      :user_id
+    ]
+  }
+}
+```
+
 # TODOs
 
 Refs:
 
+- Move deploy bash scripts to settings, so we can publish it and people can use project independently from puppet. (With ansible, for example.)
 - [StrongLoop Similar Service](https://strongloop.com/node-js/build-deploy-and-scale/).
 - Arkenstone client API.
