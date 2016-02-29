@@ -143,6 +143,8 @@ If one of checks is failed, than you should not merge your feature branch into r
 
 ## Delivery
 
+Non-production environment trigger deployment each time code in corresponding branch is changed. It means that ```sandbox``` and ```beta``` environment will be always up to date with latest source code.
+
 # Initialization
 
 Arkenstone will create a DigitalOcean droplet with specified parameters, using last DO Ubuntu LTS image. Only key that is added to server is a Arkenstone master key.
