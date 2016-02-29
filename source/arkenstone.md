@@ -147,7 +147,7 @@ Non-production environment trigger deployment each time code in corresponding br
 
 # Initialization
 
-Arkenstone will create a DigitalOcean droplet with specified parameters, using last DO Ubuntu LTS image. Only key that is added to server is a Arkenstone master key.
+Arkenstone will create a DigitalOcean droplet with specified parameters, using last DO Ubuntu LTS image. Only key that is added to server is a Arkenstone master key. Also it should be assigned to a new floating IP, so we would be able to hotswap server in case of critical accidents.
 
 After that it will set a CloudConfig to this VM, that will init Puppet base configuration on this server:
 
