@@ -26,6 +26,7 @@ We use:
 - [GitHub](https://github.com/) as VCS.
 - [NewRelic](https://newrelic.com) for server monitoring.
 - [Travis-CI](https://travis-ci.com) as a CI and build server.
+- [Docker](https://www.docker.com/) for applications containers.
 
 Why DigitalOcean? Because it's cheap, friendly and reliable.
 
@@ -150,7 +151,7 @@ Non-production environment trigger deployment each time code in corresponding br
 
 # Initialization
 
-Arkenstone will create a DigitalOcean droplet with specified parameters, using last DO Ubuntu LTS image. Only key that is added to server is a Arkenstone master key. Also it should be assigned to a new floating IP, so we would be able to hotswap server in case of critical accidents.
+Arkenstone will create a DigitalOcean droplet with specified parameters, using last DO Ubuntu LTS image. For ```production``` environment backups is turned on. Only key that is added to server is a Arkenstone master key. Also it should be assigned to a new floating IP, so we would be able to hotswap server in case of critical accidents.
 
 After that it will set a CloudConfig to this VM, that will init Puppet base configuration on this server:
 
@@ -208,7 +209,7 @@ All Arkenstone users and their changes are automatically provisioned to a main S
 GET /users
 {
   users: [
-    {name: "andrew", public_key: "ssh-rsa lsslkjsjlsldl", password_hash: "sdsdsdsdsd", email:"email@examile.com"}
+    {name: "andrew", public_keys: ["ssh-rsa lsslkjsjlsldl"], password_hash: "sdsdsdsdsd", email:"email@examile.com"}
   ]
 }
 ```
@@ -221,7 +222,7 @@ User name is unique string. We are stripping email from public key, to avoid Lin
 POST /users
 {
   name: "andrew",
-  public_key: "ssh-rsa lsslkjsjlsldl",
+  public_keys: ["ssh-rsa lsslkjsjlsldl"],
   password_hash: "sdsdsdsdsd",
   email:"email@examile.com"
 }
@@ -233,7 +234,7 @@ POST /users
 GET /users/:name
 {
   name: "andrew",
-  public_key: "ssh-rsa lsslkjsjlsldl",
+  public_keys: ["ssh-rsa lsslkjsjlsldl"],
   password_hash: "sdsdsdsdsd",
   email:"email@examile.com"
 }
@@ -245,7 +246,7 @@ GET /users/:name
 PUT /users/:name
 {
   name: "andrew",
-  public_key: "ssh-rsa lsslkjsjlsldl",
+  public_keys: ["ssh-rsa lsslkjsjlsldl"],
   password_hash: "sdsdsdsdsd",
   email:"email@examile.com"
 }
@@ -330,13 +331,13 @@ PUT /servers/:id
 }
 ```
 
-## Halt an Application Server
+## Delete an Application Server
 
 ```
 DELETE /servers/:id
 ```
 
-## Stop an Application Server
+## Halt an Application Server
 
 ```
 HALT /servers/:id

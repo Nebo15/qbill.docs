@@ -17,6 +17,11 @@ search: true
 
 # Tokenization
 
+TODOS:
+
+- https://switchpayments.com/docs/#accounts
+
+
 ## Introduction
 
 This is an API of a card tokenization service that was inspired by a [Visa Token Service](https://developer.visa.com/products/vts/reference#vts__vts____provision_token) API. It allows to exchange card data with a token, that can be later used to create transactions.
