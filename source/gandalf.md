@@ -240,6 +240,73 @@ http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
 
 ## Clone a Decision Table
 
+```shell
+$ curl -H"Authorization: Basic YXV0aDphdXRo" -X POST 
+http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/clone
+```
+
+```json
+{
+    "meta": {
+        "code": 200
+    },
+    "data": {   
+        "_id": "44c31536a60ad644060021aa",
+        "default_decision": "approve",
+        "fields": [
+            {
+                "key": "borrowers_phone_name",
+                "title": "Borrowers Phone Name",
+                "source": "request",
+                "type": "string"
+            },
+            {
+                "key": "contact_person_phone_verification",
+                "title": "Contact person phone verification",
+                "source": "request",
+                "type": "bool"
+            }
+        ],
+        "rules": [
+            {
+                "than": "approve",
+                "title": "My title",
+                "description": "my",
+                "conditions": [
+                    {
+                        "field_key": "borrowers_phone_name",
+                        "condition": "$eq",
+                        "value": "Vodaphone"
+                    },
+                    {
+                        "field_key": "contact_person_phone_verification",
+                        "condition": "$eq",
+                        "value": "true"
+                    }
+                ]
+            },
+            {
+                "than": "decline",
+                "title": "My title",
+                "description": "new",
+                "conditions": [
+                    {
+                        "field_key": "borrowers_phone_name",
+                        "condition": "$eq",
+                        "value": "Life"
+                    },
+                    {
+                        "field_key": "contact_person_phone_verification",
+                        "condition": "$eq",
+                        "value": "true"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
 ## Get a Decision Table
 
 ```shell
