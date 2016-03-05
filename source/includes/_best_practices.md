@@ -63,6 +63,12 @@ We use E.123 telephone number in international notation for all phone numbers in
 
 All tokens have a human-readable prefix, so you can always see what scope it carries. Example: ```project-lksdlkfjf8ds8dfsl````.
 
+```
+user-Skd90i0d
+project-dkkfi49dkkf
+admin-3kkd9re0fdkspmv
+```
+
 All ID's have a human-readable prefix that carries first 3 characters from a entity name. Example: ```acc_ssj8988udj```.
 
 ## Geographic Redundancy and Optimization
