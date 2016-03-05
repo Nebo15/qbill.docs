@@ -238,11 +238,11 @@ http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
 }
 ```
 
-## Clone a Decision Table
+## Copy a Decision Table
 
 ```shell
 $ curl -H"Authorization: Basic YXV0aDphdXRo" -X POST 
-http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/clone
+http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/copy
 ```
 
 ```json
