@@ -23,9 +23,10 @@ It's build on top of PHP Lumen framework and MongoDB.
 ### Features
 
 - Customizable - have the freedom to design a decision rules you need and to manage data structure on the fly in a easy to understand way.
-- Split testing - you can group your decision table to run a A/B tests. Later, you can leave only one, that shows best results.
-- Analytics and Decision History - you can review all previous decisions made by your tables and to analyze what rules is triggered more often.
+- Split testing (aka. Champion Winner) - you can group your decision table to run a A/B/.. tests. Later, you can leave only one, that shows the best results.
+- Decision History and Analytics - you can review all decisions made by your tables and to analyze what rules is triggered more often.
 - Production-tested - several large NDA-closed PSP's and online lending platforms already use Gandalf.
+- Audit Log - review what changes to decision tables was made and who did them. Rollback to a previous versions.
 
 # How does it work?
 
