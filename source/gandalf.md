@@ -131,7 +131,7 @@ In a result you will get a total of all scores and you can make further decision
 For all request you should pass BASIC Authorization header. There are two types of access grants: user and consumer. User can manage tables and access Gandalf GUI; consumer can only submit data and access short decision description by it's id.
 
 ```shell
-$ curl -uAPI_USER:API_TOKEN http://gandalf-api.nebo15.com/api/v1/admin/tables
+$ curl -H"Authorization: Basic YXV0aDphdXRo" http://gandalf-api.nebo15.com/api/v1/admin/tables
 ```
 
 # User GUI API
@@ -139,7 +139,7 @@ $ curl -uAPI_USER:API_TOKEN http://gandalf-api.nebo15.com/api/v1/admin/tables
 ## Get List of Decision Tables
 
 ```shell
-$ curl -uAPI_USER:API_TOKEN http://gandalf-api.nebo15.com/api/v1/admin/tables
+$ curl -H"Authorization: Basic YXV0aDphdXRo" http://gandalf-api.nebo15.com/api/v1/admin/tables
 ```
 
 ```json
@@ -175,7 +175,7 @@ For example, if you create a **preset** for field *Borrowers Salary* with condit
 for rules conditions you will receive result of **preset** checking - `true` or `false`
 
 ```shell
-$ curl -uAPI_USER:API_TOKEN -d'{"table": DECISION_TABLE }'
+$ curl -H"Authorization: Basic YXV0aDphdXRo" -d'{"table": DECISION_TABLE }'
 http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
 ```
 
@@ -317,7 +317,7 @@ http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/copy
 ## Get a Decision Table
 
 ```shell
-$ curl -uAPI_USER:API_TOKEN http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
+$ curl -H"Authorization: Basic YXV0aDphdXRo" http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
 ```
 
 ```json
@@ -391,7 +391,7 @@ Params:
  * `table` - full decision table with title, description, default_decision, fields, rules, conditions.
 
 ```shell
-$ curl -uAPI_USER:API_TOKEN -X PUT -d'{"table": DECISION_TABLE }'
+$ curl -H"Authorization: Basic YXV0aDphdXRo" -X PUT -d'{"table": DECISION_TABLE }'
 http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
 ```
 
@@ -460,7 +460,7 @@ http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
 ## Delete a Decision Table
 
 ```shell
-$ curl -uAPI_USER:API_TOKEN -X DELETE http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
+$ curl -H"Authorization: Basic YXV0aDphdXRo" -X DELETE http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
 ```
 
 ```json
@@ -480,7 +480,7 @@ Params:
 * `page` - **integer**, page
 
 ```shell
-$ curl -uAPI_USER:API_TOKEN http://gandalf-api.nebo15.com/api/v1/admin/decisions
+$ curl -H"Authorization: Basic YXV0aDphdXRo" http://gandalf-api.nebo15.com/api/v1/admin/decisions
 ```
 
 ```json
@@ -570,7 +570,7 @@ $ curl -uAPI_USER:API_TOKEN http://gandalf-api.nebo15.com/api/v1/admin/decisions
 ## Get Decision from history by ID
 
 ```shell
-$ curl -uAPI_USER:API_TOKEN http://gandalf-api.nebo15.com/api/v1/admin/decisions/56c32f02a60ad689060041a9
+$ curl -H"Authorization: Basic YXV0aDphdXRo" http://gandalf-api.nebo15.com/api/v1/admin/decisions/56c32f02a60ad689060041a9
 ```
 
 ```json
