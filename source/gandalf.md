@@ -471,6 +471,197 @@ $ curl -H"Authorization: Basic YXV0aDphdXRo" -X DELETE http://gandalf-api.nebo15
 }
 ```
 
+# Model Group
+
+### Fillable 
+
+Fields, that you can create or edit:
+ * `probability` - **random|percent**
+ * `tables` - array of objects Table 
+ ** `tables.*._id` - string, Table id
+ ** `tables.*.percent` - integer
+
+### Visible 
+
+Fields, that you can see in API response for one object:
+
+ * `probability` - **random|percent**
+ * `tables` - array of objects Table 
+ ** `tables.*._id` - string, Table id
+ ** `tables.*.percent` - integer
+
+### Listable
+
+Fields, that you can see in API response in list of objects:
+
+ * `probability` - **random|percent**
+ * `tables` - array of objects Table 
+ ** `tables.*._id` - string, Table id
+ ** `tables.*.percent` - integer
+
+
+## Get List of Group
+
+```shell
+$ curl http://gandalf-api.nebo15.com/api/v1/admin/group
+```
+
+```json
+{
+    "meta": {
+        "code": 200
+    },
+    "data": [
+        {
+            "probability": "random",
+            "tables": [
+                {
+                    "_id": "56c31536a60ad644060041af",
+                }
+            ]
+        },
+        {
+            "probability": "percent",
+            "tables": [
+                {
+                    "_id": "56c31536a60ad644060041af",
+                    "percent": 30
+                },
+                {
+                    "_id": "23c31536a60ad644060041a1",
+                    "percent": 70
+                }
+            ]
+        }
+    ]
+}
+```
+
+## Create a Group
+
+```shell
+$ curl -d'{Fillable fields}' 
+http://gandalf-api.nebo15.com/api/v1/admin/group/56c31536a60ad644060041af
+```
+
+```json
+{
+    "meta": {
+        "code": 200
+    },
+    "data": {
+        "probability": "percent",
+        "tables": [
+            {
+                "_id": "56c31536a60ad644060041af",
+                "percent": 30
+            },
+            {
+                "_id": "23c31536a60ad644060041a1",
+                "percent": 70
+            }
+        ]
+    }
+}
+```
+
+## Copy a Group
+
+```shell
+$ curl -X POST 
+http://gandalf-api.nebo15.com/api/v1/admin/group/56c31536a60ad644060041af/copy
+```
+
+```json
+{
+    "meta": {
+        "code": 200
+    },
+    "data": {   
+        "probability": "percent",
+        "tables": [
+            {
+                "_id": "56c31536a60ad644060041af",
+                "percent": 30
+            },
+            {
+                "_id": "23c31536a60ad644060041a1",
+                "percent": 70
+            }
+        ]
+    }
+}
+```
+
+## Get a Group
+
+```shell
+$ curl http://gandalf-api.nebo15.com/api/v1/admin/group/56c31536a60ad644060041af
+```
+
+```json
+{
+    "meta": {
+        "code": 200
+    },
+    "data": {
+        "probability": "percent",
+        "tables": [
+            {
+                "_id": "56c31536a60ad644060041af",
+                "percent": 30
+            },
+            {
+                "_id": "23c31536a60ad644060041a1",
+                "percent": 70
+            }
+        ]
+    }
+}
+```
+
+## Update a Group
+
+```shell
+$ curl -X PUT -d'{Fillable fields}'
+http://gandalf-api.nebo15.com/api/v1/admin/group/56c31536a60ad644060041af
+```
+
+```json
+{
+    "meta": {
+        "code": 200
+    },
+    "data": {
+        "probability": "percent",
+        "tables": [
+            {
+                "_id": "56c31536a60ad644060041af",
+                "percent": 30
+            },
+            {
+                "_id": "23c31536a60ad644060041a1",
+                "percent": 70
+            }
+        ]
+    }
+}
+```
+
+## Delete a Group
+
+```shell
+$ curl -X DELETE http://gandalf-api.nebo15.com/api/v1/admin/group/56c31536a60ad644060041af
+```
+
+```json
+{
+    "meta": {
+        "code": 200
+    }
+}
+```
+
 ## Get List of Decisions from history
 
 Params:
