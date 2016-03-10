@@ -151,12 +151,14 @@ $ curl -H"Authorization: Basic YXV0aDphdXRo" http://gandalf-api.nebo15.com/api/v
         {
             "_id": "56c31536a60ad644060041af",
             "title": "My decision table",
+            "matching_type": "first",
             "description": "Some cool table",
             "default_decision": "approve"
         },
         {
             "_id": "12c31536a67ad644060041ba",
             "title": "Yet another decision table",
+            "matching_type": "all",
             "description": "Very cool table",
             "default_decision": "decline"
         }
@@ -187,6 +189,7 @@ http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
     "data": {
         "_id": "56c31536a60ad644060041af",
         "default_decision": "approve",
+        "matching_type": "first",
         "fields": [
             {
                 "key": "salary",
@@ -260,6 +263,7 @@ http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/copy
     "data": {   
         "_id": "44c31536a60ad644060021aa",
         "default_decision": "approve",
+        "matching_type": "first",
         "fields": [
             {
                 "key": "borrowers_phone_name",
@@ -329,6 +333,7 @@ $ curl -H"Authorization: Basic YXV0aDphdXRo" http://gandalf-api.nebo15.com/api/v
         "_id": "56c31536a60ad644060041af",
         "title": "My decision table",
         "description": "Some cool table",
+        "matching_type": "first",
         "default_decision": "approve",
         "fields": [
             {
@@ -403,6 +408,7 @@ http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
     "data": {
         "_id": "56c31536a60ad644060041af",
         "default_decision": "approve",
+        "matching_type": "first",
         "fields": [
             {
                 "key": "borrowers_phone_name",
