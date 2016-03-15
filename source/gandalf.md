@@ -251,13 +251,8 @@ http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
 ## Copy a Decision Table
 
 ```shell
-<<<<<<< Updated upstream
-$ curl -H"Authorization: Basic YXV0aDphdXRo" -X POST 
-http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/copy
-=======
 $ curl -H"Authorization: Basic YXV0aDphdXRo" -X POST
-http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/clone
->>>>>>> Stashed changes
+http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/copy
 ```
 
 ```json
@@ -484,20 +479,20 @@ $ curl -H"Authorization: Basic YXV0aDphdXRo" -X DELETE http://gandalf-api.nebo15
 
 # Model Group
 
-### Fillable 
+### Fillable
 
 Fields, that you can create or edit:
  * `probability` - **random|percent**
- * `tables` - array of objects Table 
+ * `tables` - array of objects Table
  ** `tables.*._id` - string, Table id
  ** `tables.*.percent` - integer
 
-### Visible 
+### Visible
 
 Fields, that you can see in API response for one object:
 
  * `probability` - **random|percent**
- * `tables` - array of objects Table 
+ * `tables` - array of objects Table
  ** `tables.*._id` - string, Table id
  ** `tables.*.percent` - integer
 
@@ -506,7 +501,7 @@ Fields, that you can see in API response for one object:
 Fields, that you can see in API response in list of objects:
 
  * `probability` - **random|percent**
- * `tables` - array of objects Table 
+ * `tables` - array of objects Table
  ** `tables.*._id` - string, Table id
  ** `tables.*.percent` - integer
 
@@ -551,7 +546,7 @@ $ curl http://gandalf-api.nebo15.com/api/v1/admin/group
 ## Create a Group
 
 ```shell
-$ curl -d'{Fillable fields}' 
+$ curl -d'{Fillable fields}'
 http://gandalf-api.nebo15.com/api/v1/admin/group/56c31536a60ad644060041af
 ```
 
@@ -579,7 +574,7 @@ http://gandalf-api.nebo15.com/api/v1/admin/group/56c31536a60ad644060041af
 ## Copy a Group
 
 ```shell
-$ curl -X POST 
+$ curl -X POST
 http://gandalf-api.nebo15.com/api/v1/admin/group/56c31536a60ad644060041af/copy
 ```
 
@@ -588,7 +583,7 @@ http://gandalf-api.nebo15.com/api/v1/admin/group/56c31536a60ad644060041af/copy
     "meta": {
         "code": 200
     },
-    "data": {   
+    "data": {
         "probability": "percent",
         "tables": [
             {
