@@ -21,3 +21,4 @@ vendor/
 _yardoc
 doc/
 .idea/
+.vagrant
