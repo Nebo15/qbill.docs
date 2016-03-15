@@ -251,8 +251,13 @@ http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af
 ## Copy a Decision Table
 
 ```shell
+<<<<<<< Updated upstream
 $ curl -H"Authorization: Basic YXV0aDphdXRo" -X POST 
 http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/copy
+=======
+$ curl -H"Authorization: Basic YXV0aDphdXRo" -X POST
+http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/clone
+>>>>>>> Stashed changes
 ```
 
 ```json
@@ -260,7 +265,7 @@ http://gandalf-api.nebo15.com/api/v1/admin/tables/56c31536a60ad644060041af/copy
     "meta": {
         "code": 200
     },
-    "data": {   
+    "data": {
         "_id": "44c31536a60ad644060021aa",
         "default_decision": "approve",
         "matching_type": "first",
