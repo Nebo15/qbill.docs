@@ -1,14 +1,22 @@
 ---
-title: Erebor API Reference - API to Manage all the Rest Application
+title: QBill API Reference - Consumers
 
 language_tabs:
   - shell
 
 includes:
-  - erebor/introduction
-  - erebor/projects
-  - erebor/settings
-  - erebor/backups
+  - mirian/introduction
+  - interacting
+  - best_practices
+  - mirian/accounts
+  - mirian/fundings
+  - mirian/holds
+  - mirian/transfers
+  - mirian/currencies
+  - events
+  - webhooks
+  - requests
+  - mirian/queries
 
 toc_footers:
  - <a href='index.html'>Applications API - Erebor</a>
@@ -19,5 +27,3 @@ toc_footers:
 
 search: true
 ---
-
-TODO: Rename to "Ring0"
