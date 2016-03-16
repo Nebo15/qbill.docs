@@ -27,3 +27,8 @@ toc_footers:
 
 search: true
 ---
+
+TODO, take in account:
+
+- http://developer.kontomatik.com/api-doc/#best-practices
+- https://getmondo.co.uk/docs/#authorization-code-grant

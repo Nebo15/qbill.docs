@@ -507,4 +507,5 @@ Refs:
 
 - Move deploy bash scripts to settings, so we can publish it and people can use project independently from puppet. (With ansible, for example.)
 - [StrongLoop Similar Service](https://strongloop.com/node-js/build-deploy-and-scale/).
+- http://techblog.netflix.com/2015/11/global-continuous-delivery-with.html
 - Arkenstone client API.
