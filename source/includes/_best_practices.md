@@ -113,6 +113,8 @@ To perform an idempotent request, attach a unique key to any ```POST```, ```DELE
 
 How you create unique keys is completely up to you. We suggest using random strings or UUIDs. We'll always send back the same response for requests made with the same key. However, you cannot use the same key with different request parameters (We will return ```HTTP 400``` error in this case). The keys expire after 24 hours.
 
+If you have an "Account" entity, within your system, than one of best ways to generate right Idempotency key is to add a additional property ```nonce``` to a Account, and re-generate it every time transaction is created. Thus you will be sure that there no way to create a transaction without knowing latest state of the user account.
+
 ## Conditional requests
 
 Most responses return an ETag header. Many responses also return a Last-Modified header. You can use the values of these headers to make subsequent requests to those resources using the ```If-None-Match``` and ```If-Modified-Since``` headers, respectively. If the resource has not changed, the server will return a 304 Not Modified.
