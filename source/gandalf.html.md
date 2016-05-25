@@ -112,15 +112,9 @@ Row will return value selected in "Decision" column only if all validation rules
 
 If no one of defined rows passed all conditions, then we will return ```final_decision``` that equals a value specified in "Default Decision" dropdown.
 
-> IF rule1 then return rule1.decision
-
-> ELSEIF rule2 then return rule2.decision
-
-> ELSEIF rule3 then return rule3.decision
-
-> ELSEIF ruleN then return ruleN.decision
-
-> ELSE default return default.decision
+> ```
+IF rule1 then return rule1.decision
+```
 
 ## Cells
 
@@ -128,11 +122,11 @@ All cells in a row represent validations in an ```AND``` logical operator style 
 
 Sometimes you have a big table and in some rows you prefer to skip some validations. For this case you can select special validation rule called ```is set```. Logically it means that ```{field_name} is set``` and this condition will always pass validation.
 
-> IF rule1(cellCondition1 && cellCondition2 && cellConditionN) then return rule1.decision
-
-> ELSEIF ruleN(cellCondition1 && cellCondition2 && cellConditionN) then return ruleN.decision
-
-> ELSE default return default.decision
+> ```
+IF rule1(cellCondition1 && cellCondition2 && cellConditionN) then return rule1.decision
+ELSEIF ruleN(cellCondition1 && cellCondition2 && cellConditionN) then return ruleN.decision
+ELSE default return default.decision
+```
 
 ## Validation Conditions
 
