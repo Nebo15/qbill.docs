@@ -227,15 +227,8 @@ All request parameters are required!
 <p>If no one of defined rows passed all conditions, then we will return <code class="prettyprint">final_decision</code> that equals a value specified in &ldquo;Default Decision&rdquo; dropdown.</p>
 
 <blockquote>
-<p>IF rule1 then return rule1.decision</p>
-
-<p>ELSEIF rule2 then return rule2.decision</p>
-
-<p>ELSEIF rule3 then return rule3.decision</p>
-
-<p>ELSEIF ruleN then return ruleN.decision</p>
-
-<p>ELSE default return default.decision</p>
+<pre class="highlight plaintext"><code>IF rule1 then return rule1.decision
+</code></pre>
 </blockquote>
 
 <h2 id="cells">Cells</h2>
@@ -245,11 +238,10 @@ All request parameters are required!
 <p>Sometimes you have a big table and in some rows you prefer to skip some validations. For this case you can select special validation rule called <code class="prettyprint">is set</code>. Logically it means that <code class="prettyprint">{field_name} is set</code> and this condition will always pass validation.</p>
 
 <blockquote>
-<p>IF rule1(cellCondition1 &amp;&amp; cellCondition2 &amp;&amp; cellConditionN) then return rule1.decision</p>
-
-<p>ELSEIF ruleN(cellCondition1 &amp;&amp; cellCondition2 &amp;&amp; cellConditionN) then return ruleN.decision</p>
-
-<p>ELSE default return default.decision</p>
+<pre class="highlight plaintext"><code>IF rule1(cellCondition1 &amp;&amp; cellCondition2 &amp;&amp; cellConditionN) then return rule1.decision
+ELSEIF ruleN(cellCondition1 &amp;&amp; cellCondition2 &amp;&amp; cellConditionN) then return ruleN.decision
+ELSE default return default.decision
+</code></pre>
 </blockquote>
 
 <h2 id="validation-conditions">Validation Conditions</h2>
