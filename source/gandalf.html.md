@@ -46,6 +46,10 @@ Instead of rule decision you can set a score point that will be added to a final
 
 In a result you will get a total of all scores and you can make further decision based on this value.
 
+## State Transition Rules for BPM
+
+Sometimes you need to have very complex rules in your BPM-engine, that should tell you to which branch your task should be moved. In this case you can call Gandalf and configure all this in it.
+
 # Support
 
 This project is continuously supported on behalf of our customers and as part of our own [SASS-service](https://gandalf.nebo15.com/). We recommend to use it, but feel free to create your own installation of Gandalf.
@@ -109,10 +113,10 @@ Row will return value selected in "Decision" column only if all validation rules
 If no one of defined rows passed all conditions, then we will return ```final_decision``` that equals a value specified in "Default Decision" dropdown.
 
 > IF rule1 then return rule1.decision
-ELSEIF rule2 then return rule2.decision
-ELSEIF rule3 then return rule3.decision
-ELSEIF ruleN then return ruleN.decision
-ELSE default return default.decision
+> ELSEIF rule2 then return rule2.decision
+> ELSEIF rule3 then return rule3.decision
+> ELSEIF ruleN then return ruleN.decision
+> ELSE default return default.decision
 
 ## Cells
 
@@ -121,8 +125,8 @@ All cells in a row represent validations in an ```AND``` logical operator style 
 Sometimes you have a big table and in some rows you prefer to skip some validations. For this case you can select special validation rule called ```is set```. Logically it means that ```{field_name} is set``` and this condition will always pass validation.
 
 > IF rule1(cellCondition1 && cellCondition2 && cellConditionN) then return rule1.decision
-ELSEIF ruleN(cellCondition1 && cellCondition2 && cellConditionN) then return ruleN.decision
-ELSE default return default.decision
+> ELSEIF ruleN(cellCondition1 && cellCondition2 && cellConditionN) then return ruleN.decision
+> ELSE default return default.decision
 
 ## Validation Conditions
 
@@ -194,4 +198,4 @@ To make is suitable for Big Data we decided to build it on top of use very relia
 
 Also we believe that vendor-lock is a bad thing, so we published all source code on a MIT license, so you are free to change it as you wish.
 
-Done by [Nebo #15](https://github.com/Nebo15).
+Done by [Nebo #15](http://nebo15.com/).
