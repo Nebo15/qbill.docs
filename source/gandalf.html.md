@@ -62,7 +62,7 @@ You simply create a decision or scoring table, define some rules and query this 
 
 It makes Gandalf suitable for anti-fraud, loan scoring, transaction scoring, risk management, and as part any other decision making processes.
 
-## Table
+# Tables
 
 Decision table is the main entity in Gandalf. It consist of columns that describes API request structure, rows that describe decision-making logic, and cells that represents a single validation rule.
 
@@ -74,7 +74,7 @@ Decision table will apply all rules one by one, until one rule is passed and ret
 
 Scoring table will sum all values in Scoring column and return their total.
 
-## Columns
+## Columns (Fields)
 
 Column represent specific request parameter. You can add additional parameters on a fly by adding a column. After saving table with new column all future API request should provide data for it. (Or at least ```null```, if you want to sometimes omit some request parts.)
 
@@ -104,7 +104,7 @@ It should look something like this:
 
 By checking checkbox below ```Low Salary```  column in a row, you will make sure that this row won't pass check untill ```salary``` is greater than ```1000```.
 
-## Rows
+## Rows (Rules)
 
 Row represents a single rule in decision table. All rows are checked in order it was defined. (You can reorder it by drag'n'drop.) Basically, you can think about relation between rows as ```OR``` logical operators (or as ```else if```'s).
 
@@ -120,7 +120,7 @@ ELSEIF ruleN then return ruleN.decision
 ELSE default return default.decision
 ```
 
-## Cells
+## Cells (Conditions)
 
 All cells in a row represent validations in an ```AND``` logical operator style (or you can thing about them as a bunch of conditions joined with ```&&``` inside ```if``` statement).
 
@@ -132,7 +132,7 @@ ELSEIF ruleN(cellCondition1 && cellCondition2 && cellConditionN) then return rul
 ELSE default return default.decision
 ```
 
-## Validation Conditions
+### Available Conditions
 
 Available rules can differ based on a column type. Generally you should consider all rules logic as follows:
 ```{request_field_vale} {condition} {condition_value}```. For some conditions you can omit their value.
@@ -166,6 +166,33 @@ Boolean supports:
 - ```false``` - will pass if field value is ```false```, ```0```, ```"0"``` or ```'0'```.
 - ```is set``` - validation will always pass. (Use it to skip some columns.)
 - ```is null``` - validation will pass if field value equals ```null```. (Use it check if some column is skipped.)
+
+## Revisions
+
+All changes that is made to a table is saved in Revisions history. You can see who changed what, and rollback to any previous state of the table.
+
+Rollback will create a new Revision, so it can be canceled.
+
+## Split Testing
+
+Each table can have multiple variants. By adding a Variant you will start a Split Test for a table.
+
+All variants share same fields and this request structure, but can have different set of rules. It allows to test your hypothesis on how to make decision better, to measure improvement in third-party tool and to continuously improve your decision flow.
+
+You can manage traffic allocation for all variants, for example sending only 5% of requests to variant B.
+
+## Decision Analytics
+
+Each time Decision Table is called we will calculate how many times single condition was true, and how many times each rule returned it's decision. It allows you to see what rules work in real life, and to find ways to optimize your table.
+
+# Decision History
+
+All successful API request will lead to creating a Decision. You can find all Decisions in "Hisotry" tab.
+
+Decision shows all request parameters, decision engine response and decision table that was applied when request was made. It means that whenever you change your decision table, it won't affect history and you still will be able to understand decision flow for each moment of time.
+
+You can retry request on a latest table version by clicking "Debug" in request well.
+
 
 # Installation Guide
 
