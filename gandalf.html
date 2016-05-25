@@ -172,7 +172,7 @@
 
 <p>It makes Gandalf suitable for anti-fraud, loan scoring, transaction scoring, risk management, and as part any other decision making processes.</p>
 
-<h2 id="table">Table</h2>
+<h1 id="tables">Tables</h1>
 
 <p>Decision table is the main entity in Gandalf. It consist of columns that describes API request structure, rows that describe decision-making logic, and cells that represents a single validation rule.</p>
 
@@ -184,7 +184,7 @@
 
 <p>Scoring table will sum all values in Scoring column and return their total.</p>
 
-<h2 id="columns">Columns</h2>
+<h2 id="columns-fields">Columns (Fields)</h2>
 
 <p>Column represent specific request parameter. You can add additional parameters on a fly by adding a column. After saving table with new column all future API request should provide data for it. (Or at least <code class="prettyprint">null</code>, if you want to sometimes omit some request parts.)</p>
 
@@ -218,7 +218,7 @@ All request parameters are required!
 
 <p>By checking checkbox below <code class="prettyprint">Low Salary</code>  column in a row, you will make sure that this row won&rsquo;t pass check untill <code class="prettyprint">salary</code> is greater than <code class="prettyprint">1000</code>.</p>
 
-<h2 id="rows">Rows</h2>
+<h2 id="rows-rules">Rows (Rules)</h2>
 
 <p>Row represents a single rule in decision table. All rows are checked in order it was defined. (You can reorder it by drag&#39;n&#39;drop.) Basically, you can think about relation between rows as <code class="prettyprint">OR</code> logical operators (or as <code class="prettyprint">else if</code>&rsquo;s).</p>
 
@@ -235,7 +235,7 @@ ELSE default return default.decision
 </code></pre>
 </blockquote>
 
-<h2 id="cells">Cells</h2>
+<h2 id="cells-conditions">Cells (Conditions)</h2>
 
 <p>All cells in a row represent validations in an <code class="prettyprint">AND</code> logical operator style (or you can thing about them as a bunch of conditions joined with <code class="prettyprint">&amp;&amp;</code> inside <code class="prettyprint">if</code> statement).</p>
 
@@ -248,7 +248,7 @@ ELSE default return default.decision
 </code></pre>
 </blockquote>
 
-<h2 id="validation-conditions">Validation Conditions</h2>
+<h3 id="available-conditions">Available Conditions</h3>
 
 <p>Available rules can differ based on a column type. Generally you should consider all rules logic as follows:
 <code class="prettyprint">{request_field_vale} {condition} {condition_value}</code>. For some conditions you can omit their value.</p>
@@ -288,6 +288,32 @@ ELSE default return default.decision
 <li><code class="prettyprint">is set</code> - validation will always pass. (Use it to skip some columns.)</li>
 <li><code class="prettyprint">is null</code> - validation will pass if field value equals <code class="prettyprint">null</code>. (Use it check if some column is skipped.)</li>
 </ul>
+
+<h2 id="revisions">Revisions</h2>
+
+<p>All changes that is made to a table is saved in Revisions history. You can see who changed what, and rollback to any previous state of the table.</p>
+
+<p>Rollback will create a new Revision, so it can be canceled.</p>
+
+<h2 id="split-testing">Split Testing</h2>
+
+<p>Each table can have multiple variants. By adding a Variant you will start a Split Test for a table.</p>
+
+<p>All variants share same fields and this request structure, but can have different set of rules. It allows to test your hypothesis on how to make decision better, to measure improvement in third-party tool and to continuously improve your decision flow.</p>
+
+<p>You can manage traffic allocation for all variants, for example sending only 5% of requests to variant B.</p>
+
+<h2 id="decision-analytics">Decision Analytics</h2>
+
+<p>Each time Decision Table is called we will calculate how many times single condition was true, and how many times each rule returned it&rsquo;s decision. It allows you to see what rules work in real life, and to find ways to optimize your table.</p>
+
+<h1 id="decision-history">Decision History</h1>
+
+<p>All successful API request will lead to creating a Decision. You can find all Decisions in &ldquo;Hisotry&rdquo; tab.</p>
+
+<p>Decision shows all request parameters, decision engine response and decision table that was applied when request was made. It means that whenever you change your decision table, it won&rsquo;t affect history and you still will be able to understand decision flow for each moment of time.</p>
+
+<p>You can retry request on a latest table version by clicking &ldquo;Debug&rdquo; in request well.</p>
 
 <h1 id="installation-guide">Installation Guide</h1>
 
