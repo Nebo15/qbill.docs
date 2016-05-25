@@ -7,7 +7,7 @@ before_script:
   - git config --global user.email "marvin@nebo15.com"
   - git config --global user.name "The Marvin"
 script:
+  - bundle exec rake publish
   - git status
   - ls -l ./
   - ls -l build/
-  - bundle exec rake publish
