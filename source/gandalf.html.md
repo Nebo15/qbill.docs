@@ -114,6 +114,10 @@ If no one of defined rows passed all conditions, then we will return ```final_de
 
 > ```
 IF rule1 then return rule1.decision
+ELSEIF rule2 then return rule2.decision
+ELSEIF rule3 then return rule3.decision
+ELSEIF ruleN then return ruleN.decision
+ELSE default return default.decision
 ```
 
 ## Cells
