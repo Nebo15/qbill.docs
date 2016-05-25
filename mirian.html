@@ -1,0 +1,1591 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>QBill API Reference - Consumers</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #151515;
+  background-color: #ac4142;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #505050;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #d0d0d0;
+}
+.highlight .p, .highlight .pi {
+  color: #d0d0d0;
+}
+.highlight .gi {
+  color: #90a959;
+}
+.highlight .gd {
+  color: #ac4142;
+}
+.highlight .gh {
+  color: #6a9fb5;
+  background-color: #151515;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #aa759f;
+}
+.highlight .kc {
+  color: #d28445;
+}
+.highlight .kt {
+  color: #d28445;
+}
+.highlight .kd {
+  color: #d28445;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #90a959;
+}
+.highlight .sr {
+  color: #75b5aa;
+}
+.highlight .si {
+  color: #8f5536;
+}
+.highlight .se {
+  color: #8f5536;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #6a9fb5;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #90a959;
+}
+.highlight .ss {
+  color: #90a959;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="mirian" data-languages="[&quot;shell&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='index.html'>Applications API - Erebor</a></li>
+            <li><a href='mirian.html'>Accounting API - Mirian</a></li>
+            <li><a href='arkenstone.html'>Infrastructure API - Arkenstone</a></li>
+            <li><a href='palantir.html'>API Service Bus - Palantir</a></li>
+            <li><a href='gandalf.html'>Risk Management - Gandalf</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <p>TODO, take in account:</p>
+
+<ul>
+<li>http://developer.kontomatik.com/api-doc/#best-practices</li>
+<li>https://getmondo.co.uk/docs/#authorization-code-grant</li>
+</ul>
+
+          <h1 id="introduction">Introduction</h1>
+
+<p>Welcome to the QBilling API. It will provide you access to universal billing system that is usage-agnostic, what makes it suitable for financial companies for storing accounts and transferring money, games with inner currency or anyone else who have balance and any actions with it.</p>
+
+<h1 id="key-features">Key Features</h1>
+
+<h3 id="data-retention-policy">Data Retention Policy</h3>
+
+<p>We believe that vendor-lock is a bad thing, thats why you are free to download all data from your account in a JSON format.</p>
+
+<p>Also you can remove all you data from our servers. After your confirm data remove process in Dashboard we will keep everything for additional 30 days, so your account will be protected from accidental removals. After 30 days all data will be scrubbed and impossible to restore.</p>
+
+<h3 id="api-centered">API-centered</h3>
+
+<p>We are API-centered, that means that we are trying to make it simple, easy to understand, and yet very powerful.</p>
+
+<h3 id="crossintegrations">Crossintegrations</h3>
+
+<p>We support hustle-free integration with oAuth providers. See more at <a href="#integrating-oauth-provider">Integrating oAuth provider</a> section.</p>
+
+<p>Also we support custom webhook integrations in a SOA-style. This will help you to add any puzzle-pieces that you may need: users storage, antifraud systems, data storages, scoring systems, etc.</p>
+
+<h3 id="project-scopes">Project scopes</h3>
+
+<p>We allow you to create separated projects in case you need them for different test or production environments.</p>
+
+<h1 id="account-types">Account types</h1>
+
+<p>We have 3 plans for different clients:</p>
+
+<ol>
+<li><p>Starter. This is a free account that you can use for testing purposes. It&rsquo;s rate limited to 1000 requests per 15 minutes. Support trough GitHub issues.</p></li>
+<li><p>Basic. Includes all features starter plan and rate limit of 5000 requests per 15 minutes.</p></li>
+<li><p>Enterpise. Basic package plus access to custom SQL queries. Backups for this plan can be downloaded 4 times per day. Plus email support.</p></li>
+</ol>
+
+<p>Need custom installation or 99.9% SLA? Contact us!</p>
+
+          <h1 id="interacting-with-api">Interacting with API</h1>
+
+<p>Our API is organized around <a href="http://en.wikipedia.org/wiki/Representational_State_Transfer">REST</a>. It has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API errors. We use built-in HTTP features, like HTTP authentication and HTTP verbs, which are understood by off-the-shelf HTTP clients. We support cross-origin resource sharing, allowing you to interact securely with our API from a client-side web application (though you should never expose your secret API key in any public website&rsquo;s client-side code).</p>
+
+<h3 id="http-verbs">HTTP Verbs</h3>
+
+<p>As per RESTful design patterns, API implements following HTTP verbs:</p>
+
+<ul>
+<li><code class="prettyprint">HEAD</code> - Can be issued against any resource to get just the HTTP header info.</li>
+<li><code class="prettyprint">GET</code> - Read resources.</li>
+<li><code class="prettyprint">POST</code> - Create new resources.</li>
+<li><code class="prettyprint">PUT</code> - Replace resources (basically field values) or collections.</li>
+<li><code class="prettyprint">DELETE</code> - Remove resources.</li>
+</ul>
+
+<h3 id="http-status-codes">HTTP status codes</h3>
+
+<table><thead>
+<tr>
+<th>HTTP Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">200</code></td>
+<td>Everything worked as expected.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">400</code></td>
+<td>Bad Request. The request was unacceptable, often due to missing a required parameter. Or request contains invalid JSON. Duplicate idempotency key.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">401</code></td>
+<td>Unauthorized. No valid API key provided or API key doesn&rsquo;t match project.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">402</code></td>
+<td>The parameters were valid but the request failed.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">403</code></td>
+<td>Source or destination account is disabled.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">404</code></td>
+<td>Not Found. The requested resource doesn&rsquo;t exist.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">415</code></td>
+<td>Incorrect <code class="prettyprint">Content-Type</code> HTTP header.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">429</code></td>
+<td>Too Many Requests. Rate limit is exceeded.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">500</code>, <code class="prettyprint">502</code>, <code class="prettyprint">503</code>, <code class="prettyprint">504</code></td>
+<td>Server Errors. Something went wrong on our end. (These are rare.)</td>
+</tr>
+</tbody></table>
+
+<h2 id="authentication">Authentication</h2>
+
+<p>To use our service you need to authenticate your application. Authentication to the API is performed via <a href="http://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Auth</a>. Provide your API key as the basic auth username value. You do not need to provide a password. You can manage your API keys in the Dashboard.</p>
+<pre class="highlight plaintext"><code>curl https://example.com/resource \
+   -u WgLodNU5wCdbSw4f:
+</code></pre>
+
+<aside class="notice">
+Even trough we support different scopes for tokens, you should simply use token from a Project settings in your Dashboard. (This token have a &ldquo;`project&rdquo;` access scope.) All following mentions of token should read as &ldquo;project scope token&rdquo;.
+</aside>
+
+<aside class="warning">
+Your API keys carry all the privileges, so be sure to keep them secret! Do not share your secret API keys in publicly accessible areas such GitHub, client-side code, and so forth. Paranoid people even don&rsquo;t store it in the configuration files, by keeping them in [memcache](https://en.wikipedia.org/wiki/Memcached).
+</aside>
+
+<p>Additionally you can create oAuth cross-integration for authenticating your clients and making requests directly to our API. You can find more info at <a href="#integrating-oauth-provider">Integrating oAuth provider</a> section.</p>
+
+<h2 id="response-structure">Response structure</h2>
+
+<p>Response can consist of 5 root properties:</p>
+
+<ul>
+<li><code class="prettyprint">meta</code> - URL of the requested resource (<code class="prettyprint">url</code> ); requested resource type (<code class="prettyprint">type</code>); current status (<code class="prettyprint">code</code>); optional error description (<code class="prettyprint">error</code>); idempotency key (<code class="prettyprint">idempotency_id</code>); request id (<code class="prettyprint">request_id</code>).</li>
+<li><code class="prettyprint">urgent</code> - Notifications and counters.</li>
+<li><code class="prettyprint">data</code> - Requested resource.</li>
+<li><code class="prettyprint">paging</code> - Pagination data.</li>
+<li><code class="prettyprint">sandbox</code> - Optional data provided by <code class="prettyprint">sandbox</code> environment, for development purposes.</li>
+</ul>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://qbill.ly/transactions/"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"list"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"200"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"idempotency_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"iXXekd88DKqo"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"qudk48fFlaP"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"urgent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"notifications"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"Read new emails!"</span><span class="p">],</span><span class="w">
+    </span><span class="nt">"unseen_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="err">&lt;...&gt;</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"paging"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"cursors"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"after"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MTAxNTExOTQ1MjAwNzI5NDE="</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"before"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NDMyNzQyODI3OTQw"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"has_more"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"sandbox"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"debug_varibale"</span><span class="p">:</span><span class="w"> </span><span class="s2">"39384"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"live"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+
+<h2 id="errors">Errors</h2>
+
+<p>All errors is returned in JSON format if another <code class="prettyprint">Content-Type</code> is not specified. This means that your will receive JSON for requests with HTTP 415 code when incorrect <code class="prettyprint">Content-Type</code> is provided.</p>
+
+<h3 id="error-object-properties">Error Object Properties</h3>
+
+<p>You can find all necessary information about occurred error in a response <code class="prettyprint">meta.error</code> property. It can have following fields:</p>
+
+<table><thead>
+<tr>
+<th>Fields</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td>General error type. You should return human-readable error message based on this field as a key. Type descriptions is listed in next section.</td>
+</tr>
+<tr>
+<td>invalid</td>
+<td>Collection of validation errors for your request.</td>
+</tr>
+<tr>
+<td>invalid[].entry_type</td>
+<td>Type of invalid field.</td>
+</tr>
+<tr>
+<td>invalid[].entry_id</td>
+<td>ID of invalid field.</td>
+</tr>
+<tr>
+<td>invalid[].rule</td>
+<td>Failed rule for invalid field. You can find supported validation rules at <a href="#request-validators">Request Validators</a> table.</td>
+</tr>
+<tr>
+<td>invalid[].params</td>
+<td>Optional parameters that can be used in a human-readable error message, to make it easier to understand. Usually it contains limit values for failed validator.</td>
+</tr>
+<tr>
+<td>message</td>
+<td>Human readable message for API developer.</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"form_validation_failed"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"invalid"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"entry_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"field"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"entry_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"username"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"rules"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+              </span><span class="nt">"rule"</span><span class="p">:</span><span class="w"> </span><span class="s2">"min:6"</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"params"</span><span class="p">:{</span><span class="nt">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">}</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+              </span><span class="nt">"rule"</span><span class="p">:</span><span class="w"> </span><span class="s2">"length:2"</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"params"</span><span class="p">:{</span><span class="nt">"lenght"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"entry_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"field"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"entry_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"rules"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="nt">"rule"</span><span class="p">:</span><span class="w"> </span><span class="s2">"empty"</span><span class="p">}</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"entry_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"header"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"entry_id"</span><span class="p">:</span><span class="s2">"Timezone"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"rules"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="nt">"rule"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="p">}</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"entry_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"request"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"entry_id"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"rules"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="nt">"rule"</span><span class="p">:</span><span class="w"> </span><span class="s2">"json"</span><span class="p">}</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Validation failed. Return human-readable error message. You find all possible validation rules at https://docs.qbill.ly/#request-validators."</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+
+<h3 id="error-types">Error Types</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ID</td>
+<td>The ID to retrieve</td>
+</tr>
+<tr>
+<td>duplicated_idempotency_key</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h3 id="request-data-validators">Request Data Validators</h3>
+
+<p>All invalid request data is listed in <code class="prettyprint">meta.error.invalid</code> object. There are different types of entries:</p>
+
+<ul>
+<li><code class="prettyprint">header</code> - Response HTTP header.</li>
+<li><code class="prettyprint">request</code> - Response JSON object.</li>
+<li><code class="prettyprint">field</code> - Response field.</li>
+</ul>
+
+<p>List of possible validation rules:</p>
+
+<table><thead>
+<tr>
+<th>Validator Rule</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">active_url</code></td>
+<td>The field under validation must be a valid URL according to the checkdnsrr PHP function.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">after:&lt;date&gt;</code></td>
+<td>The field under validation must be a value after a given date. The dates will be passed into the strtotime PHP function. Sample rule: &ldquo;`date</td>
+</tr>
+<tr>
+<td><code class="prettyprint">before:&lt;date&gt;</code></td>
+<td>The field under validation must be a value preceding the given date. The dates will be passed into the PHP strtotime function. Sample rule: &rdquo;`date</td>
+</tr>
+<tr>
+<td><code class="prettyprint">alpha</code></td>
+<td>The field under validation must be entirely alphabetic characters.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">alpha_dash</code></td>
+<td>The field under validation may have alpha-numeric characters, as well as dashes and underscores.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">alpha_num</code></td>
+<td>The field under validation must be entirely alpha-numeric characters.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">between:&lt;min&gt;,&lt;max&gt;</code></td>
+<td>The field under validation must have a size between the given <min> and <max>. Strings, numerics, and files are evaluated in the same fashion as the size rule.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">boolean</code></td>
+<td>The field under validation must be able to be cast as a boolean. Accepted input are <code class="prettyprint">true</code>, <code class="prettyprint">false</code>, <code class="prettyprint">1</code>, <code class="prettyprint">0</code>, <code class="prettyprint">&quot;1&quot;</code>, and <code class="prettyprint">&quot;0&quot;</code>.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">confirmed</code></td>
+<td>The field under validation must have a matching field of <code class="prettyprint">foo_confirmation</code>. For example, if the field under validation is <code class="prettyprint">password</code>, a matching <code class="prettyprint">password_confirmation</code> field must be present in the input.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">date</code></td>
+<td>A valid data in ISO 8601 format.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">digits:&lt;value&gt;</code></td>
+<td>The field under validation must be numeric and must have an exact length of value.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">digits_between:&lt;min&gt;,&lt;max&gt;</code></td>
+<td>The field under validation must have a length between the given min and max.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">email</code></td>
+<td>The field under validation must be formatted as an e-mail address.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">in:&lt;foo&gt;,&lt;bar&gt;,&lt;...&gt;</code></td>
+<td>The field under validation must be included in the given list of values.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">json</code></td>
+<td>The field under validation must be a valid JSON string.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">max:&lt;value&gt;</code></td>
+<td>The field under validation must be less than or equal to a maximum value. Strings, numerics, and files are evaluated in the same fashion as the size rule.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">min:&lt;value&gt;</code></td>
+<td>The field under validation must have a minimum value. Strings, numerics, and files are evaluated in the same fashion as the size rule.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">not_in:&lt;foo&gt;,&lt;bar&gt;,&lt;...&gt;</code></td>
+<td>The field under validation must not be included in the given list of values.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">numeric</code></td>
+<td>The field under validation must be numeric.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">regex:&lt;pattern&gt;</code></td>
+<td>The field under validation must match the given regular expression.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">required</code></td>
+<td>The field under validation must be present in the input data and not empty. A field is considered &ldquo;empty&rdquo; is one of the following conditions are true: the value is null; the value is an empty string; the value is an empty array or empty Countable object; the value is an uploaded file with no path.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">size:&lt;value&gt;</code></td>
+<td>The field under validation must have a size matching the given value. For string data, value corresponds to the number of characters. For numeric data, value corresponds to a given integer value. For files, size corresponds to the file size in kilobytes.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">string</code></td>
+<td>The field under validation must be a string.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">timezone</code></td>
+<td>The field under validation must be a valid timezone identifier according to the timezone_identifiers_list PHP function.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">url</code></td>
+<td>The field under validation must be a valid URL according to PHP&rsquo;s <code class="prettyprint">filter_var</code> function.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">otp_code</code></td>
+<td>A valid OTP code.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">password_strong</code></td>
+<td>Password field that should include at least one latin letter in lowercase, one letter in uppercase and one number. Min lenght is set by another rule.</td>
+</tr>
+<tr>
+<td>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<h2 id="pagination">Pagination</h2>
+
+<p>All top-level API resources with root type <code class="prettyprint">list</code> have support of pagination over a &ldquo;list&rdquo; API methods. These methods share a common structure, taking at least these three parameters: <code class="prettyprint">limit</code>, <code class="prettyprint">starting_after</code>, and <code class="prettyprint">ending_before</code>.</p>
+
+<p>API utilizes cursor-based pagination via the <code class="prettyprint">starting_after</code> and <code class="prettyprint">ending_before</code> parameters. Both take an existing object ID value (see below). The <code class="prettyprint">ending_before</code> parameter returns objects created before the named object, in descending chronological order. The <code class="prettyprint">starting_after</code> parameter returns objects created after the named object, in ascending chronological order. If both parameters are provided, only ending_before is used.</p>
+
+<p>Arguments:</p>
+
+<ul>
+<li><code class="prettyprint">limit</code> (optional) - A limit on the number of objects to be returned, between 1 and 100. Default: 50;</li>
+<li><code class="prettyprint">starting_after</code> (optional) - A cursor for use in pagination. <code class="prettyprint">starting_after</code> is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with <code class="prettyprint">obj_foo</code>, your subsequent call can include <code class="prettyprint">starting_after=obj_foo</code> in order to fetch the next page of the list;</li>
+<li><code class="prettyprint">ending_before</code> (optional) - A cursor for use in pagination. <code class="prettyprint">ending_before</code> is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with <code class="prettyprint">obj_bar</code>, your subsequent call can include <code class="prettyprint">ending_before=obj_bar</code> in order to fetch the previous page of the list.</li>
+</ul>
+
+<h2 id="content-type">Content Type</h2>
+
+<p>You should send <code class="prettyprint">Content-Type</code> header in all your requests, otherwise API will return HTTP 415 status. Right now we support two content types:</p>
+
+<ul>
+<li><code class="prettyprint">application/json</code> - Response is sent in a JSON format.</li>
+<li><code class="prettyprint">text/csv</code> - Response is trimmed to a requested resource and sent in a CSV format.</li>
+</ul>
+
+<p>This header doesn&rsquo;t affect any outgoing requests, they are always sent in JSON format.</p>
+
+<aside class="notice">
+To make CSV look better in spreadsheets viewers we are stripping all response metadata (everything except data that is returned in &ldquo;`data&rdquo;` field).
+</aside>
+
+<h2 id="rate-limits-throttling">Rate Limits (Throttling)</h2>
+
+<p>We throttle our APIs by default to ensure maximum performance for all developers.</p>
+
+<p>Rate limiting of the API is primarily considered on a per-consumer basis. All your projects share a same rate limit, to avoid API-consuming fraud. Rate limits depend on your account type.</p>
+
+<p>Currently free accounts is rate limited to 1000 API calls every 15 minutes, but this value may be adjusted at our discretion.</p>
+
+<p>For your convenience, all requests is sent with 3 additional headers:</p>
+
+<table><thead>
+<tr>
+<th>HTTP Header</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>X-RateLimit-Limit</td>
+<td>Current rate limit for your application.</td>
+</tr>
+<tr>
+<td>X-RateLimit-Remaining</td>
+<td>Remaining rate limit for your application.</td>
+</tr>
+<tr>
+<td>X-RateLimit-Reset</td>
+<td>The time at which the current rate limit window resets in <a href="http://en.wikipedia.org/wiki/Unix_time">UTC epoch seconds</a>.</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+When limit is exceeded all requests will return &ldquo;`HTTP 429&rdquo;` status code with corresponding error in &ldquo;`meta&rdquo; response object.
+</aside>
+<pre class="highlight plaintext"><code>X-RateLimit-Limit: 5000
+X-RateLimit-Remaining: 4966
+X-RateLimit-Reset: 1372700873
+</code></pre>
+
+<h2 id="cross-origin-resource-sharing">Cross Origin Resource Sharing</h2>
+
+<p>The API supports Cross Origin Resource Sharing (CORS) for AJAX requests from any origin. You can read the <a href="http://www.w3.org/TR/cors/">CORS W3C Recommendation</a>, or <a href="http://code.google.com/p/html5security/wiki/CrossOriginRequestSecurity">this intro</a> from the HTML 5 Security Guide.</p>
+
+<aside type="notice">
+Never publish your application or project tokens in any kind of Front-End applications. They carry all the project privileges, and would be exposed to a third-parties. You can find more info about client authentication in [Adding oAuth provider](#adding-oauth-provider) section.
+</aside>
+<pre class="highlight plaintext"><code>Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, X-Requested-With
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE
+Access-Control-Expose-Headers: ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-Request-ID, X-Idempotency-Key
+Access-Control-Allow-Credentials: true
+</code></pre>
+
+<h2 id="timezones">Timezones</h2>
+
+<p>All requests allow to provide a <code class="prettyprint">Time-Zone</code> header to receive all date and time fields in a local timezone.</p>
+
+<p>Explicitly provide an ISO 8601 timestamp with timezone information to use this feature. Also it is possible to supply a Time-Zone header which defines a timezone according to the list of names from the <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">Olson database</a>.</p>
+<pre class="highlight shell"><code>curl -H <span class="s2">"Time-Zone: Europe/Amsterdam"</span> ..
+curl -H <span class="s2">"Time-Zone: Europe/Kiev"</span> ..
+</code></pre>
+
+<h2 id="request-id-39-s">Request ID&rsquo;s</h2>
+
+<p>Each API request has an associated request identifier. You can find it in <code class="prettyprint">X-Request-ID</code> response header or inside <code class="prettyprint">meta.request_id</code> property of returned JSON.</p>
+
+<p>You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.</p>
+
+<p>All Request ID&rsquo;s are prefixed with a human-readable name of server that served your request. (Yes, we give names to all our servers.)</p>
+<pre class="highlight plaintext"><code>X-Request-ID: flash-99spDSoim3i
+</code></pre>
+
+<h2 id="limiting-response-fields">Limiting Response Fields</h2>
+
+<p>By default, all the fields in a node are returned when you make a query. You can choose the fields you want returned with the <code class="prettyprint">fields</code> query parameter. This is really useful for making your API calls more efficient and fast.</p>
+<pre class="highlight plaintext"><code>/resource?fields=id,name,balance
+</code></pre>
+
+<h2 id="expanding-response-fields-into-objects">Expanding Response Fields into Objects</h2>
+
+<p>Many response fields contain the ID of a related object in their values. For example a <code class="prettyprint">Transfer</code> can have an associated <code class="prettyprint">User</code> object linked by a <code class="prettyprint">sender</code> field. Those objects can be expanded inline with the <code class="prettyprint">expand</code> request parameter. Objects that can be expanded are noted in this documentation. This parameter is available on all API requests, and applies to the response of that request only.</p>
+
+<p>You can expand object by querying list, expands will be applied on all matched elements. Expanded lists return up to 25 elements, limit can be specified in brackets.</p>
+
+<p>You can expand multiple objects at once by identifying multiple items divided by comma.</p>
+<pre class="highlight plaintext"><code>/accounts?expand=transactions(5)
+</code></pre>
+
+<p>You can nest expand requests with the dot property. For example, requesting <code class="prettyprint">sender.payments</code> on a <code class="prettyprint">Transfer</code> list will expand the <code class="prettyprint">sender</code> property into a full <code class="prettyprint">User</code> object, and will then expand the <code class="prettyprint">payments</code> property of that <code class="prettyprint">User</code> into a full <code class="prettyprint">Transactions</code> collection.</p>
+<pre class="highlight plaintext"><code>/accounts?expand=transactions(5).recipients
+</code></pre>
+
+<h2 id="ordering-lists-and-collections">Ordering Lists and Collections</h2>
+
+<p>By default, all collections are ordered in ascending chronological order. You can specify different order by providing the &ldquo;order&rdquo; query parameter.</p>
+<pre class="highlight plaintext"><code>/accounts?order=account.created_at(reverse_chronological)
+</code></pre>
+
+<p>Available orders:</p>
+
+<ul>
+<li><code class="prettyprint">ascending_chronological</code> - Ascending chronological order.</li>
+<li><code class="prettyprint">reverse_chronological</code> - Descending chronological order.</li>
+</ul>
+
+<h2 id="filtering-lists">Filtering Lists</h2>
+
+<p>You can filter all lists by a data. Filter can refer to any fields inside a <code class="prettyprint">data</code> response property, except entities that was expanded. Also you can filter by a metadata value.</p>
+
+<p>To apply filter you should provide <a href="https://en.wikipedia.org/wiki/Base64">Base64 encoded</a> encoded JSON string with a filtering rules in a <code class="prettyprint">filter</code> query parameter.</p>
+
+<blockquote>
+<p>Create a JSON object and convert it to string:</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="gp">$ </span><span class="nb">echo</span> <span class="s2">"{predicates:[&lt;predicate_1&gt;,&lt;predicate_1&gt;,...]}"</span> | base64
+e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K
+</code></pre>
+
+<blockquote>
+<p>Send encoded string as filter query parameter:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>GET /v1/accounts?filter=e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K
+</code></pre>
+
+<p>Predicate is an object with at least 3 fields:</p>
+
+<ul>
+<li><code class="prettyprint">field</code> - Resource filed that should be used for current filter predicate.</li>
+<li><code class="prettyprint">comparison</code> - Comparison type that is applied to a field value and <code class="prettyprint">value</code> predicate property.</li>
+<li><code class="prettyprint">value</code> - Value that should be compared with resource field value.</li>
+</ul>
+
+<p>Available comparison methods:</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>eq</td>
+<td>Matches values that are equal to a specified value.</td>
+</tr>
+<tr>
+<td>ne</td>
+<td>Matches all values that are not equal to a specified value.</td>
+</tr>
+<tr>
+<td>gt</td>
+<td>Matches values that are greater than a specified value.</td>
+</tr>
+<tr>
+<td>gte</td>
+<td>Matches values that are greater than or equal to a specified value.</td>
+</tr>
+<tr>
+<td>lt</td>
+<td>Matches values that are less than a specified value.</td>
+</tr>
+<tr>
+<td>lte</td>
+<td>Matches values that are less than or equal to a specified value.</td>
+</tr>
+<tr>
+<td>in</td>
+<td>Matches any of the values specified in an array. Array is set to a <code class="prettyprint">value</code> predicate property.</td>
+</tr>
+<tr>
+<td>nin</td>
+<td>Matches none of the values specified in an array.</td>
+</tr>
+<tr>
+<td>ewi</td>
+<td>Matches all values that ends with a specified value.</td>
+</tr>
+<tr>
+<td>swi</td>
+<td>Matches all values that starts with a specified value.</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="err">predicates:[</span><span class="w">
+    </span><span class="err">{</span><span class="w">
+      </span><span class="nt">"attribute"</span><span class="p">:</span><span class="s2">"balance"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"comparison"</span><span class="p">:</span><span class="s2">"eq"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"27"</span><span class="w">
+    </span><span class="p">}</span><span class="err">,</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"attribute"</span><span class="p">:</span><span class="s2">"metadata.user_id"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"comparison"</span><span class="p">:</span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value"</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="err">]</span><span class="w">
+</span><span class="err">}</span><span class="w">
+</span></code></pre>
+
+<p>To apply filters with logical rules you can add with logical type. Available types:</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>or</td>
+<td>Joins query clauses with a logical OR returns all objects that match the conditions of either clause.</td>
+</tr>
+<tr>
+<td>and</td>
+<td>Joins query clauses with a logical AND returns all objects that match the conditions of both clauses.</td>
+</tr>
+<tr>
+<td>not</td>
+<td>Inverts the effect of a query expression and returns objects that do not match the query expression.</td>
+</tr>
+<tr>
+<td>nor</td>
+<td>Joins query clauses with a logical NOR returns all objects that fail to match both clauses.</td>
+</tr>
+</tbody></table>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"predicates"</span><span class="p">:[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"attribute"</span><span class="p">:</span><span class="s2">"metadata.user_id"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"comparison"</span><span class="p">:</span><span class="s2">"eq"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"3994kdkd8"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"type"</span><span class="p">:</span><span class="s2">"or"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"predicates"</span><span class="p">:[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"attribute"</span><span class="p">:</span><span class="s2">"balance"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"comparison"</span><span class="p">:</span><span class="s2">"gt"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"100"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nt">"attribute"</span><span class="p">:</span><span class="s2">"transactions.count"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"comparison"</span><span class="p">:</span><span class="s2">"gt"</span><span class="p">,</span><span class="w">
+          </span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"10"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="aggregating-lists">Aggregating lists</h2>
+
+<p>All lists can be queried to get aggregations on given set of rules. When you are using aggregation default filtered period is one month. For example you can get aggregated count of <code class="prettyprint">Accounts</code> to know how many accounts was created at each day for last month.</p>
+
+<p>To use aggregation you need to specify only one query parameter:</p>
+
+<ul>
+<li><code class="prettyprint">aggregate</code> - <a href="https://en.wikipedia.org/wiki/Base64">Base64 encoded</a> JSON string with a aggregation rules.</li>
+</ul>
+
+<p>Also you can change aggregation dispensation by providing <code class="prettyprint">tick</code> query parameter:</p>
+
+<ul>
+<li><code class="prettyprint">tick</code> - Aggregation period particle. Default value: <code class="prettyprint">day</code>. Optional.</li>
+</ul>
+
+<blockquote>
+<p>Create a JSON object and convert it to string:</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="gp">$ </span><span class="nb">echo</span> <span class="s2">"{aggregate:[&lt;aggregate_1&gt;,&lt;aggregate_1&gt;,...]}"</span> | base64
+<span class="nv">e2FnZ3JlZ2F0ZXM6WzxhZ2dyZWdhdGVfMT4sPGFnZ3JlZ2F0ZV8xPiwuLi5dfQo</span><span class="o">=</span>
+</code></pre>
+
+<blockquote>
+<p>Send encoded string as filter query parameter:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>GET /v1/accounts?aggregate=e3ByZWRpY2F0ZXM6WzxwcmVkaWNhdGUxPiw8cHJlZGljYXRlMT4sLi4uXX0K&amp;tick=day
+</code></pre>
+
+<p>Aggregate is an object with at least 2 fields:</p>
+
+<ul>
+<li><code class="prettyprint">name</code> - Property name in a response aggregate object.</li>
+<li><code class="prettyprint">strategy</code> - Aggregation strategy.</li>
+<li><code class="prettyprint">field</code> - Field that will be used for aggregation.</li>
+</ul>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="err">predicates:[</span><span class="w">
+    </span><span class="err">{</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"accounts_count"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"strategy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"count"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"id"</span><span class="w">
+    </span><span class="p">}</span><span class="err">,</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"accounts_liquidity"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"strategy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sum"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"balance"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="err">]</span><span class="w">
+</span><span class="err">}</span><span class="w">
+</span></code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="err">meta:</span><span class="w"> </span><span class="err">{</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"list"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="err">data:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+     </span><span class="nt">"tick"</span><span class="p">:</span><span class="s2">"2015-07-11"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"aggregates"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+       </span><span class="nt">"accounts_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w">
+       </span><span class="nt">"accounts_equity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1000000</span><span class="w">
+     </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+     </span><span class="nt">"tick"</span><span class="p">:</span><span class="s2">"2015-07-12"</span><span class="p">,</span><span class="w">
+     </span><span class="nt">"aggregates"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+       </span><span class="nt">"accounts_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">98</span><span class="p">,</span><span class="w">
+       </span><span class="nt">"accounts_equity"</span><span class="p">:</span><span class="w"> </span><span class="mi">900000</span><span class="w">
+     </span><span class="p">},</span><span class="w">
+     </span><span class="err">...</span><span class="w">
+    </span><span class="err">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="err">}</span><span class="w">
+</span></code></pre>
+
+<p>Available aggregation strategies:</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>count</td>
+<td>Returns count of returned aggregated fields.</td>
+</tr>
+<tr>
+<td>sum</td>
+<td>For integers and floats returns total for all field values.</td>
+</tr>
+<tr>
+<td>arr</td>
+<td>Returns array of all possible values. (Very useful for anti-frauds.)</td>
+</tr>
+<tr>
+<td>max</td>
+<td>Returns maximum value of a field.</td>
+</tr>
+<tr>
+<td>min</td>
+<td>Returns minimum value of a field.</td>
+</tr>
+<tr>
+<td>avg</td>
+<td>Returns average value of a field.</td>
+</tr>
+</tbody></table>
+
+<p>Available <code class="prettyprint">tick</code> values:</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>hour</td>
+<td>Return aggregation for each hour in a filtered period.</td>
+</tr>
+<tr>
+<td>day</td>
+<td>Return aggregation for each day in a filtered period. Default value.</td>
+</tr>
+<tr>
+<td>month</td>
+<td>Return aggregation for each month in a filtered period.</td>
+</tr>
+<tr>
+<td>year</td>
+<td>Return aggregation for each year in a filtered period.</td>
+</tr>
+</tbody></table>
+
+<h2 id="testing">Testing</h2>
+
+<p>All accounts have test project that is created for you on account creation. Just use test project API secret for your test environment. We don&rsquo;t have any policy for data retention in test accounts and we can drop all data once a while. You can do it manually from your dashboard.</p>
+
+<p>Responses in <code class="prettyprint">sandbox</code> environment will always return a <code class="prettyprint">sandbox</code> property.</p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"meta"</span><span class="p">:{},</span><span class="w">
+  </span><span class="nt">"data"</span><span class="p">:{},</span><span class="w">
+  </span><span class="nt">"sandbox"</span><span class="p">:{</span><span class="w">
+    </span><span class="err">...</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Right now test accounts is not rate limited, but we will manually limit test project that will consume too many resources.</p>
+
+<h2 id="metadata">Metadata</h2>
+
+<p>We support <code class="prettyprint">metadata</code> field for every objects in our API. It allows the API developer to store custom information related to accounts and transactions. This information can be for example:</p>
+
+<ul>
+<li>Internal order ID.</li>
+<li>Customers name and email address.</li>
+</ul>
+
+<p>Metadata field supports key-value pairs with the following limitations:</p>
+
+<ul>
+<li>Up to 24 keys.</li>
+<li>Up to 100 characters for the key (alphanumeric characters, hyphens and underscores).</li>
+<li>Up to 500 characters for the value.</li>
+<li>String, integer, decimals and boolean values only. All other types will be converted into string.</li>
+</ul>
+
+<h2 id="key-objects">Key objects</h2>
+
+<p>We have list of key objects that is accessible trough our API:</p>
+
+<ul>
+<li><code class="prettyprint">Accounts</code> - Represents a customer object with a balance.</li>
+<li><code class="prettyprint">Fundings</code> - Represents fundings into system. All top-ups is grouped in this list, to have all money income in a single place.</li>
+<li><code class="prettyprint">Transfers</code> - Represents all charges and transfer operations in system. (Move of money from one account into another.)</li>
+<li><code class="prettyprint">Holds</code> - Represents all holds on account balances. Hold is a similar of <code class="prettyprint">Transfers</code>, with key difference: hold decreases available balance for an <code class="prettyprint">Account</code>, but doesn&rsquo;t really decrease balance itself. <code class="prettyprint">Hold</code> can be declined or turned into <code class="prettyprint">Transfer</code>.</li>
+<li><code class="prettyprint">Webhooks</code> - List of all webhooks and their historical data.</li>
+<li><code class="prettyprint">Events</code> - List of all events that was created in our API.</li>
+<li><code class="prettyprint">Requests</code> - List of all incoming requests to the API.</li>
+<li><code class="prettyprint">Currencies</code> - List of custom currencies.</li>
+<li><code class="prettyprint">Settings</code> - List of settings for API <code class="prettyprint">Project</code>.</li>
+</ul>
+
+<h2 id="batching-request">Batching Request</h2>
+
+<p>There are number of situations when you need to download few entities at once, for example when your customers have multiple accounts and you need to return balance for all of them in a single request. For this cases we have request multiplexing.</p>
+
+<p>The batch API takes in an array of logical HTTP requests represented as JSON arrays - each request has a method (corresponding to HTTP method GET/PUT/POST/DELETE etc.), a uri (the portion of the URL after domain), optional headers array (corresponding to HTTP headers) and an optional body (for POST and PUT requests). The Batch API returns an array of logical HTTP responses represented as JSON arrays - each response has a status code, an optional headers array and an optional body (which is a JSON encoded string).</p>
+
+<p>To make batched requests, you build a JSON object which describes each individual operation you&rsquo;d like to perform and POST this to the batch API endpoint at https://batcher.qbill.co.</p>
+<pre class="highlight plaintext"><code>curl \
+    -F ‘batch=[{“method”:”GET",“relative_url”:/accounts/:id1”},{“method”:”GET",“relative_url”:/accounts/:id1”}]’ \
+    https://graph.facebook.com
+</code></pre>
+
+<p>As an alternative you can use simpler alias for a batching requests to the objects. Whenever you can provide an ID inside URL to retrieve resource, you can also provide multiple ID&rsquo;s separated by comma. For example, you can get two user accounts in one request.</p>
+<pre class="highlight plaintext"><code>GET /projects/:project_id/accounts/:id1,id2,...
+</code></pre>
+
+<blockquote>
+<p>Response would be a list of requested items.</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="err">data:</span><span class="w"> </span><span class="err">[</span><span class="w">
+    </span><span class="nt">"&lt;user1_id&gt;"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"&lt;user1&gt;"</span><span class="err">}</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"&lt;user2_id&gt;"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"&lt;user2&gt;"</span><span class="err">}</span><span class="w">
+  </span><span class="err">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+
+<h3 id="timeouts">Timeouts</h3>
+
+<p>Large or complex batches may timeout if it takes too long to complete all the requests within the batch. In such a circumstance, the result is a partially-completed batch. In partially-completed batches, responses from operations that complete successfully will look normal whereas responses for operations that are not completed will have corresponding error code in <code class="prettyprint">meta</code> property.</p>
+
+<h3 id="limits">Limits</h3>
+
+<p>You can batch up to 10 request. Every request in batch will be counted as separate requests in Rate Limits.</p>
+
+<h2 id="request-flow">Request Flow</h2>
+
+<ol>
+<li>Save request data.</li>
+<li>Run any pre-flight webhooks, for example for customer authentication. And if webhooks returned 2XX codes..</li>
+<li>Check authentication. And if authorized..</li>
+<li>Check rate limits for your application. And if they not exceeded..</li>
+<li>Validate request data and complete request.
+4.1. Generate event for this request.
+4.2. Queue money flow (all operations with money is asynchronous).</li>
+<li>Return API response</li>
+<li>Save API response to <code class="prettyprint">Requests</code></li>
+<li>Schedule all webhooks configured for a <code class="prettyprint">Project</code>. If webhook failed, re-try it.</li>
+<li>Record all webhooks statuses</li>
+</ol>
+
+<h2 id="other-security-improvements">Other Security Improvements</h2>
+
+<h3 id="nosniff">Nosniff</h3>
+
+<p>We are setting <code class="prettyprint">X-Content-Type-Options=nosniff</code> to make sure that older IE browsers won&rsquo;t MIME-sniff a response away from the declared <code class="prettyprint">Content-Type</code>.</p>
+
+<p>strict-transport-security: max-age=2592000;includeSubdomains</p>
+
+<h3 id="iframes">iFrames</h3>
+
+<p>All Front-End Servers will disallow including any resources within an iFrame with a <code class="prettyprint">X-Frame-Options</code> header.</p>
+<pre class="highlight plaintext"><code>X-Frame-Options DENY;
+</code></pre>
+
+<h3 id="content-security-policy">Content Security Policy</h3>
+
+<p>For API server we are setting Content-Security-Policy that disallows to load any resources.</p>
+<pre class="highlight plaintext"><code>Content-Security-Policy "default-src 'none'; script-src 'none'; img-src 'none'; style-src 'none'; font-src 'none'; child-src 'none'; frame-src 'none'; connect-src 'none'; object-src 'none'";
+</code></pre>
+
+<p>For Dashboard servers we will configure minimize all possible paths to resources, to make sure anything won&rsquo;t be loaded from unauthorized services.</p>
+
+<h3 id="ssh-access">SSH Access</h3>
+
+<p>We are running a separate server as a single SSH authorization point, that allows to mange access right in one place, and to act fast on security incidents. Connecting to SSH ports on all other instances is only allows from Access Server IP address with a Access Server RSA keys.</p>
+
+<h3 id="restricted-on-production-hotfixes">Restricted On-Production Hotfixes</h3>
+
+<p>Nobody should ever have an SUDO password for API servers. To make any changes you need to kill existing instance and to replace it with a new one.</p>
+
+          <h1 id="best-practices">Best Practices</h1>
+
+<h2 id="currency-flows">Currency flows</h2>
+
+<p>We encourage you to use right accounting models inside your system. Separate all accounts by a <code class="prettyprint">type</code>, lets call them <code class="prettyprint">system</code> and <code class="prettyprint">client</code> accounts.</p>
+
+<p>This will help you to calculate losses and revenue in a right, predictable way.</p>
+
+<h3 id="funding-account">Funding account</h3>
+
+<p>Every time you need to add a money to your system you should create a <code class="prettyprint">Funding</code>. Even trough they have a separate endpoint to load all fundings, we strongly recommend to fund a transit accounts first, rather that directly consumer accounts.</p>
+
+<p>For example, you can create a system account for money inflow for each of your Payment Service Providers, and you would be able to list all transfers trough it, compare money flow of our PSP and QBill, and to charge front-fee by leaving some money on transit account or by batch-transferring it both to customer and &ldquo;revenue&rdquo; accounts.</p>
+
+<p>Also we strongly recommend you to use <code class="prettyprint">Funding</code> metadata power, by adding to it original ID of your PSP, original amount and other helpful information, to efficiently track money flow trough all the systems.</p>
+
+<p>Additionally it would be easier for you to show your customer all transactions log, because all operations will be available trough <code class="prettyprint">Transfers</code> list. Otherwise, your will need to merge two lists: <code class="prettyprint">Transfers</code> and <code class="prettyprint">Fundings</code>.</p>
+
+<h3 id="revenue-tracking">Revenue tracking</h3>
+
+<p>For revenue we recommend you to create special account for each of revenue-takers (you, your partners, etc.)</p>
+
+<p>This will allow to find all transactions that is gained your revenue, and to easily understand how many you need to pay to your partners.</p>
+
+<p>Finally if you want to clear revenue account once a while (for example, each time you sending money to a partner), you can simply send them to &ldquo;/dev/null&rdquo; account, that will accommodate all funds that should be terminated.</p>
+
+<p>Direct reduction of account is not possible to keep you from common accounting mistakes.</p>
+
+<h3 id="charges">Charges</h3>
+
+<p>Any time you charge customer for any type your services, you should simply create a transfer to a revenue account with corresponding metadata (to show correct transaction information for your customers).</p>
+
+<h3 id="account-overdrafts">Account Overdrafts</h3>
+
+<p>(IDEA) Create a system overdrafts account and fund users from it each time they need an to get a overdraft. You can calculate overdraft later by using aggregation with account filter.</p>
+
+<p>(IDEA2) Create another account for your customer and fund it, then transfer money from one account to another. Funding should be done each time you are adding overdraft funs to a user.</p>
+
+<h3 id="transferring-money-between-projects">Transferring money between projects</h3>
+
+<p>(IDEA) Simply move money to an project account and create a funding operation in another project.</p>
+
+<h2 id="integrating-oauth-provider">Integrating oAuth provider</h2>
+
+<p>Sometimes is more rational to make request to an API without any additional services that will proxy this requests. But by adding project token to your application you would make it very vulnerable to a third-party&rsquo;s.</p>
+
+<p>For this cases we recommend you to request our API with a oAuth token and to add a pre-flght webhook to connect API to your oAuth provider. Flow should look something like this:</p>
+
+<ol>
+<li>Your application requests API with <code class="prettyprint">Authorization: Bearer &lt;token&gt;</code> header.</li>
+<li>Pre-flight webhook is send to your oAuth endpoint.</li>
+<li>oAuth endpoint validates Bearer token and if its valid returns <code class="prettyprint">HTTP 200</code> status code with a <code class="prettyprint">X-Override-Authorization: Token &lt;project_token&gt;</code> header, where <code class="prettyprint">&lt;project_token&gt;</code> is a API project token issued in Dashboard.</li>
+<li>Our API validates new authorization token and fulfills the request.</li>
+</ol>
+
+<p>Sample oAuth provider can be found in our <a href="#">GitHub</a> account.</p>
+
+<h2 id="token-id-lengths-and-formats">Token, ID lengths and formats</h2>
+
+<p>In order to avoid interruptions in processing, it&rsquo;s best to make minimal assumptions about what our gateway-generated tokens and identifiers will look like in the future. The length and format of these identifiers – including payment method tokens and transaction IDs – can change at any time, with or without advance notice. However, it is safe to assume that they will remain 1 to 64 upper- and lowercase alphanumeric characters with minuses (<code class="prettyprint">-</code>) and underscores (<code class="prettyprint">_</code>).</p>
+
+<p>We use ISO 8601 formats for all dates in our API.</p>
+
+<p>We use E.123 telephone number in international notation for all phone numbers in our API.</p>
+
+<p>All tokens have a human-readable prefix, so you can always see what scope it carries. Example: <code class="prettyprint">project-lksdlkfjf8ds8dfsl</code>`.</p>
+<pre class="highlight plaintext"><code>user-Skd90i0d
+project-dkkfi49dkkf
+admin-3kkd9re0fdkspmv
+</code></pre>
+
+<p>All ID&rsquo;s have a human-readable prefix that carries first 3 characters from a entity name. Example: <code class="prettyprint">acc_ssj8988udj</code>.</p>
+
+<h2 id="geographic-redundancy-and-optimization">Geographic Redundancy and Optimization</h2>
+
+<p>To ensure that you will always have the lowest response time we can provide, we are automatically detecting nearest datacenter to you, so all your projects have master servers in it. To migrate data to a different region please contact our support team.</p>
+
+<h2 id="data-storage-and-backup-policy">Data Storage and Backup Policy</h2>
+
+<p>To ensure that you won&rsquo;t loose your data we use geographical redundant MongoDB replica sets. It means that at least one of your secondary DB&rsquo;s is hosted in another region, and will save all data in case main datacenter would be unavailable.</p>
+
+<h2 id="providing-urgent-data-for-your-users">Providing urgent data for your users</h2>
+
+<p>Sometimes you want to update account balance and notifications list on each request you made. You can provide additional HTTP header <code class="prettyprint">X-Urgent-Account-ID</code> with an Account ID that should be queried. All result data will be in <code class="prettyprint">urgent</code> response field.</p>
+
+<p>Requesting urgent data counts as a separate request and affects your rate limits.</p>
+<pre class="highlight plaintext"><code>X-Urgent-Data-ID: acc_3idjdjkd9
+</code></pre>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"urgent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"account"</span><span class="p">:</span><span class="w"> </span><span class="s2">"acc_3idjdjkd9"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"notifications"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="nt">"unseen_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"holds"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="idempotent-requests">Idempotent Requests</h2>
+
+<p>The API supports idempotency for safely retrying write requests without accidentally performing the same operation twice. For example, if a request to create a charge fails due to a network connection error, you can retry the request with the same idempotency key to guarantee that only a single charge is created.</p>
+
+<p>To perform an idempotent request, attach a unique key to any <code class="prettyprint">POST</code>, <code class="prettyprint">DELETE</code> or <code class="prettyprint">PUT</code> request made to the API via the <code class="prettyprint">Idempotency-Key: &lt;key&gt;</code> header.</p>
+
+<p>How you create unique keys is completely up to you. We suggest using random strings or UUIDs. We&rsquo;ll always send back the same response for requests made with the same key. However, you cannot use the same key with different request parameters (We will return <code class="prettyprint">HTTP 400</code> error in this case). The keys expire after 24 hours.</p>
+
+<p>If you have an &ldquo;Account&rdquo; entity, within your system, than one of best ways to generate right Idempotency key is to add a additional property <code class="prettyprint">nonce</code> to a Account, and re-generate it every time transaction is created. Thus you will be sure that there no way to create a transaction without knowing latest state of the user account.</p>
+
+<h2 id="conditional-requests">Conditional requests</h2>
+
+<p>Most responses return an ETag header. Many responses also return a Last-Modified header. You can use the values of these headers to make subsequent requests to those resources using the <code class="prettyprint">If-None-Match</code> and <code class="prettyprint">If-Modified-Since</code> headers, respectively. If the resource has not changed, the server will return a 304 Not Modified.</p>
+
+<p>Also note: making a conditional request and receiving a 304 response does not count against your Rate Limit, so we encourage you to use it whenever possible.</p>
+
+<h2 id="versioning">Versioning</h2>
+
+<p>All API calls should be made with a <code class="prettyprint">X-API-Version</code> header which guarantees that your call is using the correct API version. Version is passed in as a date (UTC) of the implementation in YYYY-MM-DD format.</p>
+
+<p>If no version is passed, the newest will be used and a warning will be shown. Under no circumstances should you always pass in the current date as that will return the current version which might break your implementation.</p>
+
+<h2 id="ssl-certificates">SSL certificates</h2>
+
+<p>We recommend that all users obtain an SSL certificate and serve any data that is stored in our service over HTTPS. Also we don&rsquo;t allow to add a webhook that doesn&rsquo;t support SSL encryption.</p>
+
+<p>We don&rsquo;t have a specific preferred vendor for SSL certificates, but we recommend that you stick with a well-known provider (e.g. Network Solutions, GoDaddy, Namecheap). Generally speaking, most certificates will be similar, so it&rsquo;s up to you to determine what fits your needs best.</p>
+
+<p>You can test your server with a <a href="https://www.ssllabs.com/ssltest/">SSL Server Test</a>.</p>
+
+<h2 id="http-redirects">HTTP Redirects</h2>
+
+<p>API uses HTTP redirection where appropriate. Clients should assume that any request may result in a redirection. Receiving an HTTP redirection is not an error and clients should follow that redirect. Redirect responses will have a Location header field which contains the URI of the resource to which the client should repeat the requests.</p>
+
+<p>Status codes:</p>
+
+<ul>
+<li><code class="prettyprint">301</code> - Permanent redirection. The URI you used to make the request has been superseded by the one specified in the Location header field. This and all future requests to this resource should be directed to the new URI.</li>
+<li><code class="prettyprint">302, 307</code> - Temporary redirection. The request should be repeated verbatim to the URI specified in the Location header field but clients should continue to use the original URI for future requests.</li>
+</ul>
+
+<p>Other redirection status codes may be used in accordance with the HTTP 1.1 spec.</p>
+
+          <h1 id="accounts">Accounts</h1>
+
+<p>Account is a one a base entities that represents any object with a balance. This balance can be in any currency, you can add a currency code in <code class="prettyprint">metadata</code> object. (You find info at <a href="#metadata">Metadata</a> section.)</p>
+
+<p>(TODO: Add information about in-built currencies.)</p>
+
+<p>(TODO: Add overdraft limit to an Account. <code class="prettyprint">overdraft</code> field that hold maximum negative balance for this user.)</p>
+
+<h2 id="list-all-accounts">List all Accounts</h2>
+<pre class="highlight plaintext"><code>GET /projects/:project_id/accounts
+</code></pre>
+
+<h2 id="create-an-account">Create an Account</h2>
+<pre class="highlight plaintext"><code>POST /projects/:project_id/accounts
+{
+  metadata: {
+    external_id: 192838,
+    currency_code: 'USD'
+  }
+}
+</code></pre>
+
+<blockquote>
+<p>Response</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"201"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.qbill.ly/accounts/acc_388djejje88du"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"qudk48fFdaP"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"idempotency_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"iXXedd88DKqo"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"urgent"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"notifications"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="nt">"unseen_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"holds"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="err">id:</span><span class="w"> </span><span class="nt">"acc_388djejje88du"</span><span class="w">
+    </span><span class="err">balance</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="err">metadata</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="err">external_id:</span><span class="w"> </span><span class="err">192838,</span><span class="w">
+      </span><span class="err">currency_code:</span><span class="w"> </span><span class="err">'USD'</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="get-all-account-data">Get all Account data</h2>
+<pre class="highlight plaintext"><code>GET /projects/:project_id/accounts/:id
+</code></pre>
+
+<h2 id="list-all-account-funding-operations">List all Account Funding Operations</h2>
+
+<p>This is a shortcut to <a href="#List all Fundings">List all Fundings</a> with an filter based on account id.</p>
+<pre class="highlight plaintext"><code>GET /projects/:project_id/accounts/:id/fundings
+</code></pre>
+
+<h2 id="list-all-account-holds">List all Account Holds</h2>
+
+<p>This is a shortcut to <a href="#list-all-holds">List all Holds</a> with an filter based on account id.</p>
+<pre class="highlight plaintext"><code>GET /projects/:project_id/accounts/:id/holds
+</code></pre>
+
+<h2 id="list-all-account-transfers">List all Account Transfers</h2>
+
+<p>This is a shortcut to <a href="#list-all-transfers">List all Transfers</a> with an filter based on account id.</p>
+<pre class="highlight plaintext"><code>GET /projects/:project_id/accounts/:id/transfers
+</code></pre>
+
+<h2 id="disabling-and-enabling-an-account">Disabling and Enabling an Account</h2>
+
+<p>Accounts can&rsquo;t be deleted, but can be disabled to prevent its future usage. Requesting or linking a disabled account will always result a <code class="prettyprint">HTTP 403</code> error.</p>
+
+<h3 id="disabling">Disabling</h3>
+<pre class="highlight plaintext"><code>PUT /projects/:project_id/accounts/:id
+{
+  is_disabled: true
+}
+</code></pre>
+
+<h3 id="enabling">Enabling</h3>
+
+<p>You can enable account to continue using it later.</p>
+<pre class="highlight plaintext"><code>PUT /projects/:project_id/accounts/:id
+{
+  is_disabled: false
+}
+</code></pre>
+
+          <h1 id="fundings">Fundings</h1>
+
+<p>Funding allows to top-up any account balance in a system. (Basically this is an equivalent for an money emission.)</p>
+
+<p>You can find best practices for <a href="http://nebo15.github.io/qbill.docs/#funding-account">Funding an Account</a>.</p>
+
+<h2 id="create-a-funding-to-account">Create a Funding to Account</h2>
+<pre class="highlight plaintext"><code>POST /projects/:project_id/fundings
+{
+  account_id: &lt;account_id&gt;,
+  total: 1000
+}
+</code></pre>
+
+<h2 id="list-all-fundings">List all Fundings</h2>
+<pre class="highlight plaintext"><code>GET /projects/:project_id/fundings
+</code></pre>
+
+<h2 id="canceling-a-funding-operation">Canceling a Funding Operation</h2>
+
+<p>All Fundings can&rsquo;t be canceled, to do so just create a Transaction and move money to a system account. You can create some sort of <code class="prettyprint">/dev/null</code> account for this purpose.</p>
+
+          <h1 id="holds">Holds</h1>
+
+<p>(TODO: Allow subpayments on funding to charge front fee?)</p>
+
+<p>(TODO: Holds should be part of Transfers API response, so consumers can return correct payment history to clients.)</p>
+
+<p>(TODO: Transfer with a currency conversion.)</p>
+
+<p>You should hold some amount from account balance whenever you create a multi-step payments.</p>
+
+<h2 id="list-all-holds">List all Holds</h2>
+<pre class="highlight plaintext"><code>GET /projects/:project_id/holds
+</code></pre>
+
+<h2 id="create-a-hold">Create a Hold</h2>
+
+<p>To create a hold you should provide at least two fields:</p>
+
+<ul>
+<li><code class="prettyprint">transfer</code> - List of Transfers that should be created when Hold is completed into a Transfer. This allows you to take fees from your customers.</li>
+<li><code class="prettyprint">total</code> - Total amount should be holded from an Account. Total should be exactly same as sum of all created transfers. (Otherwise we will return an appropriate error.)</li>
+</ul>
+
+<p>You can attach any <code class="prettyprint">metadata</code> to a Hold.</p>
+<pre class="highlight plaintext"><code>POST /projects/:project_id/holds
+{
+  transfer: [
+    {subtotal: 90, destination: "&lt;service_account_id&gt;", metadata: {service_id: 1, service_name: 'Cellular Topup'}}
+    {subtotal: 10, destination: "&lt;fees_account_id&gt;", metadata: {for: "service_payment", service_id 1}}
+  ],
+  total: 100,
+  metadata: {
+    desctiption: "Payment for a Cellular topup"
+  }
+}
+</code></pre>
+
+<h2 id="changing-a-hold">Changing a Hold</h2>
+
+<blockquote>
+<p>While money is on-hold you can change any payment details, for eg. to refund some part of money</p>
+</blockquote>
+<pre class="highlight plaintext"><code>PUT /projects/:project_id/holds/:hold_id
+{
+  total: 20.00
+}
+</code></pre>
+
+<h2 id="cancel-a-hold">Cancel a Hold</h2>
+
+<blockquote>
+<p>After hold payment can be completed to commit balance change and turn hold into charge or declined to remove hold and return funds to available balance.</p>
+</blockquote>
+<pre class="highlight plaintext"><code>POST /projects/:project_id/holds/:hold_id/decline
+</code></pre>
+
+<h2 id="complete-hold-into-a-transfer">Complete Hold into a Transfer</h2>
+
+<p>On hold completion we will add same <code class="prettyprint">metadata</code> to a Transfer.</p>
+<pre class="highlight plaintext"><code>POST /projects/:project_id/holds/:hold_id/complete
+</code></pre>
+
+          <h1 id="transfer">Transfer</h1>
+
+<p>You should use Transfers whenever you accept a payment or transfer money from one account to another. Creating Transfer will decrease Account balance by transfer total.</p>
+
+<h2 id="list-all-transfers">List all Transfers</h2>
+<pre class="highlight plaintext"><code>GET /projects/:project_id/transfers
+</code></pre>
+
+<h3 id="create-a-transfer">Create a Transfer</h3>
+
+<p>To create a Transfer you need to specify at least two request fields:</p>
+
+<ul>
+<li><code class="prettyprint">transfer</code> - List of Transfers that should be created in a single Transfer. This allows you to take fees from your customers.</li>
+<li><code class="prettyprint">total</code> - Total amount of created transfers. Total should be exactly same as sum of all created transfers. (Otherwise we will return an appropriate error.)</li>
+</ul>
+
+<p>You can attach any <code class="prettyprint">metadata</code> to a Transfer.</p>
+<pre class="highlight plaintext"><code>POST /projects/:project_id/transfers
+{
+  total: 100,
+  transfer: [
+    {subtotal: 90, destination: "&lt;service_account_id&gt;", meta: {service_id: 1, service_name: 'Cellular Topup'}}
+    {subtotal: 10, destination: "&lt;fees_account_id&gt;", meta: {for: "service_payment", service_id 1}}
+  ],
+  meta: {}
+}
+</code></pre>
+
+<h2 id="rollback-a-transfer">Rollback a Transfer</h2>
+
+<p>On a Transfer rollback we will create new Transfer from a destination to a source accounts with same totals. This means that we will also return all the fees you charged from a Account. Created Transfer will have <code class="prettyprint">is_rollback</code> field set to true and <code class="prettyprint">rollback_refference</code> set to a original Transfer ID.</p>
+
+<p>Also rollbacked transfer will have a <code class="prettyprint">rollback_transfer</code> property that will hold rollback Transfer ID and a <code class="prettyprint">is_rollbacke</code> field set to <code class="prettyprint">true</code>.</p>
+
+<h2 id="create-refund-for-a-transfer">Create Refund for a Transfer</h2>
+
+<p>Refund is similar to a Rollback, but you need to specify refund total for every account that received funds. This allows you to refund funds by keeping the fees or to refund it with all the fees.</p>
+
+<h2 id="transferring-money-between-projects">Transferring money between projects</h2>
+
+<p>(TODO: Should we handle it or leave it for developers?)</p>
+
+          <h1 id="currencies-and-conversion-rates">Currencies and Conversion Rates</h1>
+
+<p>Our system supports any currency with a custom conversion rates. To simplify conversion we have a base</p>
+
+<h2 id="creating-a-currency">Creating a Currency</h2>
+
+<h2 id="list-all-currencies">List all Currencies</h2>
+
+<h2 id="updating-a-currency">Updating a Currency</h2>
+
+<h3 id="setting-a-base-currency">Setting a base Currency</h3>
+
+<h3 id="changing-conversion-rates">Changing Conversion Rates</h3>
+
+          <h1 id="events">Events</h1>
+
+<h2 id="list-all-events">List all Events</h2>
+
+          <h1 id="webhooks">Webhooks</h1>
+
+<p>All webhooks is sent as <code class="prettyprint">POST</code> request to a selected endpoint.</p>
+
+<p>Right now we support two types of webhooks: pre-flight and event-based. Pre-flight webhooks is send on all requests and should respond synchronously. All event-based webhooks is sent when request is completed.</p>
+
+<p>All actions will trigger creation of an `<code class="prettyprint">Event</code>, that is be send to all your webhooks.</p>
+
+<h3 id="limits">Limits</h3>
+
+<p>Webhooks is also exceeding your rate limits, one for each request that was sent, so be careful and void creating too many of them.</p>
+
+<p>Right now you can create two pre-flight webhooks and 5 event-based webhooks.</p>
+
+<h2 id="request-structure">Request structure</h2>
+
+<p>We are sending same data object as described in an <code class="prettyprint">Event</code> section of this documentation.</p>
+<pre class="highlight plaintext"><code>&lt;Request sample&gt;
+</code></pre>
+
+<p>(TODO: Move this to an event structure.)
+We add few additional HTTP headers for a request:</p>
+<pre class="highlight plaintext"><code>X-Application-ID: &lt;application_id&gt;
+X-Project-ID: &lt;project_id&gt;
+X-HTTP-Verb: &lt;http_verb&gt;
+X-Requested-Object: &lt;api_entity&gt;
+X-Requested-URI: &lt;uri&gt;
+</code></pre>
+
+<p>You can make sure that webhooks is coming from our back-end by validating <code class="prettyprint">X-Webhook-Secret</code> header. It&rsquo;s a sha1 hash of <code class="prettyprint">request_id</code> and <code class="prettyprint">project_api_token</code>.
+<code class="prettyprint">
+addHeader(&#39;X-Webhook-Secret&#39;, sha1($request_id . $project_api_token));
+</code></p>
+
+<h2 id="event-based-webhooks">Event-Based Webhooks</h2>
+
+<p>If event-based webhook is failed to deliver we will retry it for the next 24 hours. Retry time is increased each time request is made: 5, 15, 30 and 60 minutes. (60 minutes is a maximum timeout.)</p>
+
+<h2 id="pre-flight-webhooks">Pre-Flight Webhooks</h2>
+
+<p>To make API easier to integrate with other systems we can synchronously pass all requested data and all available metadata to endpoint specified in a Dashboard.</p>
+
+<p>Pre-Flight requests doesn&rsquo;t retry over time, of configured endpoint is not responding for 15 seconds we will return <code class="prettyprint">HTTP 412 Precondition Failed</code> header.</p>
+
+<p>Request webhooks is sent in same order they was created. You can re-order them in your Dasbhoard.</p>
+
+<p>Service will act differently based on HTTP response of this endpoint:</p>
+
+<table><thead>
+<tr>
+<th>oAuth HTTP Code</th>
+<th>Action</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>2XX</td>
+<td>Continue processing your request.</td>
+</tr>
+<tr>
+<td>301, 307, 308</td>
+<td>Follow the redirect. And continue checking response code.</td>
+</tr>
+<tr>
+<td>401, 402, 4XX</td>
+<td>Return same HTTP code</td>
+</tr>
+<tr>
+<td>5XX, timeout and all other codes</td>
+<td>Return HTTP 412 Precondition Failed</td>
+</tr>
+</tbody></table>
+
+<p>This webhooks is extremely useful for antifraud purposes, when another system needs to validate transaction before they are completed.</p>
+
+<h3 id="modifying-original-request-headers">Modifying original request headers</h3>
+
+<p>Pre-Flight Webhooks can modify original request, for example to exchange oAuth user token to an Project token. This allow you to use our API directly from client devices and don&rsquo;t expose secret API tokens.</p>
+
+<p>To modify request simply return header in following format: <code class="prettyprint">X-Override-&lt;Header&gt;</code>.</p>
+<pre class="highlight plaintext"><code>X-Override-Authorization: Token 3kdjd9d0uds080ujdsj38
+</code></pre>
+
+<p>Also you can add and save your internal request ID to a webhooks log by using same technique.</p>
+<pre class="highlight plaintext"><code>X-Override-External-Request-ID: 8383729938
+</code></pre>
+
+<p>You can modify following HTTP headers:</p>
+
+<ul>
+<li>Authorization</li>
+<li>Timezone</li>
+<li>X-Urgent-Account-ID</li>
+</ul>
+
+<h2 id="list-all-webhooks">List all Webhooks</h2>
+
+<h2 id="add-a-webhook">Add a Webhook</h2>
+
+          <h1 id="requests">Requests</h1>
+
+<p>All incoming requests is logged for your convenience. You can use them for debug or to review as a security log.</p>
+
+<p>Request include, but not limited to: HTTP headers, last 4 digits of access token, all request fields, all response fields.</p>
+
+<p>Outgoing requests is listed in <a href="#">Webhooks</a> section.</p>
+
+<p>All requests are stored and returned in popular <a href="http://www.softwareishard.com/blog/har-12-spec/">HTTP Archive (HAR)</a> format with one difference, we use snake_case instead of CamelCase as field keys.</p>
+
+<h2 id="list-all-requests">List all Requests</h2>
+
+          <h1 id="sql-queries">SQL Queries</h1>
+
+<p>Internally we use MongoDB, but we known that almost every developer knows SQL, and it can be more convenient way for you to get analytical data trough SQL query.</p>
+
+<p>For this purpose we replicate all data into <a href="www.postgresql.org/">PostgreSQL</a> DB, and give you access to perform any kind of SQL read queries.</p>
+
+<aside class="notice">
+Data returned by an SQL query can have a time lag versus direct API calls. Also we don&rsquo;t guarantee any performance for this query, since some API consumers can run very complicated JOINS.
+</aside>
+
+<h3 id="limits">Limits</h3>
+
+<p>(TODO: How to share perfomance for each user?)
+(TODO: How to limit query complicity?)</p>
+
+<p>(Idea) Each second our DB is handling your request will exceed your rate limit by 50 requests. (But we need to guarantee performance in this case.)</p>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

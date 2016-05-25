@@ -1,0 +1,603 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Project Arkenstone</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #151515;
+  background-color: #ac4142;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #505050;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #d0d0d0;
+}
+.highlight .p, .highlight .pi {
+  color: #d0d0d0;
+}
+.highlight .gi {
+  color: #90a959;
+}
+.highlight .gd {
+  color: #ac4142;
+}
+.highlight .gh {
+  color: #6a9fb5;
+  background-color: #151515;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #aa759f;
+}
+.highlight .kc {
+  color: #d28445;
+}
+.highlight .kt {
+  color: #d28445;
+}
+.highlight .kd {
+  color: #d28445;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #90a959;
+}
+.highlight .sr {
+  color: #75b5aa;
+}
+.highlight .si {
+  color: #8f5536;
+}
+.highlight .se {
+  color: #8f5536;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #6a9fb5;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #90a959;
+}
+.highlight .ss {
+  color: #90a959;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="arkenstone" data-languages="[&quot;shell&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='index.html'>Accounting API - Mirian</a></li>
+            <li><a href='app.html'>Projects API - Mirian SaaS</a></li>
+            <li><a href='arkenstone.html'>Deployment API - Arkenstone</a></li>
+            <li><a href='palantir.html'>API Service Bus - Palantir</a></li>
+            <li><a href='gandalf.html'>Risk Management - Gandalf</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="introduction">Introduction</h1>
+
+<p>This is project that Nebo15 uses to manage it&rsquo;s infrastructure.</p>
+
+<p>We use:</p>
+
+<ul>
+<li><a href="https://digitalocean.com">DigitalOcean</a> (DO) as our main hosting provider, DNS hosting and Floating IP provider.</li>
+<li>DO <a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-cloud-config-scripting">CloudConfig</a> for initial VM (Droplet) configuration.</li>
+<li><a href="https://puppetlabs.com/puppet/puppet-open-source">Puppet</a> for configuration management.</li>
+<li><a href="https://github.com/">GitHub</a> as VCS.</li>
+<li><a href="https://newrelic.com">NewRelic</a> for server monitoring.</li>
+<li><a href="https://travis-ci.com">Travis-CI</a> as a CI and build server.</li>
+<li><a href="https://www.docker.com/">Docker</a> for applications containers.</li>
+</ul>
+
+<p>Why DigitalOcean? Because it&rsquo;s cheap, friendly and reliable.</p>
+
+<h1 id="infrastructure-overview">Infrastructure overview</h1>
+
+<h2 id="repository-and-project-naming">Repository and Project Naming</h2>
+
+<p>Everybody must name new projects in a agreed way, so we can make assumptions about project, server purpose and deployed environment based on a single string.</p>
+
+<p>Generally repository name should look something like this:
+<code class="prettyprint">{project_name}[.{subproject_name}].{project_type}</code> =&gt; <code class="prettyprint">{repo_name}</code>, where:</p>
+
+<ul>
+<li><code class="prettyprint">{project_name}</code> - lowercased alphanumeric string, internal name for a project. Usually picked from Star Trek, Lord of The Rings or Star Wars movies, with some kind of associative connection.</li>
+<li><code class="prettyprint">{subproject_name}</code> - (optional) lowercased alphanumeric string, subproject name.</li>
+<li><code class="prettyprint">{project_type}</code> - lowercased alphanumeric string, repo type.</li>
+</ul>
+
+<p>There are 5 known repo types:</p>
+
+<ul>
+<li><code class="prettyprint">api</code> - REST API back-end.</li>
+<li><code class="prettyprint">web</code> - HTML5+CSS3 and Angular.js thin client.</li>
+<li><code class="prettyprint">layout</code> - HTML5 layout for corresponding <code class="prettyprint">web</code> project.</li>
+<li><code class="prettyprint">ios</code> - iOS application.</li>
+<li><code class="prettyprint">android</code> - Android application.</li>
+<li><code class="prettyprint">docs</code> - project documentation. (TODO: Keep it in same repo?)</li>
+</ul>
+
+<p>In our GitHub account only forked repos can be named in a different way. For Composer-included repos we replace dots (<code class="prettyprint">.</code>) with dashes (<code class="prettyprint">-</code>).</p>
+<pre class="highlight plaintext"><code>mbank.api
+mbank.web
+mbank.layout
+mbank.emails.layout
+mbank.persona.api
+mbank.webclient.web
+mbank.ios
+mbank.android
+</code></pre>
+
+<h2 id="environments">Environments</h2>
+
+<p>For all projects we have 3 environments:</p>
+
+<ul>
+<li><code class="prettyprint">production</code> - stable environment with at least 99% SLA.</li>
+<li><code class="prettyprint">beta</code> - pre-production environment, where we can test change before they merged into <code class="prettyprint">production</code>. We can skit it for very small projects without external API dependencies and where we can run all the tests on <code class="prettyprint">sandbox</code>.</li>
+<li><code class="prettyprint">sandbox</code> - development environment and environment for our API consumers, whenever they need sandbox to test their code.</li>
+</ul>
+
+<h2 id="branch-naming">Branch Naming</h2>
+
+<p>All our environments are mapped into git branches. It helps us to keep in mind where code will be provisioned whenever we add a new commit. And helps to get rid of messy branch-&gt;environment mapping.</p>
+
+<aside class="notice">
+Our &ldquo;`production&rdquo;`, &ldquo;`beta&rdquo;` and &ldquo;`sandbox&rdquo;` git branches are protected by a GitHub&rsquo;s &ldquo;Protected branches&rdquo; feature. It means that nobody can force-push to this branch; commit directly to it; can merge pull request that didn&rsquo;t passed all CI status checks.
+
+To commit change we are creating pull request and asking a colleague to review it and merge. Nobody is allowed to merge own pull request.
+</aside>
+
+<h2 id="server-naming">Server Naming</h2>
+
+<p>Servers are named based on their hostname and thus a DNS host name. This helps us to avoid PTR records issues.</p>
+
+<p>Initially we name them in the following way:
+<code class="prettyprint">{server_id}.nebo15.com</code>, where:</p>
+
+<ul>
+<li><code class="prettyprint">{server_id}</code> - any human-readable unique id for a server. (Can be picked from a <a href="https://en.wikipedia.org/wiki/List_of_proper_names_of_stars">star common name</a>.)</li>
+<li><code class="prettyprint">{environment}</code> - branch/environment name for a deployed project.</li>
+</ul>
+
+<h2 id="dns-records-naming">DNS Records Naming</h2>
+
+<p>When we are adding a new server to our pool, we automatically adding a new DNS record to our <code class="prettyprint">nebo15.com</code> domain. If you need to map another subdomain or domain to the server, you can simply setup a <code class="prettyprint">CNAME</code> DNS record and make corresponding changes in nginx settings.</p>
+<pre class="highlight plaintext"><code>gandalf.forza.md CNAME gandalf.nebo15.com
+</code></pre>
+
+<p>Generally we have a convention on naming end-domain endpoints:</p>
+
+<ul>
+<li>For <code class="prettyprint">api</code> projects: <code class="prettyprint">{environment}</code> subdomain for a <code class="prettyprint">beta</code> and <code class="prettyprint">sandbox</code> environment. <code class="prettyprint">api</code> subdomain for `<code class="prettyprint">production</code> environment.</li>
+<li>For <code class="prettyprint">web</code> projects: root domain for <code class="prettyprint">production</code> environment. (And a redirect from <code class="prettyprint">www</code> to <code class="prettyprint">@</code>.) Other environments are tested on <code class="prettyprint">nebo15.com</code> domain.</li>
+</ul>
+
+<aside class="notice">
+We don&rsquo;t use 3-d level subdomains because it&rsquo;s would be too expensive to generate valid SSL wildcard certificates for all of them.
+</aside>
+
+<h2 id="single-responsibility">Single Responsibility</h2>
+
+<p>For production environment we are sticking to &ldquo;single VM responsibility&rdquo; strategy. It means that we do not deploy more than one project to a single DO droplet. It helps to scale better and simplifies maintenance of our projects.</p>
+
+<p>For development environment we can have multiple projects on one VM, but still we are trying to avoid it. VM&rsquo;s are cheaper than cost of developer work.</p>
+
+<h1 id="ssh-authorization">SSH Authorization</h1>
+
+<p>All SSH access should be done trough middleware Arkenstone Auth server. It means that to connect, for example, to <code class="prettyprint">example.nebo15.com</code>, you need to run:</p>
+
+<ul>
+<li><code class="prettyprint">$ ssh auth.nebo15.com -p2020</code>.</li>
+<li><code class="prettyprint"># ssh example.nebo15.com -p2020</code>.</li>
+</ul>
+
+<p>Arkenstone will automatically:</p>
+
+<ul>
+<li>Generate a SSH keypair for you and provision it to all servers you have access to.</li>
+<li>Provision your Arkenstone password as to all your accounts on all servers you have access to.</li>
+<li>Update <code class="prettyprint">~/.ssh/authorized_keys</code> when you change <code class="prettyprint">public-key</code> in Arkenstone GUI.</li>
+</ul>
+
+<h1 id="security">Security</h1>
+
+<p>Never commit passwords, private keys, API keys or anything like to a git repos. If you did something like this, than you must change all credentials that was affected.</p>
+
+<h1 id="continuous-integration">Continuous Integration</h1>
+
+<h2 id="testing">Testing</h2>
+
+<p>All our applications have minimum code coverage requirement (75%). On each commit we will trigger a build and test on Travis-CI server, that will run following checks:</p>
+
+<ul>
+<li>Code style.</li>
+<li>Code coverage.</li>
+<li>All project tests.</li>
+</ul>
+
+<p>If one of checks is failed, than you should not merge your feature branch into repo. (And, actually, you won&rsquo;t be able to.)</p>
+
+<h2 id="delivery">Delivery</h2>
+
+<p>Non-production environment trigger deployment each time code in corresponding branch is changed. It means that <code class="prettyprint">sandbox</code> and <code class="prettyprint">beta</code> environment will be always up to date with latest source code.</p>
+
+<h1 id="initialization">Initialization</h1>
+
+<p>Arkenstone will create a DigitalOcean droplet with specified parameters, using last DO Ubuntu LTS image. For <code class="prettyprint">production</code> environment backups is turned on. Only key that is added to server is a Arkenstone master key. Also it should be assigned to a new floating IP, so we would be able to hotswap server in case of critical accidents.</p>
+
+<p>After that it will set a CloudConfig to this VM, that will init Puppet base configuration on this server:</p>
+
+<ul>
+<li>Change ssh port and ssh authorization settings (port: 2020; deny root login; authorization with key-only; allow login only from Arkenstone master-server IP address).</li>
+<li>Setup nginx.</li>
+<li>Setup Arkenstone client app and make it available only from Arkenstone Master-Server IP address.</li>
+<li>Deploy Elliptic-Curve Diffie-Hellman (ECDHE) group.</li>
+<li>Some other basic configurations.</li>
+</ul>
+
+<h1 id="deploying-a-project">Deploying a Project</h1>
+
+<ol>
+<li>Notify Slack that deployment is started.</li>
+<li>Asks you to authorize our Arkenstone GitHub app.</li>
+<li>Generate a SSH key pair for GitHub repo on a application-server.</li>
+<li>Add this key to a GitHub Deploy Keys.</li>
+<li>Setup a virtual host to access GitHub that uses this keys from this server (in <code class="prettyprint">~/.ssh/config</code>).</li>
+<li>Fetch project git repository to a <code class="prettyprint">/www/{project_name}/releases/latest</code> folder.</li>
+<li>Change branch to a deployment environment.</li>
+<li>Make a project copy (without <code class="prettyprint">.git</code> folder) to a <code class="prettyprint">/www/{project_name}/releases/{commit_id}-{deploy_timestamp}/</code> and <code class="prettyprint">cd</code> to it.</li>
+<li>Provision users ssh keys and passwords from a Arkenstone master-servers.</li>
+<li>Fetch all Puppet dependencies and apply project config.</li>
+<li>Apply a Puppet config for this project.</li>
+<li>Fetch all Puppet dependencies.</li>
+<li>Run <code class="prettyprint">/www/{project_name}/releases/{commit_id}-{deploy_timestamp}/bin/build.sh</code>.</li>
+<li>Create symlink from <code class="prettyprint">/www/{project_name}/releases/{commit_id}-{deploy_timestamp}/</code> to a <code class="prettyprint">/www/{project_name}/releases/current</code>.</li>
+<li>Notify NewRelic, <a href="https://developer.github.com/v3/repos/deployments/">GitHub</a> and Slack that deployment is finished.</li>
+<li>Add a project server to it&rsquo;s load balancer.</li>
+</ol>
+
+<p>All deploy logs are stored in <code class="prettyprint">/var/logs/www/{project_name}/releases/{commit_id}-{deploy_timestamp}/deploy.log</code>.</p>
+
+<aside class="notice">
+We store all project configurations inside a repo along with a source code. So you can change add components in one place. And, eventually, all people that have access to the source code, can add themselves to a project users.
+
+Puppet config is in &ldquo;/arkenstone/{environment}/puppet/init.pp&rdquo;.
+Users that have access is listed in &ldquo;/arkenstone/{environment}/users.json&rdquo;.
+Environment variables listed in &ldquo;/arkenstone/{environment}/environment.json&rdquo;.
+Load balancer discovery settings listed in &ldquo;/arkenstone/{environment}/lb.json&rdquo;.
+</aside>
+
+<h1 id="deploying-an-update">Deploying an update</h1>
+
+<p>Deployment for a changes are very familiar. Just re-run steps 3-10 from previous section.</p>
+
+<h1 id="service-discovery-and-load-balancing">Service Discovery and Load Balancing</h1>
+
+<p>Each time you deploy a application we will try to find a appropriate load balancer for it and add a new node to it&rsquo;s config. It helps to scale projects really fast.</p>
+
+<h1 id="users">Users</h1>
+
+<p>All Arkenstone users and their changes are automatically provisioned to a main SSH authorization server and to all application servers that user have access to.</p>
+
+<h2 id="list-all-active-users">List all active Users</h2>
+<pre class="highlight plaintext"><code>GET /users
+{
+  users: [
+    {name: "andrew", public_keys: ["ssh-rsa lsslkjsjlsldl"], password_hash: "sdsdsdsdsd", email:"email@examile.com"}
+  ]
+}
+</code></pre>
+
+<h2 id="create-a-user">Create a User</h2>
+
+<p>User name is unique string. We are stripping email from public key, to avoid Linux key conflicts.</p>
+<pre class="highlight plaintext"><code>POST /users
+{
+  name: "andrew",
+  public_keys: ["ssh-rsa lsslkjsjlsldl"],
+  password_hash: "sdsdsdsdsd",
+  email:"email@examile.com"
+}
+</code></pre>
+
+<h2 id="get-a-user">Get a User</h2>
+<pre class="highlight plaintext"><code>GET /users/:name
+{
+  name: "andrew",
+  public_keys: ["ssh-rsa lsslkjsjlsldl"],
+  password_hash: "sdsdsdsdsd",
+  email:"email@examile.com"
+}
+</code></pre>
+
+<h2 id="update-a-user">Update a User</h2>
+<pre class="highlight plaintext"><code>PUT /users/:name
+{
+  name: "andrew",
+  public_keys: ["ssh-rsa lsslkjsjlsldl"],
+  password_hash: "sdsdsdsdsd",
+  email:"email@examile.com"
+}
+</code></pre>
+
+<h2 id="delete-a-user">Delete a User</h2>
+<pre class="highlight plaintext"><code>DELETE /users/:name
+</code></pre>
+
+<h1 id="application-servers">Application Servers</h1>
+
+<h2 id="list-all-application-servers">List all Application Servers</h2>
+<pre class="highlight plaintext"><code>GET /servers
+{
+  deployments: [
+    {
+      repo: ":repo_name",
+      environment: ":environment",
+      deployments: [
+        {commit_id: "", time: "", user: ":user_id", is_current: true}
+      ]
+    }
+  ],
+  ssh: {
+    users: [:user_id, :user_id, :user_id]
+  },
+  droplet: {
+    region: ":do_region",
+    size: ":do_size",
+    ipv6: true,
+    private_networking: true,
+    ip: "",
+    name: "",
+    private_ip: ""
+  }
+}
+</code></pre>
+
+<h2 id="create-and-provision-a-new-application-server">Create and provision a new Application Server</h2>
+<pre class="highlight plaintext"><code>POST /servers
+{
+  deployments: [
+    {
+      repo: ":repo_name",
+      environment: ":environment"
+    }
+  ],
+  ssh: {
+    users: [:user_id, :user_id, :user_id]
+  },
+  droplet: {
+    region: ":do_region",
+    size: ":do_size",
+    ipv6: true,
+    private_networking: true
+  }
+}
+</code></pre>
+
+<h2 id="provision-changes-to-a-application-server">Provision changes to a Application Server</h2>
+<pre class="highlight plaintext"><code>PUT /servers/:id
+{
+  deployments: [
+    {
+      repo: ":repo_name",
+      environment: ":environment"
+    }
+  ],
+  ssh: {
+    users: [
+      :user_id
+    ]
+  }
+}
+</code></pre>
+
+<h2 id="delete-an-application-server">Delete an Application Server</h2>
+<pre class="highlight plaintext"><code>DELETE /servers/:id
+</code></pre>
+
+<h2 id="halt-an-application-server">Halt an Application Server</h2>
+<pre class="highlight plaintext"><code>HALT /servers/:id
+</code></pre>
+
+<h1 id="deployments">Deployments</h1>
+
+<h2 id="list-all-deployments-for-a-server">List all Deployments for a Server</h2>
+<pre class="highlight plaintext"><code>GET /servers/:id/deployments
+{
+  deployments: [
+    {
+      repo: ":repo_name",
+      environment: ":environment",
+      deployments: [
+        {commit_id: "", time: "", user: ":user_id", is_current: true}
+      ]
+    }
+  ]
+}
+</code></pre>
+
+<h2 id="get-project-deployments-list-for-an-application-server">Get Project deployments list for an Application Server</h2>
+<pre class="highlight plaintext"><code>GET /servers/:id/deployments/:repo_name
+{
+  repo: ":repo_name",
+  environment: ":environment",
+  deployments: [
+    {commit_id: "", time: "", user: ":user_id", is_current: true}
+  ]
+}
+</code></pre>
+
+<h2 id="get-project-deployment-data-for-an-application-server">Get Project deployment data for an Application Server</h2>
+<pre class="highlight plaintext"><code>GET /servers/:id/deployments/:repo_name/:commit_id
+{
+  commit_id: "",
+  time: "",
+  user: ":user_id",
+  log: "",
+  is_current: true
+}
+</code></pre>
+
+<h2 id="deploy-new-version-of-application">Deploy new version of Application</h2>
+<pre class="highlight plaintext"><code>POST GET /servers/:id/deployments/:repo_name
+{
+  commit_id: ":commit_id",
+  is_current: true
+}
+</code></pre>
+
+<h2 id="rollback-to-a-previous-version-of-application">Rollback to a previous version of Application</h2>
+
+<p>Also this allows to deploy specific version of application to a server.</p>
+<pre class="highlight plaintext"><code>PUT /servers/:id/deployments/:repo_name/:commit_id
+{
+  is_current: true
+}
+</code></pre>
+
+<h2 id="get-interactive-deployment-log">Get interactive Deployment log</h2>
+<pre class="highlight plaintext"><code>GET /servers/:id/deployments/:repo_name/:commit_id/log
+</code></pre>
+
+<h1 id="webhooks">Webhooks</h1>
+
+<p>POST /webhooks/github/
+POST /webhooks/slack/
+POST /webhooks/newrelic/</p>
+
+<h1 id="arkenstone-client-api">Arkenstone Client API</h1>
+
+<h2 id="deploy-a-project">Deploy a project</h2>
+
+<h3 id="list-all-deployments">List all Deployments</h3>
+<pre class="highlight plaintext"><code>GET /deployments
+{
+  deployments: [
+    {
+      repo: ":repo_name",
+      environment: ":environment",
+      deployments: [
+        {commit_id: "", time: "", user: ":user_id", is_current: true}
+      ]
+    }
+  ]
+}
+</code></pre>
+
+<h3 id="get-project-deployment-data-for-an-application-server">Get Project deployment data for an Application Server</h3>
+<pre class="highlight plaintext"><code>GET /deployments/:repo_name/:commit_id
+{
+  commit_id: "",
+  time: "",
+  user: ":user_id",
+  log: "",
+  is_current: true
+}
+</code></pre>
+
+<h3 id="deploy-new-version-of-application">Deploy new version of Application</h3>
+<pre class="highlight plaintext"><code>POST GET /deployments/:repo_name
+{
+  commit_id: ":commit_id",
+  is_current: true
+}
+</code></pre>
+
+<h3 id="rollback-to-a-previous-version-of-application">Rollback to a previous version of Application</h3>
+
+<p>Also this allows to deploy specific version of application to a server.</p>
+<pre class="highlight plaintext"><code>PUT /deployments/:repo_name/:commit_id
+{
+  is_current: true
+}
+</code></pre>
+
+<h3 id="get-interactive-deployment-log">Get interactive Deployment log</h3>
+<pre class="highlight plaintext"><code>GET /deployments/:repo_name/:commit_id/log
+</code></pre>
+
+<h3 id="provision-user-changes-and-deploy-a-new-project">Provision user changes and deploy a new project</h3>
+<pre class="highlight plaintext"><code>PUT /settings
+{
+  deployments: [
+    {
+      repo: ":repo_name",
+      environment: ":environment"
+    }
+  ],
+  ssh: {
+    users: [
+      :user_id
+    ]
+  }
+}
+</code></pre>
+
+<h1 id="todos">TODOs</h1>
+
+<p>Refs:</p>
+
+<ul>
+<li>Move deploy bash scripts to settings, so we can publish it and people can use project independently from puppet. (With ansible, for example.)</li>
+<li><a href="https://strongloop.com/node-js/build-deploy-and-scale/">StrongLoop Similar Service</a>.</li>
+<li>http://techblog.netflix.com/2015/11/global-continuous-delivery-with.html</li>
+<li>Arkenstone client API.</li>
+</ul>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

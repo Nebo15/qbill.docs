@@ -1,0 +1,327 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Project Gandalf</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #151515;
+  background-color: #ac4142;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #505050;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #d0d0d0;
+}
+.highlight .p, .highlight .pi {
+  color: #d0d0d0;
+}
+.highlight .gi {
+  color: #90a959;
+}
+.highlight .gd {
+  color: #ac4142;
+}
+.highlight .gh {
+  color: #6a9fb5;
+  background-color: #151515;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #aa759f;
+}
+.highlight .kc {
+  color: #d28445;
+}
+.highlight .kt {
+  color: #d28445;
+}
+.highlight .kd {
+  color: #d28445;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #90a959;
+}
+.highlight .sr {
+  color: #75b5aa;
+}
+.highlight .si {
+  color: #8f5536;
+}
+.highlight .se {
+  color: #8f5536;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #6a9fb5;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #90a959;
+}
+.highlight .ss {
+  color: #90a959;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="gandalf" data-languages="[&quot;shell&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='index.html'>Accounting API - Mirian</a></li>
+            <li><a href='app.html'>Projects API - Mirian SaaS</a></li>
+            <li><a href='arkenstone.html'>Deployment API - Arkenstone</a></li>
+            <li><a href='palantir.html'>API Service Bus - Palantir</a></li>
+            <li><a href='gandalf.html'>Risk Management - Gandalf</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="introduction">Introduction</h1>
+
+<p>Gandalf is a Open-Source Decision Engine for Big-Data.</p>
+
+<p>Source code is available in our <a href="https://github.com/Nebo15/gandalf.api/">GitHub Account</a>. It&rsquo;s split in two separate parts:</p>
+
+<ul>
+<li><a href="https://github.com/Nebo15/gandalf.api/">PHP, Laravel, MongoDB Back-End</a></li>
+<li><a href="https://github.com/Nebo15/gandalf.web/">Angular.js GUI</a></li>
+</ul>
+
+<h3 id="features">Features</h3>
+
+<ul>
+<li>Customizable - have the freedom to design a decision rules you need and to manage data structure on the fly in a easy to understand way.</li>
+<li>Split testing (aka. Champion Winner) - each table can have infinite number of different variants, you can allocate traffic between them and leave only best one later.</li>
+<li>Decision History - all decisions are saved with all metadata: request parameters, decision table at request moment of time and decision itself.</li>
+<li>Decision Analytics - you can review all decisions made by your tables and to analyze what rules is triggered more often.</li>
+<li>Revisions History - rollback any changes that was made by you or your collaborators.</li>
+<li>Tooling. Debug your decision tables directly from Gandalf GUI.</li>
+<li>SASS-based Role Model and oAuth 2.0. You can create projects and share access among users to them.</li>
+<li>Production-tested - several large NDA-closed PSP&rsquo;s and online lending platforms already use Gandalf.</li>
+</ul>
+
+<h1 id="use-cases">Use Cases</h1>
+
+<h2 id="decision-table-and-rules-engine">Decision Table and Rules Engine</h2>
+
+<p>There are many cases when you need to make decision based on input data. One good example is a decision to approve or decline lending application. You can setup set of cut-off risk rules to decline applications for a high-risk applicants or to use a decision table to specify what categories of users will receive loan on automatic basis.</p>
+
+<h2 id="scoring-table">Scoring Table</h2>
+
+<p>Instead of rule decision you can set a score point that will be added to a final result. (Also you need to pick another type of decision picking called &ldquo;Sum of passed decisions&rdquo;).</p>
+
+<p>In a result you will get a total of all scores and you can make further decision based on this value.</p>
+
+<h1 id="support">Support</h1>
+
+<p>This project is continuously supported on behalf of our customers and as part of our own <a href="https://gandalf.nebo15.com/">SASS-service</a>. We recommend to use it, but feel free to create your own installation of Gandalf.</p>
+
+<p>Feel free to submit tickets in our GitHub repos, we will respond shortly. And if you want some custom conditions, like 99.9% SLA - <a href="mailto:support@nebo15.com">contact us</a>.</p>
+
+<h1 id="how-does-it-work">How does it work?</h1>
+
+<p>You simply create a decision or scoring table, define some rules and query this table via API.</p>
+
+<p>It makes Gandalf suitable for anti-fraud, loan scoring, transaction scoring, risk management, and as part any other decision making processes.</p>
+
+<h2 id="table">Table</h2>
+
+<p>Decision table is the main entity in Gandalf. It consist of columns that describes API request structure, rows that describe decision-making logic, and cells that represents a single validation rule.</p>
+
+<h3 id="decision-table">Decision Table</h3>
+
+<p>Decision table will apply all rules one by one, until one rule is passed and return value in Decision column for this rule.</p>
+
+<h3 id="scoring-table">Scoring Table</h3>
+
+<p>Scoring table will sum all values in Scoring column and return their total.</p>
+
+<h2 id="columns">Columns</h2>
+
+<p>Column represent specific request parameter. You can add additional parameters on a fly by adding a column. After saving table with new column all future API request should provide data for it. (Or at least <code class="prettyprint">null</code>, if you want to sometimes omit some request parts.)</p>
+
+<aside class="notice">
+All request parameters are required!
+</aside>
+
+<p>However, API consumer can provide more data and you don&rsquo;t need to specify column for each of request fields, in this case we will skip unused ones. Best practice is to feed table with any data you have, so you can use it when you need without changing back-end.</p>
+
+<p>Column can have following settings:</p>
+
+<ul>
+<li><code class="prettyprint">Title</code> - human-readable string that describes field in interface.</li>
+<li><code class="prettyprint">Field API Key</code> - field name from witch data will be taken. For example, if you add a field with key <code class="prettyprint">name</code> than all API consumers should provide JSON with this field: <code class="prettyprint">{&quot;name&quot;: &quot;Some User Name&quot;}</code>.</li>
+<li><code class="prettyprint">Type</code> - type of data that will be submitted in this field. <code class="prettyprint">String</code>, <code class="prettyprint">Numeric</code> or <code class="prettyprint">Boolean</code>.</li>
+</ul>
+
+<h3 id="presets">Presets</h3>
+
+<p>You can modify field value for table rows by adding field preset. For example, you have field called salary and it&rsquo;s too routine to add a &ldquo;salaries greater than 1000&rdquo; condition in each row, instead you can create preset that turns <code class="prettyprint">Numeric</code> salary into <code class="prettyprint">Boolean</code> type and simply turn on this validation in each rule.</p>
+
+<p>It should look something like this:</p>
+
+<ul>
+<li><code class="prettyprint">Title</code> = <code class="prettyprint">Sufficient Salary</code>;</li>
+<li><code class="prettyprint">Field API Key</code> = <code class="prettyprint">salary</code>;</li>
+<li><code class="prettyprint">Type</code> = <code class="prettyprint">Numeric</code>;</li>
+<li><code class="prettyprint">Preset Condition</code> = <code class="prettyprint">greater than</code>;</li>
+<li><code class="prettyprint">Preset Value</code> = <code class="prettyprint">1000</code>.</li>
+</ul>
+
+<p>By checking checkbox below <code class="prettyprint">Low Salary</code>  column in a row, you will make sure that this row won&rsquo;t pass check untill <code class="prettyprint">salary</code> is greater than <code class="prettyprint">1000</code>.</p>
+
+<h2 id="rows">Rows</h2>
+
+<p>Row represents a single rule in decision table. All rows are checked in order it was defined. (You can reorder it by drag&#39;n&#39;drop.) Basically, you can think about relation between rows as <code class="prettyprint">OR</code> logical operators (or as <code class="prettyprint">else if</code>&rsquo;s).</p>
+
+<p>Row will return value selected in &ldquo;Decision&rdquo; column only if all validation rules in it have passed. Rules are checked in a same order as you see them in a table. You can reorder them by drug&#39;n&#39;drop.</p>
+
+<p>If no one of defined rows passed all conditions, then we will return <code class="prettyprint">final_decision</code> that equals a value specified in &ldquo;Default Decision&rdquo; dropdown.</p>
+
+<blockquote>
+<p>IF rule1 then return rule1.decision
+ELSEIF rule2 then return rule2.decision
+ELSEIF rule3 then return rule3.decision
+ELSEIF ruleN then return ruleN.decision
+ELSE default return default.decision</p>
+</blockquote>
+
+<h2 id="cells">Cells</h2>
+
+<p>All cells in a row represent validations in an <code class="prettyprint">AND</code> logical operator style (or you can thing about them as a bunch of conditions joined with <code class="prettyprint">&amp;&amp;</code> inside <code class="prettyprint">if</code> statement).</p>
+
+<p>Sometimes you have a big table and in some rows you prefer to skip some validations. For this case you can select special validation rule called <code class="prettyprint">is set</code>. Logically it means that <code class="prettyprint">{field_name} is set</code> and this condition will always pass validation.</p>
+
+<blockquote>
+<p>IF rule1(cellCondition1 &amp;&amp; cellCondition2 &amp;&amp; cellConditionN) then return rule1.decision
+ELSEIF ruleN(cellCondition1 &amp;&amp; cellCondition2 &amp;&amp; cellConditionN) then return ruleN.decision
+ELSE default return default.decision</p>
+</blockquote>
+
+<h2 id="validation-conditions">Validation Conditions</h2>
+
+<p>Available rules can differ based on a column type. Generally you should consider all rules logic as follows:
+<code class="prettyprint">{request_field_vale} {condition} {condition_value}</code>. For some conditions you can omit their value.</p>
+
+<p>String fields support following conditions:</p>
+
+<ul>
+<li><code class="prettyprint">=</code> - validation will pass if field value equals specified value.</li>
+<li><code class="prettyprint">!=</code> - validation will pass if field value does not equal specified value.</li>
+<li><code class="prettyprint">in</code> - validation will pass if field value eqals to one of listed values. Separate values by comma with space. If searched string have comma you can surround value by single qoute. For example: <code class="prettyprint">d,e</code> in <code class="prettyprint">a, b, c, &#39;d,e&#39;</code> will return true.</li>
+<li><code class="prettyprint">not in</code> - validation will pass if field value does not eqal to any of listed values.</li>
+<li><code class="prettyprint">contains</code> - validation will pass if field value is contains specified value.</li>
+<li><code class="prettyprint">is set</code> - validation will always pass. (Use it to skip some columns.)</li>
+<li><code class="prettyprint">is null</code> - validation will pass if field value equals <code class="prettyprint">null</code>. (Use it check if some column is skipped.)</li>
+</ul>
+
+<p>Numeric supports:</p>
+
+<ul>
+<li><code class="prettyprint">=</code> - validation will pass if field value equals specified value.</li>
+<li><code class="prettyprint">&gt;</code> - validation will pass if field value is greater than specified value.</li>
+<li><code class="prettyprint">&gt;=</code> - validation will pass if field value is greater or equal to a specified value.</li>
+<li><code class="prettyprint">&lt;</code> - validation will pass if field value is less than specified value.</li>
+<li><code class="prettyprint">&lt;=</code> - validation will pass if field value is less or equal to a specified value.</li>
+<li><code class="prettyprint">!=</code> - validation will pass if field value does not equal specified value.</li>
+<li><code class="prettyprint">in</code> - validation will pass if field value eqals to one of listed values. Separate values by comma with space. If searched string have comma you can surround value by single qoute. For example: <code class="prettyprint">d,e</code> in <code class="prettyprint">a, b, c, &#39;d,e&#39;</code> will return true.</li>
+<li><code class="prettyprint">not in</code> - validation will pass if field value does not eqal to any of listed values.</li>
+<li><code class="prettyprint">is set</code> - validation will always pass. (Use it to skip some columns.)</li>
+<li><code class="prettyprint">is null</code> - validation will pass if field value equals <code class="prettyprint">null</code>. (Use it check if some column is skipped.)</li>
+</ul>
+
+<p>Boolean supports:</p>
+
+<ul>
+<li><code class="prettyprint">true</code> - will pass if field value is <code class="prettyprint">true</code>, <code class="prettyprint">1</code>, <code class="prettyprint">&quot;1&quot;</code> or <code class="prettyprint">&#39;1&#39;</code>.</li>
+<li><code class="prettyprint">false</code> - will pass if field value is <code class="prettyprint">false</code>, <code class="prettyprint">0</code>, <code class="prettyprint">&quot;0&quot;</code> or <code class="prettyprint">&#39;0&#39;</code>.</li>
+<li><code class="prettyprint">is set</code> - validation will always pass. (Use it to skip some columns.)</li>
+<li><code class="prettyprint">is null</code> - validation will pass if field value equals <code class="prettyprint">null</code>. (Use it check if some column is skipped.)</li>
+</ul>
+
+<h1 id="installation-guide">Installation Guide</h1>
+
+<h2 id="back-end">Back-End</h2>
+
+<p>You can use <a href="https://www.vagrantup.com/">Vagrant</a> to intialize a development environment. Simply install it, <code class="prettyprint">cd</code> into your project directory and run:</p>
+<pre class="highlight plaintext"><code>vagrant up
+</code></pre>
+
+<p>Also you can notice that we use <a href="https://puppetlabs.com/puppet/puppet-open-source">Puppet</a> as our configuration tool. Scripts located in <a href="https://github.com/Nebo15/gandalf.api/tree/master/puppet">/puppet</a> directory of this repo. You can deploy code to your server and simply run:</p>
+<pre class="highlight plaintext"><code>set -o nounset -o errexit -o pipefail -o errtrace
+trap 'error "${BASH_SOURCE}" "${LINENO}"' ERR
+echo 127.0.0.1 gandalf.yourdomain.com | sudo tee -a /etc/hosts
+sudo /bin/bash puppet/initial/init.sh -u "www-data"
+</code></pre>
+
+<p>And your server will be ready for production use!</p>
+
+<h2 id="front-end">Front-End</h2>
+
+<h1 id="api-docs">API Docs</h1>
+
+<p>Right now API docs can be found <a href="http://gandalf.nebo15.com/doc/?url=https://raw.githubusercontent.com/Nebo15/gandalf.api/develop/public/swagger.json#!/User/get_users">here</a>. Also you can find <a href="https://github.com/Nebo15/gandalf.api/blob/develop/public/swagger.json">SWAGGER file</a> in our API repo.</p>
+
+<h1 id="story-behind-gandalf">Story behind Gandalf</h1>
+
+<p>We - are production oriented team, and we work for a fintech company. Almost all project that we created need a decision engine that reduces business risks. And all solutions we can find is ether old and ugly, or very expensive. So we decided to create free open-source alternative, that will be scalable, reliable and flexible enough to cover 95% of cases.</p>
+
+<p>To make is suitable for Big Data we decided to build it on top of use very reliable open-source database MongoDB, that have good sharding capabilities and easy to maintain.</p>
+
+<p>Also we believe that vendor-lock is a bad thing, so we published all source code on a MIT license, so you are free to change it as you wish.</p>
+
+<p>Done by <a href="https://github.com/Nebo15">Nebo #15</a>.</p>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

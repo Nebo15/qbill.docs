@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Erebor API Reference - API to Manage all the Rest Application</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #151515;
+  background-color: #ac4142;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #505050;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #d0d0d0;
+}
+.highlight .p, .highlight .pi {
+  color: #d0d0d0;
+}
+.highlight .gi {
+  color: #90a959;
+}
+.highlight .gd {
+  color: #ac4142;
+}
+.highlight .gh {
+  color: #6a9fb5;
+  background-color: #151515;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #aa759f;
+}
+.highlight .kc {
+  color: #d28445;
+}
+.highlight .kt {
+  color: #d28445;
+}
+.highlight .kd {
+  color: #d28445;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #90a959;
+}
+.highlight .sr {
+  color: #75b5aa;
+}
+.highlight .si {
+  color: #8f5536;
+}
+.highlight .se {
+  color: #8f5536;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #6a9fb5;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #90a959;
+}
+.highlight .ss {
+  color: #90a959;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='index.html'>Applications API - Erebor</a></li>
+            <li><a href='mirian.html'>Accounting API - Mirian</a></li>
+            <li><a href='arkenstone.html'>Infrastructure API - Arkenstone</a></li>
+            <li><a href='palantir.html'>API Service Bus - Palantir</a></li>
+            <li><a href='gandalf.html'>Risk Management - Gandalf</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <p>TODO: Rename to &ldquo;Ring0&rdquo;</p>
+
+          <p>This API section describes endpoints that is used in our Dashboard. You are free to build any system on top of it. All main interaction rules are the same for consumer and application API.</p>
+
+<p>Main difference is in Authorization and Authentication flows.</p>
+
+<h2 id="authorization">Authorization</h2>
+
+<p>To use this API you need to use token with a <code class="prettyprint">application</code> scope. You can receive it in <code class="prettyprint">/oAuth/basic</code> endpoint.</p>
+<pre class="highlight plaintext"><code>TODO
+</code></pre>
+
+<!-- API takes two types of tokens (```application``` and ```project``` tokens), each of them have different access scope. This scope is managed by a object-related Access Control Layer. It means that if you have token that have access to a ```Accounts`` list, than you can manage all records in this list, and all fields in them.
+
+List of objects and token access to them:
+
+Object | ```application``` Token | ```project``` Token
+--------- | ----------- | -----------
+```Projects``` | Yes | No
+```Settings``` | Yes | No
+```Backup``` | Yes | No
+```Accounts``` | Yes | Yes
+```Fundings``` | Yes | Yes
+```Transfers``` | Yes | Yes
+```Holds``` | Yes | Yes
+```Webhooks``` | Yes | Yes
+```Events``` | Yes | Yes
+```Requests``` | Yes | Yes
+```Currencies``` | Yes | Yes -->
+
+<h3 id="application-token">Application token</h3>
+
+<p>(TODO: Describe root authentication with OTP token. Lets call them <code class="prettyprint">Managers</code> + API for manager login.)</p>
+
+<p>(TODO: Allow creating root user accounts only from our domain.)</p>
+
+<h1 id="sign-up">Sign Up</h1>
+
+<h1 id="sign-in">Sign In</h1>
+
+          <h1 id="projects">Projects</h1>
+
+<p>To start using our application you need to create a project. Project is a special scope that stores all data in it. It allows you to separate different accounts between different access scopes.</p>
+
+<p>For example it can be used for eWallet white-labels, where each app have all data in separate.</p>
+
+<p>All accounts already have a bootstrapped project for a development purposes.</p>
+
+<h2 id="get-all-project-settings">Get all Project Settings</h2>
+
+<h2 id="changing-project-settings">Changing Project Settings</h2>
+
+<p>You are free to attach metadata object to settings.</p>
+
+<h2 id="create-a-project">Create a Project</h2>
+
+<h2 id="disable-project">Disable Project</h2>
+
+<h2 id="delete-a-project-scheduled">Delete a Project (scheduled)</h2>
+
+<h2 id="generate-new-api-token-for-a-project">Generate new API token for a Project</h2>
+
+<h2 id="delete-an-api-token-for-a-project">Delete an API token for a Project</h2>
+
+          <h1 id="settings">Settings</h1>
+
+<p>(TODO: General authorization flow, to access to Projects list).</p>
+
+<h2 id="transfers-between-projects">Transfers between Projects</h2>
+
+<h2 id="generate-a-new-master-token">Generate a new Master Token</h2>
+
+          <h1 id="backups">Backups</h1>
+
+<h2 id="download-all-data">Download all data</h2>
+
+<p>You can download all data of your <code class="prettyprint">Accounts</code>, <code class="prettyprint">Tranfers</code>, <code class="prettyprint">Holds</code> and <code class="prettyprint">Fundings</code> whenever you want.</p>
+
+<p>Data is available in a ZIP archive with a JSON files that represent your project. There are single endpoint to download all projects. Each of them will be in a separate folder.</p>
+<pre class="highlight plaintext"><code>GET /v1/backup
+</code></pre>
+
+<aside class="notice">
+This endpoint have a separated Rate Limits, you can download this data only once a day.
+</aside>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

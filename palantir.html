@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Project Palantir</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #151515;
+  background-color: #ac4142;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #505050;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #d0d0d0;
+}
+.highlight .p, .highlight .pi {
+  color: #d0d0d0;
+}
+.highlight .gi {
+  color: #90a959;
+}
+.highlight .gd {
+  color: #ac4142;
+}
+.highlight .gh {
+  color: #6a9fb5;
+  background-color: #151515;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #aa759f;
+}
+.highlight .kc {
+  color: #d28445;
+}
+.highlight .kt {
+  color: #d28445;
+}
+.highlight .kd {
+  color: #d28445;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #90a959;
+}
+.highlight .sr {
+  color: #75b5aa;
+}
+.highlight .si {
+  color: #8f5536;
+}
+.highlight .se {
+  color: #8f5536;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #6a9fb5;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #90a959;
+}
+.highlight .ss {
+  color: #90a959;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="palantir" data-languages="[&quot;shell&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='index.html'>Accounting API - Mirian</a></li>
+            <li><a href='app.html'>Projects API - Mirian SaaS</a></li>
+            <li><a href='arkenstone.html'>Deployment API - Arkenstone</a></li>
+            <li><a href='palantir.html'>API Service Bus - Palantir</a></li>
+            <li><a href='gandalf.html'>Risk Management - Gandalf</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="introduction">Introduction</h1>
+
+<p>Palantir is our API Service Bus that helps to connect different applications with different API and with different data sources.</p>
+
+<h1 id="use-cases">Use Cases</h1>
+
+<h2 id="enriching-data">Enriching data</h2>
+
+<p>Sometimes you are receiving user data, but this data may be not enough for decision making or other business logic. In this case you can set-up a data model and to tell Palantir where should it get rest of data and what parameters this service consume.</p>
+
+<p>For example, you have a lending site and you need to score your users before sending applicant data to decision-making system. You need to:</p>
+
+<ol>
+<li>Setup Palantir data model called &ldquo;Applicant&rdquo;.</li>
+<li>Setup <code class="prettyprint">ON_POST</code> trigger for &ldquo;Applicant&rdquo;. (Also you need to setup a <code class="prettyprint">ON_CALLBACK_FAILIED</code> trigger.)</li>
+<li>Configure this triggers authorization type (lets say, <code class="prettyprint">HTTP Basic</code>), login and password, and API endpoint.</li>
+<li>Describe what data this API consumes:
+<code class="prettyprint">
+{
+applicant_id: &quot;{{applicant.id}}&quot;,
+ssh: &quot;{{applicant.ssn}}&quot;,
+idn: &quot;{{applicant.idn}}&quot;,
+callback_url: &quot;{{palantir.callback_url}}&quot;
+}
+</code></li>
+<li>Describe how to map response
+<code class="prettyprint">
+applicant.score = request.scoring.result;
+applicant.decision = request.scoring.result &gt; 50;
+</code></li>
+<li>Setup next webhook. <code class="prettyprint">ON_MODEL_FILLED</code>. And API endpoint where Palantir need to post data.</li>
+</ol>
+
+<blockquote>
+<p>Create applicant</p>
+</blockquote>
+<pre class="highlight plaintext"><code>POST /applicants
+{
+  name: "John Smith",
+  ssh: "8383-29383-22",
+  idn: "AA293823",
+  birth_date: "1990-11-19"
+}
+</code></pre>
+
+<blockquote>
+<p>Palantir requests scroring API</p>
+</blockquote>
+<pre class="highlight plaintext"><code>POST https://example.com/score
+{
+  applicant_id: "123",
+  ssh: "8383-29383-22",
+  idn: "AA293823",
+  callback_url: "https://palantir-example.com/callbacks/diuqng3bci382llkd"
+}
+</code></pre>
+
+<blockquote>
+<p>Receives async scoring result. It can make sync calls either.</p>
+
+<p>Lets check how applicant now looks like</p>
+</blockquote>
+<pre class="highlight plaintext"><code>GET /applicants/123
+{
+  applicant_id: "123",
+  ssh: "8383-29383-22",
+  idn: "AA293823",
+  score: 87
+}
+</code></pre>
+
+<h2 id="data-multiplexing">Data Multiplexing</h2>
+
+<p>There are cases when you need to send multiple webhooks when you receive some data. For example, on each user creation you want to send API request to Mixpanel and Intercom with corresponding events.</p>
+
+<h2 id="api-acl">API ACL</h2>
+
+<p>You can setup trigger on each request. (Webhooks from QBill.)</p>
+
+<h2 id="sync-to-async">Sync to Async</h2>
+
+<p>If you want to wait, its your decision :). You can create a sync APi endpoint that will make one or few webhook calls and return response when they will be accomplished.</p>
+
+<h1 id="db-structure">DB Structure</h1>
+<pre class="highlight plaintext"><code>models: [
+  {
+    _id: "111",
+    applicant_id: "123",
+    ssh: "8383-29383-22",
+    idn: "AA293823",
+    score: 87
+  }
+]
+
+triggers: [
+  {
+    model: 'applicants',
+    triggers: [
+      {
+        _id: "010",
+        on: "post",
+        type: "async",
+        endpoint: {...}
+      },
+      {
+        _id: "010",
+        on: "filled",
+        type: "sync",
+        endpoint: {...}
+      }
+    ]
+  }
+]
+</code></pre>
+
+<p>TODO:</p>
+
+<ul>
+<li>Better way to describe triggers is a conditions table: <code class="prettyprint">WHEN name is set, surname is set THEN {api_call}</code> and <code class="prettyprint">WHEN score is set THEN {api_call}</code>.</li>
+<li>Split view editor for node.js code, like in October CMS. (Condition, Trigger, Result Mapping).</li>
+<li>Drop downs in editor. For condition: <code class="prettyprint">ON: change, filled, code</code>. For trigger: <code class="prettyprint">Conenctor: JSON API, XML API, code</code>. Mapping: <code class="prettyprint">Editor: model, code</code>.</li>
+</ul>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

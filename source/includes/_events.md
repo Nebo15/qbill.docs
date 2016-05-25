@@ -1,3 +1,0 @@
-# Events
-
-## List all Events
