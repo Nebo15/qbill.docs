@@ -8,7 +8,4 @@ before_script:
   - git config --global user.name "The Marvin"
 script:
   - bundle exec middleman build
-  - bundle exec rake publish
-  - git status
-  - ls -l ./
-  - ls -l build/
+  - ./deploy.sh
