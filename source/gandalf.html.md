@@ -30,31 +30,30 @@ Source code is available in our [GitHub Account](https://github.com/Nebo15/ganda
 - Decision History - all decisions are saved with all metadata: request parameters, decision table at request moment of time and decision itself.
 - Decision Analytics - you can review all decisions made by your tables and to analyze what rules is triggered more often.
 - Revisions History - rollback any changes that was made by you or your collaborators.
-- Tooling. Debug your decision tables directly from Gandalf GUI.
-- SASS-based Role Model and oAuth 2.0. You can create projects and share access among users to them.
+- Tooling - debug your decision tables directly from Gandalf GUI.
+- SASS-based Role Model and oAuth 2.0 - you can create projects and share access among users to them.
 - Production-tested - several large NDA-closed PSP's and online lending platforms already use Gandalf.
 
 # Use Cases
 
 ## Decision Table and Rules Engine
 
-There are many cases when you need to make decision based on input data. One good example is a decision to approve or decline lending application. You can setup set of cut-off risk rules to decline applications for a high-risk applicants or to use a decision table to specify what categories of users will receive loan on automatic basis.
+There are many cases when you need to make decision based on input data. One good example is a decision to approve or decline lending application. You can setup a set of cut-off risk rules to decline applications for a high-risk applicants or to use a decision table to specify which categories of users will receive a loan on automatic basis.
 
 ## Scoring Table
 
-Instead of rule decision you can set a score point that will be added to a final result. (Also you need to pick another type of decision picking called "Sum of passed decisions").
-
+Instead of rule decision you can set a score point that will be added to a final result.
 In a result you will get a total of all scores and you can make further decision based on this value.
 
 ## State Transition Rules for BPM
 
-Sometimes you need to have very complex rules in your BPM-engine, that should tell you to which branch your task should be moved. In this case you can call Gandalf and configure all this in it.
+Sometimes you need to have very complex rules in your BPM-engine, that should tell you to which branch your task should be transitioned to. Use Gandalf to manage all those rules.
 
 # Support
 
-This project is continuously supported on behalf of our customers and as part of our own [SASS-service](https://gandalf.nebo15.com/). We recommend to use it, but feel free to create your own installation of Gandalf.
+This project is continuously supported on behalf of our customers and as part of our own [SaaS-service](https://gandalf.nebo15.com/). We recommend to use it, you can create your own installation of Gandalf.
 
-Feel free to submit tickets in our GitHub repos, we will respond shortly. And if you want some custom conditions, like 99.9% SLA - [contact us](mailto:support@nebo15.com).
+Feel free to submit tickets in our GitHub repos, we will respond shortly. And if you want some custom conditions, e.g. 99.9% SLA - [contact us](mailto:support@nebo15.com).
 
 # How does it work?
 
@@ -64,7 +63,7 @@ It makes Gandalf suitable for anti-fraud, loan scoring, transaction scoring, ris
 
 # Tables
 
-Decision table is the main entity in Gandalf. It consist of columns that describes API request structure, rows that describe decision-making logic, and cells that represents a single validation rule.
+Decision table is the main entity in Gandalf. It consists of columns that describe API request structure, rows that represent decision-making logic, and cells which describe a single validation rule.
 
 ### Decision Table
 
